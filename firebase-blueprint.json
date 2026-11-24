@@ -23,6 +23,39 @@
       },
       "required": ["fullName", "headline", "shortBio", "domicile", "status", "isVisible", "createdAt", "updatedAt"]
     },
+    "PublicProfile": {
+      "title": "PublicProfile",
+      "description": "Dedicated public read-only profile snapshot (publicProfile/osama) synchronized automatically from published portfolio records for external websites such as Dars with Osama.",
+      "type": "object",
+      "properties": {
+        "fullName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "headline": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "shortBio": { "type": "string", "minLength": 1, "maxLength": 800 },
+        "domicile": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "photoUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
+        "photoFallbackUrls": { "type": "array", "description": "Up to 5 external-safe absolute HTTPS image URLs" },
+        "photoSourceUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
+        "education": { "type": "array", "description": "Up to 20 published education summary records" },
+        "experiences": { "type": "array", "description": "Up to 30 published experience summary records" },
+        "skills": { "type": "array", "description": "Up to 50 published skill and competency records" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "fullName",
+        "headline",
+        "shortBio",
+        "domicile",
+        "photoUrl",
+        "photoFallbackUrls",
+        "photoSourceUrl",
+        "education",
+        "experiences",
+        "skills",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
     "Experience": {
       "title": "Experience",
       "description": "Professional, mentoring, teaching, or committee experience record.",
@@ -312,6 +345,10 @@
     "/profile/{profileId}": {
       "schema": { "$ref": "#/entities/Profile" },
       "description": "Primary portfolio owner profile document (typically id 'main')."
+    },
+    "/publicProfile/{profileId}": {
+      "schema": { "$ref": "#/entities/PublicProfile" },
+      "description": "Dedicated public profile document (id 'osama') readable without login by external websites and writable only by verified admins."
     },
     "/experiences/{experienceId}": {
       "schema": { "$ref": "#/entities/Experience" },

@@ -28,6 +28,52 @@ export interface ProfileData {
   updatedAt?: unknown;
 }
 
+export interface PublicProfileEducationEntry {
+  institution: string;
+  degree: string;
+  fieldOfStudy: string;
+  graduationYear: string;
+  period: string;
+  location: string;
+  category: string;
+}
+
+export interface PublicProfileExperienceEntry {
+  role: string;
+  institution: string;
+  category: string;
+  period: string;
+  duration: string;
+  location: string;
+  description: string;
+  featured: boolean;
+}
+
+export interface PublicProfileSkillEntry {
+  name: string;
+  category: string;
+  proficiencyLabel: string;
+  description: string;
+}
+
+export interface PublicProfilePayload {
+  fullName: string;
+  headline: string;
+  shortBio: string;
+  domicile: string;
+  photoUrl: string;
+  photoFallbackUrls: string[];
+  photoSourceUrl: string;
+  education: PublicProfileEducationEntry[];
+  experiences: PublicProfileExperienceEntry[];
+  skills: PublicProfileSkillEntry[];
+}
+
+export interface PublicProfileDocument extends PublicProfilePayload {
+  createdAt?: unknown;
+  updatedAt?: unknown;
+}
+
 export type ExperienceCategory = 'mentoring' | 'teaching' | 'committee' | 'work';
 
 export interface ExperienceItem extends BaseContentMeta {

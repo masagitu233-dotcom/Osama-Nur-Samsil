@@ -61,6 +61,19 @@ import {
   type ContactFormValues,
 } from '../utils/portfolioLogic';
 import { compressImageIfNeeded } from '../utils/mediaCompression';
+import {
+  buildPublicProfilePayload,
+  PUBLIC_PROFILE_COLLECTION,
+  PUBLIC_PROFILE_DOC_ID,
+  PUBLIC_PROFILE_PATH,
+  shouldSyncPublicProfile,
+} from '../utils/publicProfileSync';
+
+const PUBLIC_PROFILE_SYNC_COLLECTIONS = new Set<ManagedCollectionName>([
+  'education',
+  'experiences',
+  'skills',
+]);
 
 export type ManagedCollectionName =
   | 'experiences'
@@ -161,6 +174,62 @@ export async function logAdminActivity(
   }
 }
 
+export async function syncPublicProfileFromFirestore(
+  profileOverride?: Pick<ProfileData, 'fullName' | 'headline' | 'shortBio' | 'domicile' | 'photoUrl' | 'status' | 'isVisible'>
+): Promise<boolean> {
+  const publicDocRef = doc(db, PUBLIC_PROFILE_COLLECTION, PUBLIC_PROFILE_DOC_ID);
+  try {
+    let sourceProfile = profileOverride;
+    if (!sourceProfile) {
+      const profileSnap = await getDoc(doc(db, 'profile', 'main'));
+      if (!profileSnap.exists()) {
+        return false;
+      }
+      sourceProfile = profileSnap.data() as ProfileData;
+    }
+
+    if (!shouldSyncPublicProfile(sourceProfile)) {
+      return false;
+    }
+
+    const [eduSnap, expSnap, skillSnap, existingPublicSnap] = await Promise.all([
+      getDocs(collection(db, 'education')),
+      getDocs(collection(db, 'experiences')),
+      getDocs(collection(db, 'skills')),
+      getDoc(publicDocRef),
+    ]);
+
+    const education = eduSnap.docs.map((d) => ({ id: d.id, ...d.data() }) as EducationItem);
+    const experiences = expSnap.docs.map((d) => ({ id: d.id, ...d.data() }) as ExperienceItem);
+    const skills = skillSnap.docs.map((d) => ({ id: d.id, ...d.data() }) as SkillItem);
+
+    const payload = buildPublicProfilePayload({
+      profile: sourceProfile,
+      education,
+      experiences,
+      skills,
+    });
+
+    if (existingPublicSnap.exists()) {
+      await setDoc(publicDocRef, {
+        ...payload,
+        createdAt: existingPublicSnap.data().createdAt,
+        updatedAt: serverTimestamp(),
+      });
+    } else {
+      await setDoc(publicDocRef, {
+        ...payload,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+    }
+
+    return true;
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, PUBLIC_PROFILE_PATH);
+  }
+}
+
 export async function saveProfile(data: Omit<ProfileData, 'id' | 'createdAt' | 'updatedAt'>): Promise<void> {
   const path = 'profile/main';
   const docRef = doc(db, 'profile', 'main');
@@ -193,6 +262,10 @@ export async function saveProfile(data: Omit<ProfileData, 'id' | 'createdAt' | '
         createdAt: serverTimestamp(),
       });
     }
+
+    // Automatically synchronize the dedicated external public profile document (publicProfile/osama)
+    await syncPublicProfileFromFirestore(payload);
+
     await logAdminActivity('update', 'profile', payload.fullName);
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, path);
@@ -433,6 +506,11 @@ export async function upsertManagedItem(
       });
       await logAdminActivity('create', collectionName, labelForLog);
     }
+
+    if (PUBLIC_PROFILE_SYNC_COLLECTIONS.has(collectionName)) {
+      await syncPublicProfileFromFirestore();
+    }
+
     return docId;
   } catch (error) {
     handleFirestoreError(error, existingId ? OperationType.UPDATE : OperationType.CREATE, path);
@@ -448,6 +526,10 @@ export async function deleteManagedItem(
   try {
     await deleteDoc(doc(db, collectionName, docId));
     await logAdminActivity('delete', collectionName, labelForLog);
+
+    if (collectionName !== 'contactMessages' && PUBLIC_PROFILE_SYNC_COLLECTIONS.has(collectionName)) {
+      await syncPublicProfileFromFirestore();
+    }
   } catch (error) {
     handleFirestoreError(error, OperationType.DELETE, path);
   }
@@ -597,6 +679,22 @@ export async function seedInitialPortfolioToFirestore(): Promise<number> {
     updatedAt: serverTimestamp(),
   });
   count++;
+
+  // Dedicated Public Profile Snapshot (publicProfile/osama)
+  if (shouldSyncPublicProfile(INITIAL_PORTFOLIO_DATA.profile)) {
+    const publicProfilePayload = buildPublicProfilePayload({
+      profile: INITIAL_PORTFOLIO_DATA.profile,
+      education: INITIAL_PORTFOLIO_DATA.education,
+      experiences: INITIAL_PORTFOLIO_DATA.experiences,
+      skills: INITIAL_PORTFOLIO_DATA.skills,
+    });
+    batch.set(doc(db, PUBLIC_PROFILE_COLLECTION, PUBLIC_PROFILE_DOC_ID), {
+      ...publicProfilePayload,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+    count++;
+  }
 
   // Contacts
   const { id: _cId, createdAt: _cC, updatedAt: _cU, ...contactFields } = INITIAL_PORTFOLIO_DATA.contacts;

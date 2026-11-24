@@ -93,6 +93,69 @@ service cloud.firestore {
         && data.updatedAt is timestamp;
     }
 
+    function isBoundedPublicEducationList(arr) {
+      return arr is list
+        && arr.size() <= 20
+        && (
+          arr.size() == 0 || (
+            arr[0] is map
+            && arr[0].keys().hasOnly(['institution', 'degree', 'fieldOfStudy', 'graduationYear', 'period', 'location', 'category'])
+            && isBoundedString(arr[0].institution, 1, 200)
+          )
+        );
+    }
+
+    function isBoundedPublicExperienceList(arr) {
+      return arr is list
+        && arr.size() <= 30
+        && (
+          arr.size() == 0 || (
+            arr[0] is map
+            && arr[0].keys().hasOnly(['role', 'institution', 'category', 'period', 'duration', 'location', 'description', 'featured'])
+            && isBoundedString(arr[0].role, 1, 200)
+          )
+        );
+    }
+
+    function isBoundedPublicSkillList(arr) {
+      return arr is list
+        && arr.size() <= 50
+        && (
+          arr.size() == 0 || (
+            arr[0] is map
+            && arr[0].keys().hasOnly(['name', 'category', 'proficiencyLabel', 'description'])
+            && isBoundedString(arr[0].name, 1, 140)
+          )
+        );
+    }
+
+    function isValidPublicProfile(data) {
+      return data.keys().hasAll([
+          'fullName', 'headline', 'shortBio', 'domicile',
+          'photoUrl', 'photoFallbackUrls', 'photoSourceUrl',
+          'education', 'experiences', 'skills',
+          'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'fullName', 'headline', 'shortBio', 'domicile',
+          'photoUrl', 'photoFallbackUrls', 'photoSourceUrl',
+          'education', 'experiences', 'skills',
+          'createdAt', 'updatedAt'
+        ])
+        && isBoundedString(data.fullName, 1, 120)
+        && isBoundedString(data.headline, 1, 240)
+        && isBoundedString(data.shortBio, 1, 800)
+        && isBoundedString(data.domicile, 1, 160)
+        && isBoundedString(data.photoUrl, 0, 2048)
+        && isBoundedStringList(data.photoFallbackUrls, 5)
+        && isBoundedString(data.photoSourceUrl, 0, 2048)
+        && isBoundedPublicEducationList(data.education)
+        && isBoundedPublicExperienceList(data.experiences)
+        && isBoundedPublicSkillList(data.skills)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
     function isValidExperience(data) {
       return data.keys().hasAll(['institution', 'role', 'category', 'period', 'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'])
         && data.keys().hasOnly([
@@ -390,6 +453,14 @@ service cloud.firestore {
       allow create: if isVerifiedUser() && isValidId(profileId) && isValidProfile(incoming()) && hasValidCreateTimestamps(incoming()) && isAdmin();
       allow update: if isVerifiedUser() && isValidId(profileId) && isValidProfile(incoming()) && hasValidUpdateTimestamps(incoming(), existing()) && isAdmin();
       allow delete: if isVerifiedUser() && isValidId(profileId) && isAdmin();
+    }
+
+    match /publicProfile/{profileId} {
+      allow get: if isValidId(profileId) && profileId == 'osama';
+      allow list: if false;
+      allow create: if isVerifiedUser() && isValidId(profileId) && profileId == 'osama' && isValidPublicProfile(incoming()) && hasValidCreateTimestamps(incoming()) && isAdmin();
+      allow update: if isVerifiedUser() && isValidId(profileId) && profileId == 'osama' && isValidPublicProfile(incoming()) && hasValidUpdateTimestamps(incoming(), existing()) && isAdmin();
+      allow delete: if isVerifiedUser() && isValidId(profileId) && profileId == 'osama' && isAdmin();
     }
 
     match /experiences/{experienceId} {

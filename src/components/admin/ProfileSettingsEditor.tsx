@@ -71,7 +71,7 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
       await saveProfile(form);
       setDirty(false);
       onDirtyChange(false);
-      showToast('success', 'Profil, biografi, dan berkas CV berhasil disimpan ke Firestore.');
+      showToast('success', 'Profil, biografi, CV, dan data profil publik berhasil disimpan & disinkronkan.');
     } catch (err) {
       showToast('error', err instanceof Error ? err.message : 'Gagal menyimpan profil.');
     } finally {
