@@ -1,0 +1,510 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net: Deny all by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // =========================================================================
+    // GLOBAL HARDENED PRIMITIVES
+    // =========================================================================
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isBootstrappedAdmin() {
+      return isVerifiedUser() && request.auth.token.email == 'osamanursamsil@gmail.com';
+    }
+
+    function isAdmin() {
+      return isBootstrappedAdmin() || (
+        isVerifiedUser() && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isPublicDoc(data) {
+      return data.status == 'published' && data.isVisible == true;
+    }
+
+    function isValidStatus(val) {
+      return val is string && val in ['draft', 'published'];
+    }
+
+    function isBoundedString(val, minLen, maxLen) {
+      return val is string && val.size() >= minLen && val.size() <= maxLen;
+    }
+
+    function isBoundedStringList(arr, maxItems) {
+      return arr is list
+        && arr.size() <= maxItems
+        && (arr.size() == 0 || (arr[0] is string && arr[0].size() <= 2048));
+    }
+
+    function hasValidCreateTimestamps(data) {
+      return data.createdAt == request.time && data.updatedAt == request.time;
+    }
+
+    function hasValidUpdateTimestamps(data, prev) {
+      return data.createdAt == prev.createdAt && data.updatedAt == request.time;
+    }
+
+    // =========================================================================
+    // ENTITY VALIDATION BLUEPRINTS (Anti-Update-Gap)
+    // =========================================================================
+    function isValidProfile(data) {
+      return data.keys().hasAll(['fullName', 'headline', 'shortBio', 'domicile', 'status', 'isVisible', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'fullName', 'headline', 'shortBio', 'biography', 'domicile',
+          'vision', 'mission', 'careerFocus', 'photoUrl', 'cvUrl', 'cvFileName',
+          'status', 'isVisible', 'createdAt', 'updatedAt'
+        ])
+        && isBoundedString(data.fullName, 1, 120)
+        && isBoundedString(data.headline, 1, 240)
+        && isBoundedString(data.shortBio, 1, 800)
+        && (!('biography' in data) || isBoundedString(data.biography, 0, 5000))
+        && isBoundedString(data.domicile, 1, 160)
+        && (!('vision' in data) || isBoundedString(data.vision, 0, 1500))
+        && (!('mission' in data) || isBoundedString(data.mission, 0, 2000))
+        && (!('careerFocus' in data) || isBoundedString(data.careerFocus, 0, 1000))
+        && (!('photoUrl' in data) || isBoundedString(data.photoUrl, 0, 2048))
+        && (!('cvUrl' in data) || isBoundedString(data.cvUrl, 0, 2048))
+        && (!('cvFileName' in data) || isBoundedString(data.cvFileName, 0, 200))
+        && isValidStatus(data.status)
+        && data.isVisible is bool
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidExperience(data) {
+      return data.keys().hasAll(['institution', 'role', 'category', 'period', 'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'institution', 'role', 'category', 'period', 'duration', 'location',
+          'description', 'responsibilities', 'imageUrls', 'featured',
+          'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'
+        ])
+        && isBoundedString(data.institution, 1, 200)
+        && isBoundedString(data.role, 1, 200)
+        && data.category is string && data.category in ['mentoring', 'teaching', 'committee', 'work']
+        && isBoundedString(data.period, 1, 100)
+        && (!('duration' in data) || isBoundedString(data.duration, 0, 100))
+        && (!('location' in data) || isBoundedString(data.location, 0, 160))
+        && (!('description' in data) || isBoundedString(data.description, 0, 3000))
+        && (!('responsibilities' in data) || isBoundedStringList(data.responsibilities, 12))
+        && (!('imageUrls' in data) || isBoundedStringList(data.imageUrls, 8))
+        && (!('featured' in data) || data.featured is bool)
+        && isValidStatus(data.status)
+        && data.isVisible is bool
+        && data.displayOrder is int && data.displayOrder >= 0 && data.displayOrder <= 10000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidOrganization(data) {
+      return data.keys().hasAll(['organizationName', 'role', 'category', 'period', 'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'organizationName', 'role', 'category', 'period', 'description',
+          'responsibilities', 'imageUrls',
+          'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'
+        ])
+        && isBoundedString(data.organizationName, 1, 200)
+        && isBoundedString(data.role, 1, 200)
+        && isBoundedString(data.category, 1, 80)
+        && isBoundedString(data.period, 1, 100)
+        && (!('description' in data) || isBoundedString(data.description, 0, 3000))
+        && (!('responsibilities' in data) || isBoundedStringList(data.responsibilities, 12))
+        && (!('imageUrls' in data) || isBoundedStringList(data.imageUrls, 8))
+        && isValidStatus(data.status)
+        && data.isVisible is bool
+        && data.displayOrder is int && data.displayOrder >= 0 && data.displayOrder <= 10000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidEducation(data) {
+      return data.keys().hasAll(['institution', 'degree', 'fieldOfStudy', 'graduationYear', 'category', 'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'institution', 'degree', 'fieldOfStudy', 'graduationYear', 'period',
+          'location', 'description', 'category',
+          'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'
+        ])
+        && isBoundedString(data.institution, 1, 200)
+        && isBoundedString(data.degree, 1, 160)
+        && isBoundedString(data.fieldOfStudy, 1, 200)
+        && isBoundedString(data.graduationYear, 1, 60)
+        && (!('period' in data) || isBoundedString(data.period, 0, 100))
+        && (!('location' in data) || isBoundedString(data.location, 0, 160))
+        && (!('description' in data) || isBoundedString(data.description, 0, 2500))
+        && isBoundedString(data.category, 1, 80)
+        && isValidStatus(data.status)
+        && data.isVisible is bool
+        && data.displayOrder is int && data.displayOrder >= 0 && data.displayOrder <= 10000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidCertificate(data) {
+      return data.keys().hasAll(['title', 'issuer', 'year', 'category', 'field', 'fileType', 'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'title', 'issuer', 'year', 'category', 'field', 'description',
+          'fileUrl', 'fileType', 'fileName', 'thumbnailUrl',
+          'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'
+        ])
+        && isBoundedString(data.title, 1, 200)
+        && isBoundedString(data.issuer, 1, 200)
+        && isBoundedString(data.year, 1, 40)
+        && isBoundedString(data.category, 1, 80)
+        && isBoundedString(data.field, 1, 100)
+        && (!('description' in data) || isBoundedString(data.description, 0, 2000))
+        && (!('fileUrl' in data) || isBoundedString(data.fileUrl, 0, 2048))
+        && data.fileType is string && data.fileType in ['image', 'pdf']
+        && (!('fileName' in data) || isBoundedString(data.fileName, 0, 200))
+        && (!('thumbnailUrl' in data) || isBoundedString(data.thumbnailUrl, 0, 2048))
+        && isValidStatus(data.status)
+        && data.isVisible is bool
+        && data.displayOrder is int && data.displayOrder >= 0 && data.displayOrder <= 10000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidTraining(data) {
+      return data.keys().hasAll(['title', 'scope', 'category', 'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'title', 'scope', 'organizer', 'year', 'category', 'topics', 'description',
+          'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'
+        ])
+        && isBoundedString(data.title, 1, 200)
+        && data.scope is string && data.scope in ['domestic', 'international']
+        && (!('organizer' in data) || isBoundedString(data.organizer, 0, 200))
+        && (!('year' in data) || isBoundedString(data.year, 0, 60))
+        && isBoundedString(data.category, 1, 80)
+        && (!('topics' in data) || isBoundedStringList(data.topics, 15))
+        && (!('description' in data) || isBoundedString(data.description, 0, 2000))
+        && isValidStatus(data.status)
+        && data.isVisible is bool
+        && data.displayOrder is int && data.displayOrder >= 0 && data.displayOrder <= 10000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidSkill(data) {
+      return data.keys().hasAll(['name', 'category', 'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'name', 'category', 'proficiencyLabel', 'description',
+          'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'
+        ])
+        && isBoundedString(data.name, 1, 140)
+        && data.category is string && data.category in ['technical', 'soft', 'academic', 'language', 'tool']
+        && (!('proficiencyLabel' in data) || isBoundedString(data.proficiencyLabel, 0, 120))
+        && (!('description' in data) || isBoundedString(data.description, 0, 800))
+        && isValidStatus(data.status)
+        && data.isVisible is bool
+        && data.displayOrder is int && data.displayOrder >= 0 && data.displayOrder <= 10000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidInterest(data) {
+      return data.keys().hasAll(['title', 'category', 'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'title', 'category', 'description',
+          'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'
+        ])
+        && isBoundedString(data.title, 1, 160)
+        && data.category is string && data.category in [
+          'professional_interest', 'academic_interest', 'personal_interest', 'talent_strength', 'career_interest'
+        ]
+        && (!('description' in data) || isBoundedString(data.description, 0, 1000))
+        && isValidStatus(data.status)
+        && data.isVisible is bool
+        && data.displayOrder is int && data.displayOrder >= 0 && data.displayOrder <= 10000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidProject(data) {
+      return data.keys().hasAll(['title', 'category', 'description', 'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'title', 'category', 'period', 'description', 'documentation',
+          'liveUrl', 'repoUrl', 'imageUrls', 'featured',
+          'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'
+        ])
+        && isBoundedString(data.title, 1, 200)
+        && data.category is string && data.category in [
+          'dars_with_osama', 'website_digital', 'article_writing', 'learning_material', 'design_media', 'other'
+        ]
+        && (!('period' in data) || isBoundedString(data.period, 0, 100))
+        && isBoundedString(data.description, 1, 3000)
+        && (!('documentation' in data) || isBoundedString(data.documentation, 0, 3000))
+        && (!('liveUrl' in data) || isBoundedString(data.liveUrl, 0, 2048))
+        && (!('repoUrl' in data) || isBoundedString(data.repoUrl, 0, 2048))
+        && (!('imageUrls' in data) || isBoundedStringList(data.imageUrls, 8))
+        && (!('featured' in data) || data.featured is bool)
+        && isValidStatus(data.status)
+        && data.isVisible is bool
+        && data.displayOrder is int && data.displayOrder >= 0 && data.displayOrder <= 10000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidPublication(data) {
+      return data.keys().hasAll(['title', 'category', 'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'title', 'category', 'venue', 'year', 'summary', 'url',
+          'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'
+        ])
+        && isBoundedString(data.title, 1, 240)
+        && data.category is string && data.category in ['publication', 'article', 'research_interest', 'study_field']
+        && (!('venue' in data) || isBoundedString(data.venue, 0, 200))
+        && (!('year' in data) || isBoundedString(data.year, 0, 40))
+        && (!('summary' in data) || isBoundedString(data.summary, 0, 2500))
+        && (!('url' in data) || isBoundedString(data.url, 0, 2048))
+        && isValidStatus(data.status)
+        && data.isVisible is bool
+        && data.displayOrder is int && data.displayOrder >= 0 && data.displayOrder <= 10000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidContactInfo(data) {
+      return data.keys().hasAll(['status', 'isVisible', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'email', 'whatsapp', 'whatsappLabel', 'linkedinUrl', 'githubUrl',
+          'instagramUrl', 'websiteUrl', 'availabilityNote',
+          'status', 'isVisible', 'createdAt', 'updatedAt'
+        ])
+        && (!('email' in data) || isBoundedString(data.email, 0, 160))
+        && (!('whatsapp' in data) || isBoundedString(data.whatsapp, 0, 80))
+        && (!('whatsappLabel' in data) || isBoundedString(data.whatsappLabel, 0, 120))
+        && (!('linkedinUrl' in data) || isBoundedString(data.linkedinUrl, 0, 2048))
+        && (!('githubUrl' in data) || isBoundedString(data.githubUrl, 0, 2048))
+        && (!('instagramUrl' in data) || isBoundedString(data.instagramUrl, 0, 2048))
+        && (!('websiteUrl' in data) || isBoundedString(data.websiteUrl, 0, 2048))
+        && (!('availabilityNote' in data) || isBoundedString(data.availabilityNote, 0, 400))
+        && isValidStatus(data.status)
+        && data.isVisible is bool
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidContactMessage(data) {
+      return data.keys().hasAll(['senderName', 'senderEmail', 'subject', 'message', 'status', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['senderName', 'senderEmail', 'subject', 'message', 'status', 'createdAt', 'updatedAt'])
+        && isBoundedString(data.senderName, 2, 120)
+        && isBoundedString(data.senderEmail, 5, 160)
+        && data.senderEmail.matches('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$')
+        && isBoundedString(data.subject, 2, 200)
+        && isBoundedString(data.message, 10, 3000)
+        && data.status is string && data.status in ['new', 'read', 'replied']
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidSiteSettings(data) {
+      return data.keys().hasAll(['siteTitle', 'metaDescription', 'ogTitle', 'ogDescription', 'status', 'isVisible', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'siteTitle', 'metaDescription', 'ogTitle', 'ogDescription', 'ogImageUrl',
+          'status', 'isVisible', 'createdAt', 'updatedAt'
+        ])
+        && isBoundedString(data.siteTitle, 1, 120)
+        && isBoundedString(data.metaDescription, 1, 320)
+        && isBoundedString(data.ogTitle, 1, 120)
+        && isBoundedString(data.ogDescription, 1, 320)
+        && (!('ogImageUrl' in data) || isBoundedString(data.ogImageUrl, 0, 2048))
+        && isValidStatus(data.status)
+        && data.isVisible is bool
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidAdminUser(data) {
+      return data.keys().hasAll(['email', 'displayName', 'role', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['email', 'displayName', 'role', 'createdAt', 'updatedAt'])
+        && isBoundedString(data.email, 5, 160)
+        && isBoundedString(data.displayName, 1, 120)
+        && data.role is string && data.role in ['admin', 'super_admin']
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidActivityLog(data) {
+      return data.keys().hasAll(['action', 'module', 'itemTitle', 'actorEmail', 'createdAt'])
+        && data.keys().hasOnly(['action', 'module', 'itemTitle', 'actorEmail', 'createdAt'])
+        && data.action is string && data.action in ['create', 'update', 'delete', 'seed', 'upload']
+        && isBoundedString(data.module, 1, 80)
+        && isBoundedString(data.itemTitle, 1, 200)
+        && isBoundedString(data.actorEmail, 1, 160)
+        && data.createdAt is timestamp;
+    }
+
+    function isValidMediaAsset(data) {
+      return data.keys().hasAll(['fileName', 'fileUrl', 'storagePath', 'mimeType', 'sizeBytes', 'folder', 'uploadedBy', 'createdAt'])
+        && data.keys().hasOnly(['fileName', 'fileUrl', 'storagePath', 'mimeType', 'sizeBytes', 'folder', 'uploadedBy', 'createdAt'])
+        && isBoundedString(data.fileName, 1, 200)
+        && isBoundedString(data.fileUrl, 1, 2048)
+        && isBoundedString(data.storagePath, 1, 500)
+        && isBoundedString(data.mimeType, 1, 100)
+        && data.sizeBytes is int && data.sizeBytes > 0 && data.sizeBytes <= 10485760
+        && isBoundedString(data.folder, 1, 80)
+        && data.uploadedBy == request.auth.uid
+        && data.createdAt is timestamp;
+    }
+
+    // =========================================================================
+    // COLLECTION RULES (Denial-of-Wallet Order: Auth -> Static -> Relational)
+    // =========================================================================
+
+    match /profile/{profileId} {
+      allow get: if isValidId(profileId) && (resource == null || isPublicDoc(existing()) || isAdmin());
+      allow list: if isPublicDoc(existing()) || isAdmin();
+      allow create: if isVerifiedUser() && isValidId(profileId) && isValidProfile(incoming()) && hasValidCreateTimestamps(incoming()) && isAdmin();
+      allow update: if isVerifiedUser() && isValidId(profileId) && isValidProfile(incoming()) && hasValidUpdateTimestamps(incoming(), existing()) && isAdmin();
+      allow delete: if isVerifiedUser() && isValidId(profileId) && isAdmin();
+    }
+
+    match /experiences/{experienceId} {
+      allow get: if isValidId(experienceId) && (isPublicDoc(existing()) || isAdmin());
+      allow list: if isPublicDoc(existing()) || isAdmin();
+      allow create: if isVerifiedUser() && isValidId(experienceId) && isValidExperience(incoming()) && hasValidCreateTimestamps(incoming()) && isAdmin();
+      allow update: if isVerifiedUser() && isValidId(experienceId) && isValidExperience(incoming()) && hasValidUpdateTimestamps(incoming(), existing()) && isAdmin();
+      allow delete: if isVerifiedUser() && isValidId(experienceId) && isAdmin();
+    }
+
+    match /organizations/{organizationId} {
+      allow get: if isValidId(organizationId) && (isPublicDoc(existing()) || isAdmin());
+      allow list: if isPublicDoc(existing()) || isAdmin();
+      allow create: if isVerifiedUser() && isValidId(organizationId) && isValidOrganization(incoming()) && hasValidCreateTimestamps(incoming()) && isAdmin();
+      allow update: if isVerifiedUser() && isValidId(organizationId) && isValidOrganization(incoming()) && hasValidUpdateTimestamps(incoming(), existing()) && isAdmin();
+      allow delete: if isVerifiedUser() && isValidId(organizationId) && isAdmin();
+    }
+
+    match /education/{educationId} {
+      allow get: if isValidId(educationId) && (isPublicDoc(existing()) || isAdmin());
+      allow list: if isPublicDoc(existing()) || isAdmin();
+      allow create: if isVerifiedUser() && isValidId(educationId) && isValidEducation(incoming()) && hasValidCreateTimestamps(incoming()) && isAdmin();
+      allow update: if isVerifiedUser() && isValidId(educationId) && isValidEducation(incoming()) && hasValidUpdateTimestamps(incoming(), existing()) && isAdmin();
+      allow delete: if isVerifiedUser() && isValidId(educationId) && isAdmin();
+    }
+
+    match /certificates/{certificateId} {
+      allow get: if isValidId(certificateId) && (isPublicDoc(existing()) || isAdmin());
+      allow list: if isPublicDoc(existing()) || isAdmin();
+      allow create: if isVerifiedUser() && isValidId(certificateId) && isValidCertificate(incoming()) && hasValidCreateTimestamps(incoming()) && isAdmin();
+      allow update: if isVerifiedUser() && isValidId(certificateId) && isValidCertificate(incoming()) && hasValidUpdateTimestamps(incoming(), existing()) && isAdmin();
+      allow delete: if isVerifiedUser() && isValidId(certificateId) && isAdmin();
+    }
+
+    match /trainings/{trainingId} {
+      allow get: if isValidId(trainingId) && (isPublicDoc(existing()) || isAdmin());
+      allow list: if isPublicDoc(existing()) || isAdmin();
+      allow create: if isVerifiedUser() && isValidId(trainingId) && isValidTraining(incoming()) && hasValidCreateTimestamps(incoming()) && isAdmin();
+      allow update: if isVerifiedUser() && isValidId(trainingId) && isValidTraining(incoming()) && hasValidUpdateTimestamps(incoming(), existing()) && isAdmin();
+      allow delete: if isVerifiedUser() && isValidId(trainingId) && isAdmin();
+    }
+
+    match /skills/{skillId} {
+      allow get: if isValidId(skillId) && (isPublicDoc(existing()) || isAdmin());
+      allow list: if isPublicDoc(existing()) || isAdmin();
+      allow create: if isVerifiedUser() && isValidId(skillId) && isValidSkill(incoming()) && hasValidCreateTimestamps(incoming()) && isAdmin();
+      allow update: if isVerifiedUser() && isValidId(skillId) && isValidSkill(incoming()) && hasValidUpdateTimestamps(incoming(), existing()) && isAdmin();
+      allow delete: if isVerifiedUser() && isValidId(skillId) && isAdmin();
+    }
+
+    match /interests/{interestId} {
+      allow get: if isValidId(interestId) && (isPublicDoc(existing()) || isAdmin());
+      allow list: if isPublicDoc(existing()) || isAdmin();
+      allow create: if isVerifiedUser() && isValidId(interestId) && isValidInterest(incoming()) && hasValidCreateTimestamps(incoming()) && isAdmin();
+      allow update: if isVerifiedUser() && isValidId(interestId) && isValidInterest(incoming()) && hasValidUpdateTimestamps(incoming(), existing()) && isAdmin();
+      allow delete: if isVerifiedUser() && isValidId(interestId) && isAdmin();
+    }
+
+    match /projects/{projectId} {
+      allow get: if isValidId(projectId) && (isPublicDoc(existing()) || isAdmin());
+      allow list: if isPublicDoc(existing()) || isAdmin();
+      allow create: if isVerifiedUser() && isValidId(projectId) && isValidProject(incoming()) && hasValidCreateTimestamps(incoming()) && isAdmin();
+      allow update: if isVerifiedUser() && isValidId(projectId) && isValidProject(incoming()) && hasValidUpdateTimestamps(incoming(), existing()) && isAdmin();
+      allow delete: if isVerifiedUser() && isValidId(projectId) && isAdmin();
+    }
+
+    match /publications/{publicationId} {
+      allow get: if isValidId(publicationId) && (isPublicDoc(existing()) || isAdmin());
+      allow list: if isPublicDoc(existing()) || isAdmin();
+      allow create: if isVerifiedUser() && isValidId(publicationId) && isValidPublication(incoming()) && hasValidCreateTimestamps(incoming()) && isAdmin();
+      allow update: if isVerifiedUser() && isValidId(publicationId) && isValidPublication(incoming()) && hasValidUpdateTimestamps(incoming(), existing()) && isAdmin();
+      allow delete: if isVerifiedUser() && isValidId(publicationId) && isAdmin();
+    }
+
+    match /contacts/{contactId} {
+      allow get: if isValidId(contactId) && (resource == null || isPublicDoc(existing()) || isAdmin());
+      allow list: if isPublicDoc(existing()) || isAdmin();
+      allow create: if isVerifiedUser() && isValidId(contactId) && isValidContactInfo(incoming()) && hasValidCreateTimestamps(incoming()) && isAdmin();
+      allow update: if isVerifiedUser() && isValidId(contactId) && isValidContactInfo(incoming()) && hasValidUpdateTimestamps(incoming(), existing()) && isAdmin();
+      allow delete: if isVerifiedUser() && isValidId(contactId) && isAdmin();
+    }
+
+    match /contactMessages/{messageId} {
+      allow get: if isVerifiedUser() && isValidId(messageId) && isAdmin();
+      allow list: if isVerifiedUser() && isAdmin();
+      allow create: if isValidId(messageId)
+        && isValidContactMessage(incoming())
+        && incoming().status == 'new'
+        && hasValidCreateTimestamps(incoming());
+      allow update: if isVerifiedUser()
+        && isValidId(messageId)
+        && isValidContactMessage(incoming())
+        && hasValidUpdateTimestamps(incoming(), existing())
+        && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt'])
+        && isAdmin();
+      allow delete: if isVerifiedUser() && isValidId(messageId) && isAdmin();
+    }
+
+    match /siteSettings/{settingId} {
+      allow get: if isValidId(settingId) && (resource == null || isPublicDoc(existing()) || isAdmin());
+      allow list: if isPublicDoc(existing()) || isAdmin();
+      allow create: if isVerifiedUser() && isValidId(settingId) && isValidSiteSettings(incoming()) && hasValidCreateTimestamps(incoming()) && isAdmin();
+      allow update: if isVerifiedUser() && isValidId(settingId) && isValidSiteSettings(incoming()) && hasValidUpdateTimestamps(incoming(), existing()) && isAdmin();
+      allow delete: if isVerifiedUser() && isValidId(settingId) && isAdmin();
+    }
+
+    match /admins/{adminUid} {
+      allow get: if isVerifiedUser() && isValidId(adminUid) && (request.auth.uid == adminUid || isAdmin());
+      allow list: if isVerifiedUser() && isAdmin();
+      allow create: if isVerifiedUser() && isValidId(adminUid) && isValidAdminUser(incoming()) && hasValidCreateTimestamps(incoming()) && isAdmin();
+      allow update: if isVerifiedUser() && isValidId(adminUid) && isValidAdminUser(incoming()) && hasValidUpdateTimestamps(incoming(), existing()) && isAdmin();
+      allow delete: if isVerifiedUser() && isValidId(adminUid) && request.auth.uid != adminUid && isAdmin();
+    }
+
+    match /activityLogs/{logId} {
+      allow get: if isVerifiedUser() && isValidId(logId) && isAdmin();
+      allow list: if isVerifiedUser() && isAdmin();
+      allow create: if isVerifiedUser() && isValidId(logId) && isValidActivityLog(incoming()) && incoming().createdAt == request.time && isAdmin();
+      allow update: if false;
+      allow delete: if isVerifiedUser() && isValidId(logId) && isAdmin();
+    }
+
+    match /mediaAssets/{assetId} {
+      allow get: if isVerifiedUser() && isValidId(assetId) && isAdmin();
+      allow list: if isVerifiedUser() && isAdmin();
+      allow create: if isVerifiedUser() && isValidId(assetId) && isValidMediaAsset(incoming()) && incoming().createdAt == request.time && isAdmin();
+      allow update: if false;
+      allow delete: if isVerifiedUser() && isValidId(assetId) && isAdmin();
+    }
+  }
+}

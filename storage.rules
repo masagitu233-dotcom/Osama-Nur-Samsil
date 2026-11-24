@@ -1,0 +1,36 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isVerifiedAdmin() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && (
+          request.auth.token.email == 'osamanursamsil@gmail.com'
+          || firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid))
+        );
+    }
+
+    function isAllowedImage() {
+      return request.resource.contentType in ['image/jpeg', 'image/png', 'image/webp']
+        && request.resource.size <= 5 * 1024 * 1024;
+    }
+
+    function isAllowedPdf() {
+      return request.resource.contentType == 'application/pdf'
+        && request.resource.size <= 10 * 1024 * 1024;
+    }
+
+    match /portfolio/{folder}/{fileName} {
+      allow read: if true;
+      allow write: if isVerifiedAdmin()
+        && folder in ['profile', 'certificates', 'experiences', 'organizations', 'projects', 'cv', 'media']
+        && (isAllowedImage() || isAllowedPdf());
+      allow delete: if isVerifiedAdmin();
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

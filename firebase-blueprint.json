@@ -1,0 +1,368 @@
+{
+  "entities": {
+    "Profile": {
+      "title": "Profile",
+      "description": "Primary portfolio owner profile, headline, biography, vision, mission, and CV document metadata.",
+      "type": "object",
+      "properties": {
+        "fullName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "headline": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "shortBio": { "type": "string", "minLength": 1, "maxLength": 800 },
+        "biography": { "type": "string", "minLength": 0, "maxLength": 5000 },
+        "domicile": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "vision": { "type": "string", "minLength": 0, "maxLength": 1500 },
+        "mission": { "type": "string", "minLength": 0, "maxLength": 2000 },
+        "careerFocus": { "type": "string", "minLength": 0, "maxLength": 1000 },
+        "photoUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
+        "cvUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
+        "cvFileName": { "type": "string", "minLength": 0, "maxLength": 200 },
+        "status": { "type": "string", "enum": ["draft", "published"] },
+        "isVisible": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["fullName", "headline", "shortBio", "domicile", "status", "isVisible", "createdAt", "updatedAt"]
+    },
+    "Experience": {
+      "title": "Experience",
+      "description": "Professional, mentoring, teaching, or committee experience record.",
+      "type": "object",
+      "properties": {
+        "institution": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "role": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "category": { "type": "string", "enum": ["mentoring", "teaching", "committee", "work"] },
+        "period": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "duration": { "type": "string", "minLength": 0, "maxLength": 100 },
+        "location": { "type": "string", "minLength": 0, "maxLength": 160 },
+        "description": { "type": "string", "minLength": 0, "maxLength": 3000 },
+        "responsibilities": { "type": "array", "description": "Up to 12 responsibility bullet items" },
+        "imageUrls": { "type": "array", "description": "Up to 8 documentation image URLs" },
+        "featured": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["draft", "published"] },
+        "isVisible": { "type": "boolean" },
+        "displayOrder": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["institution", "role", "category", "period", "status", "isVisible", "displayOrder", "createdAt", "updatedAt"]
+    },
+    "Organization": {
+      "title": "Organization",
+      "description": "Student, academic, or community organizational leadership record.",
+      "type": "object",
+      "properties": {
+        "organizationName": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "role": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "category": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "period": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "description": { "type": "string", "minLength": 0, "maxLength": 3000 },
+        "responsibilities": { "type": "array", "description": "Up to 12 key responsibilities" },
+        "imageUrls": { "type": "array", "description": "Up to 8 documentation images" },
+        "status": { "type": "string", "enum": ["draft", "published"] },
+        "isVisible": { "type": "boolean" },
+        "displayOrder": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["organizationName", "role", "category", "period", "status", "isVisible", "displayOrder", "createdAt", "updatedAt"]
+    },
+    "Education": {
+      "title": "Education",
+      "description": "Formal education and academic background record.",
+      "type": "object",
+      "properties": {
+        "institution": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "degree": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "fieldOfStudy": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "graduationYear": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "period": { "type": "string", "minLength": 0, "maxLength": 100 },
+        "location": { "type": "string", "minLength": 0, "maxLength": 160 },
+        "description": { "type": "string", "minLength": 0, "maxLength": 2500 },
+        "category": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "status": { "type": "string", "enum": ["draft", "published"] },
+        "isVisible": { "type": "boolean" },
+        "displayOrder": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["institution", "degree", "fieldOfStudy", "graduationYear", "category", "status", "isVisible", "displayOrder", "createdAt", "updatedAt"]
+    },
+    "Certificate": {
+      "title": "Certificate",
+      "description": "Uploaded training certificate or credential with image or PDF file.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "issuer": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "year": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "category": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "field": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "description": { "type": "string", "minLength": 0, "maxLength": 2000 },
+        "fileUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
+        "fileType": { "type": "string", "enum": ["image", "pdf"] },
+        "fileName": { "type": "string", "minLength": 0, "maxLength": 200 },
+        "thumbnailUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
+        "status": { "type": "string", "enum": ["draft", "published"] },
+        "isVisible": { "type": "boolean" },
+        "displayOrder": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "issuer", "year", "category", "field", "fileType", "status", "isVisible", "displayOrder", "createdAt", "updatedAt"]
+    },
+    "Training": {
+      "title": "Training",
+      "description": "Domestic or international training field or program summary.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "scope": { "type": "string", "enum": ["domestic", "international"] },
+        "organizer": { "type": "string", "minLength": 0, "maxLength": 200 },
+        "year": { "type": "string", "minLength": 0, "maxLength": 60 },
+        "category": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "topics": { "type": "array", "description": "Up to 15 topic strings" },
+        "description": { "type": "string", "minLength": 0, "maxLength": 2000 },
+        "status": { "type": "string", "enum": ["draft", "published"] },
+        "isVisible": { "type": "boolean" },
+        "displayOrder": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "scope", "category", "status", "isVisible", "displayOrder", "createdAt", "updatedAt"]
+    },
+    "Skill": {
+      "title": "Skill",
+      "description": "Technical, soft, academic, language, or software tool skill with owner-defined proficiency description.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "category": { "type": "string", "enum": ["technical", "soft", "academic", "language", "tool"] },
+        "proficiencyLabel": { "type": "string", "minLength": 0, "maxLength": 120 },
+        "description": { "type": "string", "minLength": 0, "maxLength": 800 },
+        "status": { "type": "string", "enum": ["draft", "published"] },
+        "isVisible": { "type": "boolean" },
+        "displayOrder": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "category", "status", "isVisible", "displayOrder", "createdAt", "updatedAt"]
+    },
+    "Interest": {
+      "title": "Interest",
+      "description": "Professional interest, academic interest, personal interest, talent/strength, or career interest.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "category": { "type": "string", "enum": ["professional_interest", "academic_interest", "personal_interest", "talent_strength", "career_interest"] },
+        "description": { "type": "string", "minLength": 0, "maxLength": 1000 },
+        "status": { "type": "string", "enum": ["draft", "published"] },
+        "isVisible": { "type": "boolean" },
+        "displayOrder": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "category", "status", "isVisible", "displayOrder", "createdAt", "updatedAt"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "Portfolio project, digital platform, learning material, article collection, or design work.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "category": { "type": "string", "enum": ["dars_with_osama", "website_digital", "article_writing", "learning_material", "design_media", "other"] },
+        "period": { "type": "string", "minLength": 0, "maxLength": 100 },
+        "description": { "type": "string", "minLength": 1, "maxLength": 3000 },
+        "documentation": { "type": "string", "minLength": 0, "maxLength": 3000 },
+        "liveUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
+        "repoUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
+        "imageUrls": { "type": "array", "description": "Up to 8 preview/documentation images" },
+        "featured": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["draft", "published"] },
+        "isVisible": { "type": "boolean" },
+        "displayOrder": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "category", "description", "status", "isVisible", "displayOrder", "createdAt", "updatedAt"]
+    },
+    "Publication": {
+      "title": "Publication",
+      "description": "Publication, scholarly article, research interest, or Islamic/academic study field.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "category": { "type": "string", "enum": ["publication", "article", "research_interest", "study_field"] },
+        "venue": { "type": "string", "minLength": 0, "maxLength": 200 },
+        "year": { "type": "string", "minLength": 0, "maxLength": 40 },
+        "summary": { "type": "string", "minLength": 0, "maxLength": 2500 },
+        "url": { "type": "string", "minLength": 0, "maxLength": 2048 },
+        "status": { "type": "string", "enum": ["draft", "published"] },
+        "isVisible": { "type": "boolean" },
+        "displayOrder": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "category", "status", "isVisible", "displayOrder", "createdAt", "updatedAt"]
+    },
+    "ContactInfo": {
+      "title": "ContactInfo",
+      "description": "Owner public contact channels managed from admin dashboard.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "minLength": 0, "maxLength": 160 },
+        "whatsapp": { "type": "string", "minLength": 0, "maxLength": 80 },
+        "whatsappLabel": { "type": "string", "minLength": 0, "maxLength": 120 },
+        "linkedinUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
+        "githubUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
+        "instagramUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
+        "websiteUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
+        "availabilityNote": { "type": "string", "minLength": 0, "maxLength": 400 },
+        "status": { "type": "string", "enum": ["draft", "published"] },
+        "isVisible": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["status", "isVisible", "createdAt", "updatedAt"]
+    },
+    "ContactMessage": {
+      "title": "ContactMessage",
+      "description": "Inbound message submitted via public contact form (PII isolated to admin read-only).",
+      "type": "object",
+      "properties": {
+        "senderName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "senderEmail": { "type": "string", "minLength": 5, "maxLength": 160 },
+        "subject": { "type": "string", "minLength": 2, "maxLength": 200 },
+        "message": { "type": "string", "minLength": 10, "maxLength": 3000 },
+        "status": { "type": "string", "enum": ["new", "read", "replied"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["senderName", "senderEmail", "subject", "message", "status", "createdAt", "updatedAt"]
+    },
+    "SiteSettings": {
+      "title": "SiteSettings",
+      "description": "Manageable SEO metadata, Open Graph details, and public display preferences.",
+      "type": "object",
+      "properties": {
+        "siteTitle": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "metaDescription": { "type": "string", "minLength": 1, "maxLength": 320 },
+        "ogTitle": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "ogDescription": { "type": "string", "minLength": 1, "maxLength": 320 },
+        "ogImageUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
+        "status": { "type": "string", "enum": ["draft", "published"] },
+        "isVisible": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["siteTitle", "metaDescription", "ogTitle", "ogDescription", "status", "isVisible", "createdAt", "updatedAt"]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Verified administrator UID record for RBAC.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "minLength": 5, "maxLength": 160 },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "role": { "type": "string", "enum": ["admin", "super_admin"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "displayName", "role", "createdAt", "updatedAt"]
+    },
+    "ActivityLog": {
+      "title": "ActivityLog",
+      "description": "Audit log of CMS content actions.",
+      "type": "object",
+      "properties": {
+        "action": { "type": "string", "enum": ["create", "update", "delete", "seed", "upload"] },
+        "module": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "itemTitle": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "actorEmail": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["action", "module", "itemTitle", "actorEmail", "createdAt"]
+    },
+    "MediaAsset": {
+      "title": "MediaAsset",
+      "description": "Metadata for images and PDFs uploaded to Firebase Storage.",
+      "type": "object",
+      "properties": {
+        "fileName": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "fileUrl": { "type": "string", "minLength": 1, "maxLength": 2048 },
+        "storagePath": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "mimeType": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "sizeBytes": { "type": "integer" },
+        "folder": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "uploadedBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["fileName", "fileUrl", "storagePath", "mimeType", "sizeBytes", "folder", "uploadedBy", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/profile/{profileId}": {
+      "schema": { "$ref": "#/entities/Profile" },
+      "description": "Primary portfolio owner profile document (typically id 'main')."
+    },
+    "/experiences/{experienceId}": {
+      "schema": { "$ref": "#/entities/Experience" },
+      "description": "Mentoring, teaching, committee, and work experiences."
+    },
+    "/organizations/{organizationId}": {
+      "schema": { "$ref": "#/entities/Organization" },
+      "description": "Organizational leadership and membership history."
+    },
+    "/education/{educationId}": {
+      "schema": { "$ref": "#/entities/Education" },
+      "description": "Formal educational background."
+    },
+    "/certificates/{certificateId}": {
+      "schema": { "$ref": "#/entities/Certificate" },
+      "description": "Uploaded training certificates (images and PDFs)."
+    },
+    "/trainings/{trainingId}": {
+      "schema": { "$ref": "#/entities/Training" },
+      "description": "Domestic and international training domains and sessions."
+    },
+    "/skills/{skillId}": {
+      "schema": { "$ref": "#/entities/Skill" },
+      "description": "Technical, soft, academic, language, and software tool skills."
+    },
+    "/interests/{interestId}": {
+      "schema": { "$ref": "#/entities/Interest" },
+      "description": "Professional, academic, personal, career interests and personal talents."
+    },
+    "/projects/{projectId}": {
+      "schema": { "$ref": "#/entities/Project" },
+      "description": "Portfolio projects, Dars with Osama, articles, learning materials, and design works."
+    },
+    "/publications/{publicationId}": {
+      "schema": { "$ref": "#/entities/Publication" },
+      "description": "Publications, scholarly writings, research interests, and study fields."
+    },
+    "/contacts/{contactId}": {
+      "schema": { "$ref": "#/entities/ContactInfo" },
+      "description": "Publicly displayed contact links and availability settings (typically id 'main')."
+    },
+    "/contactMessages/{messageId}": {
+      "schema": { "$ref": "#/entities/ContactMessage" },
+      "description": "Visitor contact form submissions (write-only for public, admin-only read/manage)."
+    },
+    "/siteSettings/{settingId}": {
+      "schema": { "$ref": "#/entities/SiteSettings" },
+      "description": "SEO metadata and site settings (typically id 'main')."
+    },
+    "/admins/{adminUid}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Verified administrator UID registry."
+    },
+    "/activityLogs/{logId}": {
+      "schema": { "$ref": "#/entities/ActivityLog" },
+      "description": "Immutable CMS activity logs readable only by admins."
+    },
+    "/mediaAssets/{assetId}": {
+      "schema": { "$ref": "#/entities/MediaAsset" },
+      "description": "Uploaded Firebase Storage asset metadata managed by admins."
+    }
+  }
+}

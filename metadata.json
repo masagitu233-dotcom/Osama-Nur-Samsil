@@ -1,0 +1,8 @@
+{
+  "name": "Osama Nur Samsil — Personal Portfolio & CMS",
+  "description": "Website portofolio profesional Neo-Brutalist dan Content Management System (CMS) berbasis Firebase milik Osama Nur Samsil — Sarjana Hukum Keluarga, pembina, pengajar, dan kreator platform pembelajaran digital.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,326 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Official 3-Color Identity Palette */
+  --color-beige: #F8F8E1;
+  --color-non-photo-blue: #8ACCD5;
+  --color-midnight-green: #013A42;
+}
+
+:root {
+  /* Core Palette Variables */
+  --color-beige: #F8F8E1;
+  --color-non-photo-blue: #8ACCD5;
+  --color-midnight-green: #013A42;
+
+  /* Semantic Design Tokens — Light Mode (60% Beige, 25% Midnight Green, 15% Non Photo Blue) */
+  --bg-page: var(--color-beige);
+  --surface: var(--color-beige);
+  --surface-highlight: var(--color-non-photo-blue);
+  --surface-inverse: var(--color-midnight-green);
+
+  --primary: var(--color-midnight-green);
+  --primary-text: var(--color-beige);
+  --secondary: var(--color-non-photo-blue);
+  --secondary-text: var(--color-midnight-green);
+
+  --text-primary: var(--color-midnight-green);
+  --text-muted: color-mix(in srgb, var(--color-midnight-green) 78%, transparent);
+  --text-inverse: var(--color-beige);
+  --text-inverse-muted: color-mix(in srgb, var(--color-beige) 82%, transparent);
+
+  --border: var(--color-midnight-green);
+  --border-subtle: color-mix(in srgb, var(--color-midnight-green) 24%, transparent);
+  --shadow: var(--color-midnight-green);
+  --interactive-hover: var(--color-non-photo-blue);
+  --focus-ring: var(--color-non-photo-blue);
+}
+
+.dark {
+  /* Strict 3-Color Inverted Dark Mode */
+  --bg-page: var(--color-midnight-green);
+  --surface: var(--color-midnight-green);
+  --surface-highlight: var(--color-non-photo-blue);
+  --surface-inverse: var(--color-beige);
+
+  --primary: var(--color-non-photo-blue);
+  --primary-text: var(--color-midnight-green);
+  --secondary: var(--color-beige);
+  --secondary-text: var(--color-midnight-green);
+
+  --text-primary: var(--color-beige);
+  --text-muted: color-mix(in srgb, var(--color-beige) 82%, transparent);
+  --text-inverse: var(--color-midnight-green);
+  --text-inverse-muted: color-mix(in srgb, var(--color-midnight-green) 78%, transparent);
+
+  --border: var(--color-non-photo-blue);
+  --border-subtle: color-mix(in srgb, var(--color-non-photo-blue) 30%, transparent);
+  --shadow: var(--color-non-photo-blue);
+  --interactive-hover: var(--color-non-photo-blue);
+  --focus-ring: var(--color-beige);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    overflow-x: clip;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+  }
+
+  body {
+    overflow-x: clip;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-mono-num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+/* Semantic Surface & Text Helpers */
+.surface-page {
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+}
+
+.surface-card {
+  background-color: var(--surface);
+  color: var(--text-primary);
+}
+
+/* Text on Non Photo Blue ALWAYS remains Midnight Green for WCAG AA contrast */
+.surface-highlight {
+  background-color: var(--color-non-photo-blue);
+  color: var(--color-midnight-green);
+}
+
+.surface-highlight .text-muted {
+  color: color-mix(in srgb, var(--color-midnight-green) 80%, transparent);
+}
+
+/* Text on Midnight Green ALWAYS remains Beige */
+.surface-dark {
+  background-color: var(--color-midnight-green);
+  color: var(--color-beige);
+}
+
+.surface-dark .text-muted {
+  color: color-mix(in srgb, var(--color-beige) 82%, transparent);
+}
+
+.surface-beige {
+  background-color: var(--color-beige);
+  color: var(--color-midnight-green);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-inverse-muted {
+  color: var(--text-inverse-muted);
+}
+
+.border-brutal {
+  border-color: var(--border);
+}
+
+.border-subtle {
+  border-color: var(--border-subtle);
+}
+
+/* Neo-Brutalist Cards & Hard Offset Shadows */
+.brutal-card {
+  border: 2px solid var(--border);
+  box-shadow: 5px 5px 0 0 var(--shadow);
+  transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 160ms cubic-bezier(0.16, 1, 0.3, 1), background-color 160ms ease;
+}
+
+.brutal-card-interactive:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 0 var(--shadow);
+}
+
+.brutal-card-on-dark {
+  border: 2px solid var(--color-beige);
+  box-shadow: 5px 5px 0 0 var(--color-non-photo-blue);
+}
+
+/* Neo-Brutalist Buttons */
+.brutal-btn {
+  border: 2px solid var(--border);
+  box-shadow: 3px 3px 0 0 var(--shadow);
+  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms ease, color 140ms ease;
+}
+
+.brutal-btn:hover:not(:disabled) {
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 5px 5px 0 0 var(--shadow);
+}
+
+.brutal-btn:active:not(:disabled) {
+  transform: translate(1.5px, 1.5px);
+  box-shadow: 1px 1px 0 0 var(--shadow);
+}
+
+.brutal-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Primary Button: Midnight Green bg + Beige text; hover uses Non Photo Blue accent */
+.brutal-btn-primary {
+  background-color: var(--primary);
+  color: var(--primary-text);
+  border-color: var(--border);
+}
+
+.brutal-btn-primary:hover:not(:disabled) {
+  background-color: var(--color-non-photo-blue);
+  color: var(--color-midnight-green);
+}
+
+.dark .brutal-btn-primary:hover:not(:disabled) {
+  background-color: var(--color-beige);
+  color: var(--color-midnight-green);
+}
+
+/* Secondary Button: Non Photo Blue bg + Midnight Green text + Midnight Green border */
+.brutal-btn-secondary {
+  background-color: var(--color-non-photo-blue);
+  color: var(--color-midnight-green);
+  border-color: var(--color-midnight-green);
+  box-shadow: 3px 3px 0 0 var(--shadow);
+}
+
+.brutal-btn-secondary:hover:not(:disabled) {
+  background-color: var(--color-beige);
+  color: var(--color-midnight-green);
+}
+
+/* Outline Button: Transparent/Beige bg + Midnight Green text + border */
+.brutal-btn-outline {
+  background-color: var(--surface);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.brutal-btn-outline:hover:not(:disabled) {
+  background-color: var(--color-non-photo-blue);
+  color: var(--color-midnight-green);
+}
+
+/* Button placed on Midnight Green surfaces (Navbar, Footer, Admin Sidebar, Lightbox) */
+.brutal-btn-on-dark {
+  background-color: var(--color-non-photo-blue);
+  color: var(--color-midnight-green);
+  border: 2px solid var(--color-beige);
+  box-shadow: 3px 3px 0 0 var(--color-beige);
+  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms ease;
+}
+
+.brutal-btn-on-dark:hover:not(:disabled) {
+  background-color: var(--color-beige);
+  color: var(--color-midnight-green);
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 5px 5px 0 0 var(--color-non-photo-blue);
+}
+
+.brutal-btn-on-dark-outline {
+  background-color: var(--color-midnight-green);
+  color: var(--color-beige);
+  border: 2px solid var(--color-non-photo-blue);
+  box-shadow: 3px 3px 0 0 var(--color-non-photo-blue);
+  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms ease, color 140ms ease;
+}
+
+.brutal-btn-on-dark-outline:hover:not(:disabled) {
+  background-color: var(--color-non-photo-blue);
+  color: var(--color-midnight-green);
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 5px 5px 0 0 var(--color-beige);
+}
+
+/* Form Controls */
+.brutal-input {
+  border: 2px solid var(--border);
+  background-color: var(--surface);
+  color: var(--text-primary);
+  transition: box-shadow 140ms ease, border-color 140ms ease;
+}
+
+.brutal-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.brutal-input:focus {
+  outline: none;
+  box-shadow: 3px 3px 0 0 var(--focus-ring);
+  border-color: var(--border);
+}
+
+/* Crisp Neo-Brutalist Category Accent Label (Non Photo Blue) */
+.brutal-badge {
+  display: inline-block;
+  background-color: var(--color-non-photo-blue);
+  color: var(--color-midnight-green);
+  border: 1.5px solid var(--color-midnight-green);
+  padding: 0.15rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.brutal-badge-inverse {
+  display: inline-block;
+  background-color: var(--color-midnight-green);
+  color: var(--color-beige);
+  border: 1.5px solid var(--color-midnight-green);
+  padding: 0.15rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* Skeleton Loader strictly within 3-color system */
+.brutal-skeleton {
+  background-color: color-mix(in srgb, var(--color-non-photo-blue) 35%, var(--bg-page));
+  border: 2px solid var(--border-subtle);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
