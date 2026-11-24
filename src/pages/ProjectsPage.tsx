@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ExternalLink, Search } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import type { ProjectItem } from '../types/portfolio';
@@ -6,7 +6,7 @@ import { SafeImage } from '../components/ui/SafeImage';
 import { DarsLogo } from '../components/ui/DarsLogo';
 import { Modal } from '../components/ui/Modal';
 import { getCardTone } from '../utils/cardVariants';
-import { getAosStaggerDelay } from '../utils/aos';
+import { getAosStaggerDelay, refreshAos } from '../utils/aos';
 import {
   ACTIVE_PROJECT_CATEGORY_LABELS,
   ACTIVE_PROJECT_TABS,
@@ -43,6 +43,10 @@ export const ProjectsPage: React.FC = () => {
 
   const showWebsiteSection = category === 'all' || category === 'website_digital';
   const showArticleSection = category === 'all' || category === 'article_writing';
+
+  useEffect(() => {
+    refreshAos(true);
+  }, [category, query]);
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-9">
@@ -142,7 +146,7 @@ export const ProjectsPage: React.FC = () => {
                   <article
                     key={proj.id}
                     data-aos="fade-up"
-                    data-aos-delay={getAosStaggerDelay(idx, 80, 2)}
+                    data-aos-delay={getAosStaggerDelay(idx, 100, 2)}
                     className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                   >
                     {isDars && !useCustomAsset ? (
@@ -250,7 +254,7 @@ export const ProjectsPage: React.FC = () => {
                     <article
                       key={proj.id}
                       data-aos="fade-up"
-                      data-aos-delay={getAosStaggerDelay(idx, 70, 3)}
+                      data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
                       className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                     >
                       {proj.imageUrls[0] && (

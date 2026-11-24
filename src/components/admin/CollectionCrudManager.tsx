@@ -496,7 +496,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
               <div
                 key={item.id}
                 data-aos="fade-up"
-                data-aos-delay={getAosStaggerDelay(idx, 50, 4)}
+                data-aos-delay={getAosStaggerDelay(idx, 100, 4)}
                 className="brutal-card surface-card p-3.5 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3"
               >
                 <div className="min-w-0">

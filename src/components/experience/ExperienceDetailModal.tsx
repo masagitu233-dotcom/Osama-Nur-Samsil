@@ -4,7 +4,7 @@ import { Modal } from '../ui/Modal';
 import { SafeImage } from '../ui/SafeImage';
 import { PhotoLightbox } from './PhotoLightbox';
 import { resolveExperiencePrimaryPhoto } from '../../utils/experienceGallery';
-import { getAosStaggerDelay } from '../../utils/aos';
+import { getAosStaggerDelay, refreshAos } from '../../utils/aos';
 
 export interface ExperienceDetailViewData {
   id: string;
@@ -29,9 +29,12 @@ interface ExperienceDetailModalProps {
 export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ detail, onClose }) => {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  // Reset lightbox whenever detail changes or closes
+  // Reset lightbox and trigger AOS animation cleanly whenever detail opens or changes
   useEffect(() => {
     setLightboxIndex(null);
+    if (detail) {
+      refreshAos(true);
+    }
   }, [detail?.id]);
 
   const photos = detail?.imageUrls ?? [];
@@ -142,7 +145,7 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
                         onClick={() => setLightboxIndex(idx)}
                         data-aos="fade-up"
                         data-aos-offset="-2000"
-                        data-aos-delay={getAosStaggerDelay(idx, 60, 3)}
+                        data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
                         aria-label={`Perbesar dokumentasi ${detail.institutionName} foto ${idx + 1} dari ${photos.length}`}
                         className={`w-full block break-inside-avoid mb-3.5 border-2 bg-[#F8F8E1] shadow-[3px_3px_0_0_#013A42] hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_#013A42] transition-all cursor-pointer overflow-hidden text-left group ${
                           isPrimary ? 'border-[#6C151E]' : 'border-[#013A42]'

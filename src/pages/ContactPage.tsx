@@ -112,7 +112,7 @@ export const ContactPage: React.FC = () => {
           </div>
 
           {/* Professional Links */}
-          <div data-aos="fade-up" data-aos-delay="80" className="brutal-card card-green frame-midnight p-5 space-y-3">
+          <div data-aos="fade-up" data-aos-delay="100" className="brutal-card card-green frame-midnight p-5 space-y-3">
             <span className="brutal-badge">Jejaring Digital</span>
             <h2 className="font-display text-lg font-extrabold text-[#F8F8E1]">Media Sosial &amp; Tautan Profesional</h2>
             <div className="flex flex-col gap-1.5 text-sm font-bold">

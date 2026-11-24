@@ -39,7 +39,7 @@ export const EducationPage: React.FC = () => {
                 <article
                   key={edu.id}
                   data-aos="fade-up"
-                  data-aos-delay={getAosStaggerDelay(idx, 70, 2)}
+                  data-aos-delay={getAosStaggerDelay(idx, 100, 2)}
                   className={`brutal-card p-5 sm:p-6 ${tone.cardClass} ${
                     idx === 0 ? 'frame-shadow-bordo' : tone.frameClass
                   }`}
@@ -69,7 +69,7 @@ export const EducationPage: React.FC = () => {
                         <div
                           key={`${edu.id}-img-${imgIdx}`}
                           data-aos="fade-up"
-                          data-aos-delay={getAosStaggerDelay(imgIdx, 60, 4)}
+                          data-aos-delay={getAosStaggerDelay(imgIdx, 100, 4)}
                           className="aspect-[4/3] border-2 border-[#013A42] bg-[#F8F8E1] overflow-hidden"
                         >
                           <SafeImage

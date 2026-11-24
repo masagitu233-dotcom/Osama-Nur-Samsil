@@ -60,7 +60,7 @@ export const MessagesPanel: React.FC = () => {
               <article
                 key={msg.id}
                 data-aos="fade-up"
-                data-aos-delay={getAosStaggerDelay(idx, 60, 2)}
+                data-aos-delay={getAosStaggerDelay(idx, 100, 2)}
                 className={`brutal-card p-4 sm:p-5 space-y-2.5 ${isNew ? 'surface-highlight' : 'surface-card'}`}
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
@@ -182,7 +182,7 @@ export const MediaLibraryPanel: React.FC = () => {
 
       <GoogleDriveConnectionPanel compact />
 
-      <div data-aos="fade-up" data-aos-delay={60} className="brutal-card surface-card p-4 sm:p-5 space-y-3.5">
+      <div data-aos="fade-up" data-aos-delay={100} className="brutal-card surface-card p-4 sm:p-5 space-y-3.5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-subtle">
           <label htmlFor="media-folder-select" className="text-xs font-bold uppercase tracking-wider">
             Folder Tujuan Google Drive (Portfolio Website)
@@ -224,7 +224,7 @@ export const MediaLibraryPanel: React.FC = () => {
               <article
                 key={asset.id}
                 data-aos="fade-up"
-                data-aos-delay={getAosStaggerDelay(idx, 60, 4)}
+                data-aos-delay={getAosStaggerDelay(idx, 100, 4)}
                 className="brutal-card surface-card overflow-hidden flex flex-col"
               >
                 <div className="aspect-[16/10] border-b-2 border-brutal overflow-hidden bg-[#8ACCD5]/25 relative">

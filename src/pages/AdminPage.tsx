@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   Award,
   BookOpen,
@@ -27,7 +27,7 @@ import { CollectionCrudManager, type CrudCollectionName } from '../components/ad
 import { DarsPublicationsSyncPanel } from '../components/admin/DarsPublicationsSyncPanel';
 import { MediaLibraryPanel, MessagesPanel } from '../components/admin/MessagesAndMediaPanel';
 import { Modal } from '../components/ui/Modal';
-import { refreshAosAfterTransition } from '../utils/aos';
+import { refreshAosAfterTransition, scrollToTopInstant } from '../utils/aos';
 
 interface AdminPageProps {
   onNavigate: (route: PublicRoute) => void;
@@ -76,6 +76,10 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [hasUnsavedChanges]);
+
+  useLayoutEffect(() => {
+    scrollToTopInstant();
+  }, [activeTab, isAdmin]);
 
   useEffect(() => {
     refreshAosAfterTransition();
@@ -196,21 +200,23 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
 
       {/* Main Content Area */}
       <main className="flex-1 min-w-0 p-4 sm:p-5 lg:p-7 max-w-5xl">
-        {activeTab === 'overview' && (
-          <AdminOverview onSelectTab={(tab) => requestTabChange(tab as AdminTab)} />
-        )}
-        {activeTab === 'profile' && <ProfileEditor onDirtyChange={setHasUnsavedChanges} />}
-        {isCollectionTab(activeTab) && (
-          <CollectionCrudManager
-            key={activeTab}
-            collectionName={activeTab}
-            onDirtyChange={setHasUnsavedChanges}
-          />
-        )}
-        {activeTab === 'dars_publications' && <DarsPublicationsSyncPanel />}
-        {activeTab === 'contacts_seo' && <ContactAndSeoEditor onDirtyChange={setHasUnsavedChanges} />}
-        {activeTab === 'messages' && <MessagesPanel />}
-        {activeTab === 'media' && <MediaLibraryPanel />}
+        <div key={activeTab}>
+          {activeTab === 'overview' && (
+            <AdminOverview onSelectTab={(tab) => requestTabChange(tab as AdminTab)} />
+          )}
+          {activeTab === 'profile' && <ProfileEditor onDirtyChange={setHasUnsavedChanges} />}
+          {isCollectionTab(activeTab) && (
+            <CollectionCrudManager
+              key={activeTab}
+              collectionName={activeTab}
+              onDirtyChange={setHasUnsavedChanges}
+            />
+          )}
+          {activeTab === 'dars_publications' && <DarsPublicationsSyncPanel />}
+          {activeTab === 'contacts_seo' && <ContactAndSeoEditor onDirtyChange={setHasUnsavedChanges} />}
+          {activeTab === 'messages' && <MessagesPanel />}
+          {activeTab === 'media' && <MediaLibraryPanel />}
+        </div>
       </main>
 
       {/* Unsaved Changes Warning Modal */}

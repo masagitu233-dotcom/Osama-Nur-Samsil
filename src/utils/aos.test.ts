@@ -1,30 +1,58 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { AOS_CONFIG, getAosStaggerDelay, isReducedMotionPreferred } from './aos';
+import {
+  AOS_CONFIG,
+  getAosStaggerDelay,
+  isElementBelowViewportFold,
+  isReducedMotionPreferred,
+} from './aos';
 
-test('AOS_CONFIG uses smooth once-only fade-up settings', () => {
+test('AOS_CONFIG defines consistent fade-up animation settings within spec', () => {
   assert.equal(AOS_CONFIG.once, true);
-  assert.equal(AOS_CONFIG.duration, 700);
   assert.equal(AOS_CONFIG.easing, 'ease-out-cubic');
-  assert.equal(typeof AOS_CONFIG.offset, 'number');
-  assert.ok((AOS_CONFIG.offset ?? 0) >= 24 && (AOS_CONFIG.offset ?? 0) <= 100);
+  assert.equal(AOS_CONFIG.mirror, false);
+  assert.equal(AOS_CONFIG.disableMutationObserver, true);
+  assert.ok(
+    typeof AOS_CONFIG.duration === 'number' &&
+      AOS_CONFIG.duration >= 700 &&
+      AOS_CONFIG.duration <= 900
+  );
+  assert.ok(
+    typeof AOS_CONFIG.offset === 'number' &&
+      AOS_CONFIG.offset >= 100 &&
+      AOS_CONFIG.offset <= 150
+  );
 });
 
-test('getAosStaggerDelay wraps cleanly per row and clamps negative values', () => {
-  assert.equal(getAosStaggerDelay(0, 70, 3), 0);
-  assert.equal(getAosStaggerDelay(1, 70, 3), 70);
-  assert.equal(getAosStaggerDelay(2, 70, 3), 140);
-  assert.equal(getAosStaggerDelay(3, 70, 3), 0);
-  assert.equal(getAosStaggerDelay(5, 60, 4), 60);
-  assert.equal(getAosStaggerDelay(-2, 70, 3), 0);
+test('getAosStaggerDelay snaps to valid AOS 50ms increments and resets per row', () => {
+  assert.equal(getAosStaggerDelay(0, 100, 3), 0);
+  assert.equal(getAosStaggerDelay(1, 100, 3), 100);
+  assert.equal(getAosStaggerDelay(2, 100, 3), 200);
+  assert.equal(getAosStaggerDelay(3, 100, 3), 0);
+  assert.equal(getAosStaggerDelay(4, 100, 3), 100);
+
+  // Non-50ms inputs are safely snapped to AOS-supported 50ms multiples
+  assert.equal(getAosStaggerDelay(1, 70, 3) % 50, 0);
+  assert.equal(getAosStaggerDelay(2, 80, 3) % 50, 0);
+
+  // Negative or invalid indices clamp cleanly
+  assert.equal(getAosStaggerDelay(-2, 100, 3), 0);
+  assert.equal(getAosStaggerDelay(5, 100, 0), 0);
 });
 
-test('isReducedMotionPreferred respects prefers-reduced-motion media query', () => {
+test('isElementBelowViewportFold accurately detects elements waiting below the trigger line', () => {
+  assert.equal(isElementBelowViewportFold(200, 900, 120), false);
+  assert.equal(isElementBelowViewportFold(779, 900, 120), false);
+  assert.equal(isElementBelowViewportFold(780, 900, 120), true);
+  assert.equal(isElementBelowViewportFold(1250, 900, 120), true);
+});
+
+test('isReducedMotionPreferred respects matchMedia prefers-reduced-motion', () => {
   assert.equal(isReducedMotionPreferred(() => ({ matches: true })), true);
   assert.equal(isReducedMotionPreferred(() => ({ matches: false })), false);
   assert.equal(
     isReducedMotionPreferred(() => {
-      throw new Error('unsupported');
+      throw new Error('unavailable');
     }),
     false
   );

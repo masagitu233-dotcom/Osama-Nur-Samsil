@@ -90,7 +90,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               </div>
 
               {/* Circular 1:1 Profile Photo on RIGHT */}
-              <div className="shrink-0 flex flex-col items-center gap-2.5" data-aos="fade-up" data-aos-delay="100">
+              <div className="shrink-0 flex flex-col items-center gap-2.5">
                 <div
                   data-testid="hero-profile-photo-circle"
                   className="w-[84px] h-[84px] min-[390px]:w-[96px] min-[390px]:h-[96px] sm:w-28 sm:h-28 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full p-1 sm:p-1.5 bg-[#6C151E] border-2 border-[#013A42] shadow-[4px_4px_0_0_#013A42]"
@@ -207,7 +207,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               type="button"
               onClick={() => onNavigate('/projects')}
               data-aos="fade-up"
-              data-aos-delay="60"
+              data-aos-delay="100"
               className="text-left brutal-card brutal-card-interactive card-blue frame-shadow-bordo p-4 cursor-pointer"
             >
               <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none">
@@ -223,7 +223,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               type="button"
               onClick={() => onNavigate('/skills')}
               data-aos="fade-up"
-              data-aos-delay="120"
+              data-aos-delay="200"
               className="text-left brutal-card brutal-card-interactive card-green frame-midnight p-4 cursor-pointer"
             >
               <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none text-[#8ACCD5]">
@@ -239,7 +239,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               type="button"
               onClick={() => onNavigate('/certificates')}
               data-aos="fade-up"
-              data-aos-delay="180"
+              data-aos-delay="300"
               className="text-left brutal-card brutal-card-interactive card-bordo frame-midnight p-4 cursor-pointer"
             >
               <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none text-[#8ACCD5]">
@@ -291,7 +291,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             </div>
           </div>
 
-          <div data-aos="fade-up" data-aos-delay="70" className="brutal-card card-green frame-midnight p-5 flex flex-col justify-between">
+          <div data-aos="fade-up" data-aos-delay="100" className="brutal-card card-green frame-midnight p-5 flex flex-col justify-between">
             <div>
               <p className="font-mono-num text-[11px] font-bold text-[#8ACCD5] uppercase">
                 Teknologi &amp; Perangkat Digital
@@ -308,7 +308,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             </div>
           </div>
 
-          <div data-aos="fade-up" data-aos-delay="140" className="brutal-card card-midnight frame-shadow-bordo p-5 flex flex-col justify-between">
+          <div data-aos="fade-up" data-aos-delay="200" className="brutal-card card-midnight frame-shadow-bordo p-5 flex flex-col justify-between">
             <div>
               <p className="font-mono-num text-[11px] font-bold text-[#8ACCD5] uppercase">
                 Bahasa &amp; Komunikasi
@@ -443,7 +443,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                   key={exp.id}
                   data-testid={`home-featured-exp-${idx}`}
                   data-aos="fade-up"
-                  data-aos-delay={getAosStaggerDelay(idx, 70, 3)}
+                  data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
                   className={`brutal-card brutal-card-interactive p-4 flex-1 flex flex-col justify-between gap-3 ${tone.cardClass} ${tone.frameClass}`}
                 >
                   <div className="flex items-start gap-3.5">

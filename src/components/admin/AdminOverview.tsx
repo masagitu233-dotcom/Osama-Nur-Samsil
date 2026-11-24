@@ -88,7 +88,7 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({ onSelectTab }) => 
               type="button"
               onClick={() => onSelectTab(s.tab)}
               data-aos="fade-up"
-              data-aos-delay={getAosStaggerDelay(idx, 60, 4)}
+              data-aos-delay={getAosStaggerDelay(idx, 100, 4)}
               className={`text-left brutal-card brutal-card-interactive p-4 cursor-pointer ${tone.cardClass} ${tone.frameClass}`}
             >
               <p className={`font-mono-num text-2xl font-extrabold leading-none ${tone.isDark ? 'text-[#8ACCD5]' : ''}`}>

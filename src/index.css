@@ -154,6 +154,9 @@
 .brutal-card {
   border: 2px solid var(--color-midnight);
   box-shadow: 4px 4px 0 0 var(--color-midnight);
+}
+
+.brutal-card:not([data-aos]) {
   transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 160ms cubic-bezier(0.16, 1, 0.3, 1), background-color 160ms ease;
 }
 
@@ -422,9 +425,9 @@
    AOS (ANIMATE ON SCROLL) SUBTLE EDITORIAL REFINEMENTS
    ================================================== */
 
-/* Keep fade-up travel subtle (20px instead of AOS default 100px) */
-[data-aos="fade-up"] {
-  transform: translate3d(0, 20px, 0);
+/* Refine fade-up travel distance (36px instead of default 100px) once AOS is initialized */
+body[data-aos-easing] [data-aos="fade-up"]:not(.aos-animate) {
+  transform: translate3d(0, 36px, 0);
 }
 
 /* Keep buttons, links, forms, and admin controls interactive during animation */
@@ -432,9 +435,10 @@
   pointer-events: auto !important;
 }
 
-/* Preserve Neo-Brutalist interactive card lift after AOS completes */
+/* Preserve snappy Neo-Brutalist interactive card hover lift after AOS completes */
 .brutal-card-interactive[data-aos].aos-animate:hover {
   transform: translate(-2px, -2px);
+  transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 160ms cubic-bezier(0.16, 1, 0.3, 1), background-color 160ms ease;
 }
 
 @media (prefers-reduced-motion: reduce) {

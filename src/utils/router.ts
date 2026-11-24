@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { PublicRoute } from '../types/portfolio';
+import { scrollToTopInstant } from './aos';
 
 const VALID_ROUTES: PublicRoute[] = [
   '/',
@@ -28,6 +29,7 @@ export function useRouter() {
 
   useEffect(() => {
     const onPopState = () => {
+      scrollToTopInstant();
       setRoute(normalizeRoute(window.location.pathname));
     };
     window.addEventListener('popstate', onPopState);
@@ -39,8 +41,8 @@ export function useRouter() {
     if (window.location.pathname !== target) {
       window.history.pushState({}, '', target);
     }
+    scrollToTopInstant();
     setRoute(target);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   return { route, navigate };

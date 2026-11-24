@@ -31,7 +31,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onShareProfile }) =>
   return (
     <footer className="mt-14 sm:mt-16 border-t-[3px] border-[#8ACCD5] bg-[#013A42] text-[#F8F8E1]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-9 sm:py-10">
-        <div data-aos="fade-up" data-aos-offset="20" className="grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div data-aos="fade-up" data-aos-offset="60" className="grid grid-cols-1 md:grid-cols-12 gap-8">
           {/* Brand & Summary */}
           <div className="md:col-span-5 space-y-3">
             <h2 className="font-display text-lg sm:text-xl font-extrabold tracking-tight text-[#F8F8E1]">

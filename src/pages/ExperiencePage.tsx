@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { LayoutGrid, List, Search } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import type { ExperienceCategory, ExperienceItem, OrganizationItem } from '../types/portfolio';
@@ -6,7 +6,7 @@ import { filterExperiences } from '../utils/portfolioLogic';
 import { SafeImage } from '../components/ui/SafeImage';
 import { getCardTone } from '../utils/cardVariants';
 import { resolveExperiencePrimaryPhoto } from '../utils/experienceGallery';
-import { getAosStaggerDelay } from '../utils/aos';
+import { getAosStaggerDelay, refreshAos } from '../utils/aos';
 import {
   ExperienceDetailModal,
   type ExperienceDetailViewData,
@@ -76,6 +76,10 @@ export const ExperiencePage: React.FC = () => {
     () => filterExperiences(publicData.experiences, category, query),
     [publicData.experiences, category, query]
   );
+
+  useEffect(() => {
+    refreshAos(true);
+  }, [category, query, viewMode]);
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10">
@@ -189,7 +193,7 @@ export const ExperiencePage: React.FC = () => {
               <article
                 key={exp.id}
                 data-aos="fade-up"
-                data-aos-delay={getAosStaggerDelay(idx, 70, 3)}
+                data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
                 className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
               >
                 <div className={`aspect-[16/9] w-full overflow-hidden border-b-2 ${photoFrameBorder} bg-[#F8F8E1] shrink-0`}>
@@ -234,7 +238,7 @@ export const ExperiencePage: React.FC = () => {
               <li
                 key={exp.id}
                 data-aos="fade-up"
-                data-aos-delay={getAosStaggerDelay(idx, 60, 2)}
+                data-aos-delay={getAosStaggerDelay(idx, 100, 2)}
                 className={`brutal-card p-4 sm:p-5 grid grid-cols-1 md:grid-cols-12 gap-4 items-center ${tone.cardClass} ${tone.frameClass}`}
               >
                 <div className="md:col-span-4 aspect-[16/9] w-full border-2 border-[#013A42] bg-[#F8F8E1] overflow-hidden">
@@ -295,7 +299,7 @@ export const ExperiencePage: React.FC = () => {
                 <article
                   key={org.id}
                   data-aos="fade-up"
-                  data-aos-delay={getAosStaggerDelay(idx, 70, 3)}
+                  data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
                   className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                 >
                   <div className={`aspect-[16/9] w-full overflow-hidden border-b-2 ${photoFrameBorder} bg-[#F8F8E1] shrink-0`}>

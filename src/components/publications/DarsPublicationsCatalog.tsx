@@ -311,7 +311,7 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
                 <article
                   key={article.id}
                   data-aos="fade-up"
-                  data-aos-delay={getAosStaggerDelay(idx, 70, 3)}
+                  data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
                   className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                 >
                   {/* Clickable 16:9 Cover Image -> Original Article URL */}

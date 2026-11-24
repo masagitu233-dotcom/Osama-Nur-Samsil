@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import type { InterestCategory, SkillCategory } from '../types/portfolio';
 import { getCardTone, type CardTone } from '../utils/cardVariants';
-import { getAosStaggerDelay } from '../utils/aos';
+import { getAosStaggerDelay, refreshAos } from '../utils/aos';
 import { SafeImage } from '../components/ui/SafeImage';
 
 type FilterGroup = 'all' | 'skills' | 'languages' | 'interests';
@@ -79,6 +79,10 @@ export const SkillsPage: React.FC = () => {
 
   const showInterests = group === 'all' || group === 'interests';
 
+  useEffect(() => {
+    refreshAos(true);
+  }, [group]);
+
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10">
       <header data-aos="fade-up" className="border-b-2 border-brutal pb-5 sm:pb-6">
@@ -146,7 +150,7 @@ export const SkillsPage: React.FC = () => {
                         <article
                           key={item.id}
                           data-aos="fade-up"
-                          data-aos-delay={getAosStaggerDelay(idx, 60, 3)}
+                          data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
                           className={`brutal-card p-4 flex flex-col justify-between ${tone.cardClass} ${tone.frameClass}`}
                         >
                           <div>
@@ -194,7 +198,7 @@ export const SkillsPage: React.FC = () => {
               <section
                 key={sec.key}
                 data-aos="fade-up"
-                data-aos-delay={getAosStaggerDelay(idx, 80, 2)}
+                data-aos-delay={getAosStaggerDelay(idx, 100, 2)}
                 className={`brutal-card p-5 ${tone.cardClass} ${tone.frameClass}`}
               >
                 <span className={tone.badgeClass}>

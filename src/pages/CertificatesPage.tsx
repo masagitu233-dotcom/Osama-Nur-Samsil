@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Download, ExternalLink, FileText, Search, ZoomIn } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import type { CertificateItem } from '../types/portfolio';
@@ -6,7 +6,7 @@ import { filterCertificates } from '../utils/portfolioLogic';
 import { SafeImage } from '../components/ui/SafeImage';
 import { Modal } from '../components/ui/Modal';
 import { getCardTone } from '../utils/cardVariants';
-import { getAosStaggerDelay } from '../utils/aos';
+import { getAosStaggerDelay, refreshAos } from '../utils/aos';
 import { getGoogleDriveDownloadUrl, normalizeGoogleDrivePdfEmbedUrl } from '../utils/googleDriveMedia';
 import {
   groupCertificatesByTrainingScope,
@@ -51,6 +51,10 @@ export const CertificatesPage: React.FC = () => {
   const groupedCerts = useMemo(() => groupCertificatesByTrainingScope(certificates), [certificates]);
   const domesticCount = groupedCerts.domestic.length;
   const internationalCount = groupedCerts.international.length;
+
+  useEffect(() => {
+    refreshAos(true);
+  }, [query, category, field, year]);
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10">
@@ -107,7 +111,7 @@ export const CertificatesPage: React.FC = () => {
           <div
             data-testid="training-card-international"
             data-aos="fade-up"
-            data-aos-delay="80"
+            data-aos-delay="100"
             className="brutal-card card-bordo frame-midnight p-5 flex flex-col justify-between gap-4"
           >
             <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b-2 border-[#F8F8E1]/35">
@@ -254,7 +258,7 @@ export const CertificatesPage: React.FC = () => {
                 <article
                   key={cert.id}
                   data-aos="fade-up"
-                  data-aos-delay={getAosStaggerDelay(idx, 70, 3)}
+                  data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
                   className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col ${tone.cardClass} ${tone.frameClass}`}
                 >
                   {/* Certificate original document frame */}

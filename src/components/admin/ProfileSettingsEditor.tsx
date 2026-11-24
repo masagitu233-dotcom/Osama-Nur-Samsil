@@ -196,7 +196,7 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
 
         {/* Media & Visibility */}
         <div className="lg:col-span-4 space-y-4">
-          <div data-aos="fade-up" data-aos-delay={60} className="brutal-card surface-card p-4 space-y-3">
+          <div data-aos="fade-up" data-aos-delay={100} className="brutal-card surface-card p-4 space-y-3">
             <MediaUploader
               folder="profile"
               acceptMode="image"
@@ -228,7 +228,7 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
             </div>
           </div>
 
-          <div data-aos="fade-up" data-aos-delay={120} className="brutal-card surface-card p-4 space-y-3">
+          <div data-aos="fade-up" data-aos-delay={200} className="brutal-card surface-card p-4 space-y-3">
             <MediaUploader
               folder="cv"
               acceptMode="pdf"
@@ -258,7 +258,7 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
             </div>
           </div>
 
-          <div data-aos="fade-up" data-aos-delay={180} className="brutal-card surface-card p-4 space-y-2.5">
+          <div data-aos="fade-up" data-aos-delay={300} className="brutal-card surface-card p-4 space-y-2.5">
             <p className="font-display font-bold text-sm">Kontrol Publikasi</p>
             <select
               value={form.status}
@@ -461,7 +461,7 @@ export const ContactAndSeoEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => 
           </div>
         </div>
 
-        <div data-aos="fade-up" data-aos-delay={80} className="brutal-card surface-card p-4 sm:p-5 space-y-3.5">
+        <div data-aos="fade-up" data-aos-delay={100} className="brutal-card surface-card p-4 sm:p-5 space-y-3.5">
           <h2 className="font-display text-lg font-extrabold">SEO &amp; Open Graph</h2>
           <div>
             <label htmlFor="seo-title" className="block text-xs font-bold uppercase mb-1">Judul Website (&lt;title&gt;)</label>

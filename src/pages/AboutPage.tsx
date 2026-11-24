@@ -61,7 +61,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
         </div>
 
         <div className="lg:col-span-8 space-y-5">
-          <div data-aos="fade-up" data-aos-delay="70" className="brutal-card card-beige frame-shadow-green p-5 sm:p-6">
+          <div data-aos="fade-up" data-aos-delay="100" className="brutal-card card-beige frame-shadow-green p-5 sm:p-6">
             <h2 className="font-display text-lg sm:text-xl font-extrabold mb-3">Biografi Profesional</h2>
             <div className="space-y-3 text-sm sm:text-[15px] leading-relaxed text-muted whitespace-pre-line">
               {profile.biography || profile.shortBio}
@@ -69,7 +69,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
           </div>
 
           {profile.careerFocus && (
-            <div data-aos="fade-up" data-aos-delay="120" className="brutal-card card-blue frame-shadow-bordo p-5 sm:p-6">
+            <div data-aos="fade-up" data-aos-delay="200" className="brutal-card card-blue frame-shadow-bordo p-5 sm:p-6">
               <span className="brutal-badge-inverse mb-2">Arah Karier</span>
               <h2 className="font-display text-lg font-extrabold mb-1.5">Fokus Kolaborasi &amp; Karier</h2>
               <p className="text-sm leading-relaxed font-medium">{profile.careerFocus}</p>
@@ -94,7 +94,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
               {profile.vision || 'Belum ditambahkan. Dapat diperbarui melalui Dashboard Admin.'}
             </p>
           </div>
-          <div data-aos="fade-up" data-aos-delay="80" className="brutal-card card-midnight frame-shadow-bordo p-5 sm:p-6">
+          <div data-aos="fade-up" data-aos-delay="100" className="brutal-card card-midnight frame-shadow-bordo p-5 sm:p-6">
             <h3 className="font-display text-lg font-extrabold text-[#8ACCD5] mb-2">Misi</h3>
             <p className="text-sm leading-relaxed text-[#F8F8E1] whitespace-pre-line">
               {profile.mission || 'Belum ditambahkan. Dapat diperbarui melalui Dashboard Admin.'}
@@ -128,7 +128,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
               <div
                 key={edu.id}
                 data-aos="fade-up"
-                data-aos-delay={getAosStaggerDelay(idx, 70, 2)}
+                data-aos-delay={getAosStaggerDelay(idx, 100, 2)}
                 className={`brutal-card p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 ${tone.cardClass} ${tone.frameClass}`}
               >
                 <div>
@@ -162,7 +162,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
             <div
               key={sec.key}
               data-aos="fade-up"
-              data-aos-delay={getAosStaggerDelay(idx, 80, 2)}
+              data-aos-delay={getAosStaggerDelay(idx, 100, 2)}
               className={`brutal-card p-5 ${tone.cardClass} ${tone.frameClass}`}
             >
               <span className={tone.badgeClass}>
