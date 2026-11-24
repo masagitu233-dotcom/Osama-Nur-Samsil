@@ -3,6 +3,7 @@ import { Database, RefreshCw } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { seedInitialPortfolioToFirestore } from '../../services/portfolioService';
 import { getCardTone } from '../../utils/cardVariants';
+import { GoogleDriveConnectionPanel } from './GoogleDriveConnectionPanel';
 
 interface AdminOverviewProps {
   onSelectTab: (tab: string) => void;
@@ -72,6 +73,9 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({ onSelectTab }) => 
           </p>
         </div>
       )}
+
+      {/* Google Drive Primary Storage Connection Status & Controls */}
+      <GoogleDriveConnectionPanel />
 
       {/* Metrics Grid (Planned 4-Color Card Alternation: Beige, Blue, Green, Bordo) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

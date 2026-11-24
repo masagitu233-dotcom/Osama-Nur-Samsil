@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import { Copy, ExternalLink, FileText, Trash2 } from 'lucide-react';
+import { Copy, Download, ExternalLink, FileText, Trash2 } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import {
   deleteManagedItem,
   deleteMediaAsset,
   updateContactMessageStatus,
 } from '../../services/portfolioService';
+import type { DriveUploadCategory } from '../../services/googleDriveUploadService';
 import type { ContactMessageItem, MediaAssetItem } from '../../types/portfolio';
 import { formatBytes } from '../../utils/mediaCompression';
+import { getGoogleDriveDownloadUrl } from '../../utils/googleDriveMedia';
 import { SafeImage } from '../ui/SafeImage';
 import { Modal } from '../ui/Modal';
 import { MediaUploader } from './MediaUploader';
+import { GoogleDriveConnectionPanel } from './GoogleDriveConnectionPanel';
 
 export const MessagesPanel: React.FC = () => {
   const { contactMessages, showToast } = usePortfolio();
@@ -131,9 +134,20 @@ export const MessagesPanel: React.FC = () => {
   );
 };
 
+const MEDIA_LIBRARY_FOLDER_OPTIONS: Array<{ value: DriveUploadCategory; label: string }> = [
+  { value: 'media', label: 'File Lainnya' },
+  { value: 'profile', label: 'Foto Profil' },
+  { value: 'experiences', label: 'Pengalaman' },
+  { value: 'education', label: 'Pendidikan' },
+  { value: 'certificates', label: 'Sertifikat' },
+  { value: 'documents', label: 'Dokumen' },
+  { value: 'projects', label: 'Proyek dan Karya' },
+];
+
 export const MediaLibraryPanel: React.FC = () => {
   const { mediaAssets, showToast } = usePortfolio();
   const [deleteTarget, setDeleteTarget] = useState<MediaAssetItem | null>(null);
+  const [selectedFolder, setSelectedFolder] = useState<DriveUploadCategory>('media');
 
   const handleCopy = async (url: string) => {
     try {
@@ -148,7 +162,7 @@ export const MediaLibraryPanel: React.FC = () => {
     if (!deleteTarget) return;
     try {
       await deleteMediaAsset(deleteTarget);
-      showToast('success', 'File dihapus dari Firebase Storage & pustaka media.');
+      showToast('success', 'File dihapus dari penyimpanan & pustaka media Firestore.');
     } catch (err) {
       showToast('error', err instanceof Error ? err.message : 'Gagal menghapus aset media.');
     } finally {
@@ -159,32 +173,53 @@ export const MediaLibraryPanel: React.FC = () => {
   return (
     <div className="space-y-8">
       <div className="pb-4 border-b-2 border-brutal">
-        <span className="brutal-badge">Firebase Storage</span>
+        <span className="brutal-badge">Google Drive Storage</span>
         <h1 className="font-display text-3xl font-extrabold mt-2">Pustaka Media &amp; Dokumen</h1>
       </div>
 
-      <div className="brutal-card surface-card p-6">
+      <GoogleDriveConnectionPanel compact />
+
+      <div className="brutal-card surface-card p-6 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-subtle">
+          <label htmlFor="media-folder-select" className="text-xs font-bold uppercase tracking-wider">
+            Folder Tujuan Google Drive (Portfolio Website)
+          </label>
+          <select
+            id="media-folder-select"
+            value={selectedFolder}
+            onChange={(e) => setSelectedFolder(e.target.value as DriveUploadCategory)}
+            className="brutal-input px-3 py-1.5 text-xs font-bold sm:w-64"
+          >
+            {MEDIA_LIBRARY_FOLDER_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                Portfolio Website / {opt.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <MediaUploader
-          folder="media"
+          folder={selectedFolder}
           acceptMode="both"
           multiple
-          label="Unggah Gambar atau PDF ke Pustaka Media"
-          helperText="Tersimpan otomatis di Firebase Storage & Firestore"
-          onUploaded={(res) => showToast('success', `${res.fileName} berhasil diunggah.`)}
+          label="Unggah Gambar atau PDF ke Google Drive"
+          helperText="Tersimpan otomatis ke folder Google Drive terpilih & dicatat di Firestore"
+          onUploaded={(res) => showToast('success', `${res.fileName} berhasil disimpan.`)}
         />
       </div>
 
       {mediaAssets.length === 0 ? (
         <div className="brutal-card surface-card p-8 text-sm text-muted">
-          Belum ada file yang diunggah ke Firebase Storage. Gunakan area drag-and-drop di atas untuk mengunggah foto profil, sertifikat, dokumentasi kegiatan, atau CV PDF.
+          Belum ada file yang tercatat pada Pustaka Media. Hubungkan akun Google Drive Anda di atas, lalu gunakan area unggah manual atau drag-and-drop untuk menyimpan foto profil, sertifikat, dokumentasi kegiatan, atau CV PDF.
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {mediaAssets.map((asset) => {
             const isPdf = asset.mimeType === 'application/pdf';
+            const downloadHref = asset.downloadUrl || getGoogleDriveDownloadUrl(asset.fileUrl);
             return (
               <article key={asset.id} className="brutal-card surface-card overflow-hidden flex flex-col">
-                <div className="aspect-[4/3] border-b-2 border-brutal overflow-hidden bg-[#8ACCD5]/25">
+                <div className="aspect-[4/3] border-b-2 border-brutal overflow-hidden bg-[#8ACCD5]/25 relative">
                   {isPdf ? (
                     <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center surface-highlight">
                       <FileText className="w-9 h-9 mb-2" />
@@ -193,6 +228,17 @@ export const MediaLibraryPanel: React.FC = () => {
                   ) : (
                     <SafeImage src={asset.fileUrl} alt={asset.fileName} className="w-full h-full object-cover" />
                   )}
+                  {asset.visibility && (
+                    <span
+                      className={`absolute top-2 left-2 px-2 py-0.5 font-mono-num text-[10px] font-extrabold uppercase border border-[#013A42] ${
+                        asset.visibility === 'private'
+                          ? 'bg-[#6C151E] text-[#F8F8E1]'
+                          : 'bg-[#0F3D3A] text-[#F8F8E1]'
+                      }`}
+                    >
+                      {asset.visibility === 'private' ? 'Privat' : 'Publik'}
+                    </span>
+                  )}
                 </div>
                 <div className="p-4 flex-1 flex flex-col justify-between gap-3">
                   <div>
@@ -200,8 +246,13 @@ export const MediaLibraryPanel: React.FC = () => {
                       {asset.fileName}
                     </p>
                     <p className="font-mono-num text-xs text-muted mt-0.5">
-                      Folder: {asset.folder} &middot; {formatBytes(asset.sizeBytes)}
+                      Folder: {asset.driveFolderName || asset.folder} &middot; {formatBytes(asset.sizeBytes)}
                     </p>
+                    {asset.driveFileId && (
+                      <p className="font-mono-num text-[11px] text-muted truncate mt-0.5" title={asset.driveFileId}>
+                        Drive ID: {asset.driveFileId}
+                      </p>
+                    )}
                   </div>
                   <div className="flex items-center gap-2">
                     <button
@@ -212,6 +263,18 @@ export const MediaLibraryPanel: React.FC = () => {
                       <Copy className="w-3.5 h-3.5" />
                       <span>Salin URL</span>
                     </button>
+                    {downloadHref && (
+                      <a
+                        href={downloadHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download={asset.fileName}
+                        aria-label={`Unduh ${asset.fileName}`}
+                        className="brutal-btn brutal-btn-outline p-1.5"
+                      >
+                        <Download className="w-4 h-4" />
+                      </a>
+                    )}
                     <a
                       href={asset.fileUrl}
                       target="_blank"
@@ -244,7 +307,8 @@ export const MediaLibraryPanel: React.FC = () => {
         maxWidthClass="max-w-md"
       >
         <p className="text-sm mb-6">
-          Hapus file <strong>{deleteTarget?.fileName}</strong> secara permanen dari Firebase Storage dan metadata Firestore?
+          Hapus file <strong>{deleteTarget?.fileName}</strong> secara permanen dari{' '}
+          {deleteTarget?.driveFileId ? 'Google Drive' : 'penyimpanan'} dan metadata Firestore?
         </p>
         <div className="flex justify-end gap-3">
           <button

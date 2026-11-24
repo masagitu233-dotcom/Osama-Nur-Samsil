@@ -4,6 +4,7 @@ import { ExternalLink } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import type { PublicationCategory } from '../types/portfolio';
 import { getCardTone } from '../utils/cardVariants';
+import { SafeImage } from '../components/ui/SafeImage';
 
 const PUB_LABELS: Record<PublicationCategory, string> = {
   study_field: 'Bidang Keilmuan & Kajian',
@@ -75,6 +76,22 @@ export const EducationPage: React.FC = () => {
                     <p className="text-sm sm:text-base text-muted mt-4 leading-relaxed max-w-4xl">
                       {edu.description}
                     </p>
+                  )}
+                  {edu.imageUrls && edu.imageUrls.length > 0 && (
+                    <div className="mt-5 pt-4 border-t border-subtle grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      {edu.imageUrls.map((imgUrl, imgIdx) => (
+                        <div
+                          key={`${edu.id}-img-${imgIdx}`}
+                          className="aspect-[4/3] border-2 border-[#013A42] bg-[#F8F8E1] overflow-hidden"
+                        >
+                          <SafeImage
+                            src={imgUrl}
+                            alt={`Dokumentasi ${edu.institution} ${imgIdx + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </article>
               );

@@ -115,8 +115,8 @@ export const AdminAuthGate: React.FC<AdminAuthGateProps> = ({ onNavigate }) => {
                   <code className="font-mono-num">createdAt</code>, dan <code className="font-mono-num">updatedAt</code>.
                 </li>
                 <li>
-                  Pastikan <strong>Firebase Storage</strong> aktif pada bucket proyek dan salin aturan keamanan dari file{' '}
-                  <code className="font-mono-num font-bold">storage.rules</code> pada tab Storage &rarr; Rules agar unggahan sertifikat dan foto terlindungi.
+                  Seluruh unggahan foto, sertifikat, dan dokumen kini disimpan langsung ke{' '}
+                  <strong>Google Drive</strong> akun pengelola melalui Netlify Functions (tidak memerlukan aktivasi Firebase Storage). Hubungkan akun Google Drive satu kali setelah masuk ke Dashboard Admin.
                 </li>
               </ol>
             )}

@@ -142,7 +142,7 @@ service cloud.firestore {
       return data.keys().hasAll(['institution', 'degree', 'fieldOfStudy', 'graduationYear', 'category', 'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'])
         && data.keys().hasOnly([
           'institution', 'degree', 'fieldOfStudy', 'graduationYear', 'period',
-          'location', 'description', 'category',
+          'location', 'description', 'category', 'imageUrls',
           'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'
         ])
         && isBoundedString(data.institution, 1, 200)
@@ -153,6 +153,7 @@ service cloud.firestore {
         && (!('location' in data) || isBoundedString(data.location, 0, 160))
         && (!('description' in data) || isBoundedString(data.description, 0, 2500))
         && isBoundedString(data.category, 1, 80)
+        && (!('imageUrls' in data) || isBoundedStringList(data.imageUrls, 8))
         && isValidStatus(data.status)
         && data.isVisible is bool
         && data.displayOrder is int && data.displayOrder >= 0 && data.displayOrder <= 10000
@@ -207,13 +208,14 @@ service cloud.firestore {
     function isValidSkill(data) {
       return data.keys().hasAll(['name', 'category', 'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'])
         && data.keys().hasOnly([
-          'name', 'category', 'proficiencyLabel', 'description',
+          'name', 'category', 'proficiencyLabel', 'description', 'imageUrl',
           'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'
         ])
         && isBoundedString(data.name, 1, 140)
         && data.category is string && data.category in ['technical', 'soft', 'academic', 'language', 'tool']
         && (!('proficiencyLabel' in data) || isBoundedString(data.proficiencyLabel, 0, 120))
         && (!('description' in data) || isBoundedString(data.description, 0, 800))
+        && (!('imageUrl' in data) || isBoundedString(data.imageUrl, 0, 2048))
         && isValidStatus(data.status)
         && data.isVisible is bool
         && data.displayOrder is int && data.displayOrder >= 0 && data.displayOrder <= 10000
@@ -224,7 +226,7 @@ service cloud.firestore {
     function isValidInterest(data) {
       return data.keys().hasAll(['title', 'category', 'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'])
         && data.keys().hasOnly([
-          'title', 'category', 'description',
+          'title', 'category', 'description', 'imageUrl',
           'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'
         ])
         && isBoundedString(data.title, 1, 160)
@@ -232,6 +234,7 @@ service cloud.firestore {
           'professional_interest', 'academic_interest', 'personal_interest', 'talent_strength', 'career_interest'
         ]
         && (!('description' in data) || isBoundedString(data.description, 0, 1000))
+        && (!('imageUrl' in data) || isBoundedString(data.imageUrl, 0, 2048))
         && isValidStatus(data.status)
         && data.isVisible is bool
         && data.displayOrder is int && data.displayOrder >= 0 && data.displayOrder <= 10000
@@ -356,7 +359,11 @@ service cloud.firestore {
 
     function isValidMediaAsset(data) {
       return data.keys().hasAll(['fileName', 'fileUrl', 'storagePath', 'mimeType', 'sizeBytes', 'folder', 'uploadedBy', 'createdAt'])
-        && data.keys().hasOnly(['fileName', 'fileUrl', 'storagePath', 'mimeType', 'sizeBytes', 'folder', 'uploadedBy', 'createdAt'])
+        && data.keys().hasOnly([
+          'fileName', 'fileUrl', 'storagePath', 'mimeType', 'sizeBytes', 'folder', 'uploadedBy',
+          'driveFileId', 'driveFolderId', 'driveFolderName', 'downloadUrl', 'visibility', 'storageProvider',
+          'createdAt'
+        ])
         && isBoundedString(data.fileName, 1, 200)
         && isBoundedString(data.fileUrl, 1, 2048)
         && isBoundedString(data.storagePath, 1, 500)
@@ -364,6 +371,12 @@ service cloud.firestore {
         && data.sizeBytes is int && data.sizeBytes > 0 && data.sizeBytes <= 10485760
         && isBoundedString(data.folder, 1, 80)
         && data.uploadedBy == request.auth.uid
+        && (!('driveFileId' in data) || isBoundedString(data.driveFileId, 0, 160))
+        && (!('driveFolderId' in data) || isBoundedString(data.driveFolderId, 0, 160))
+        && (!('driveFolderName' in data) || isBoundedString(data.driveFolderName, 0, 80))
+        && (!('downloadUrl' in data) || isBoundedString(data.downloadUrl, 0, 2048))
+        && (!('visibility' in data) || (data.visibility is string && data.visibility in ['public', 'private']))
+        && (!('storageProvider' in data) || (data.storageProvider is string && data.storageProvider in ['google_drive', 'firebase_storage']))
         && data.createdAt is timestamp;
     }
 

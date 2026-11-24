@@ -79,6 +79,7 @@
         "location": { "type": "string", "minLength": 0, "maxLength": 160 },
         "description": { "type": "string", "minLength": 0, "maxLength": 2500 },
         "category": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "imageUrls": { "type": "array", "description": "Up to 8 optional education documentation images" },
         "status": { "type": "string", "enum": ["draft", "published"] },
         "isVisible": { "type": "boolean" },
         "displayOrder": { "type": "integer" },
@@ -139,6 +140,7 @@
         "category": { "type": "string", "enum": ["technical", "soft", "academic", "language", "tool"] },
         "proficiencyLabel": { "type": "string", "minLength": 0, "maxLength": 120 },
         "description": { "type": "string", "minLength": 0, "maxLength": 800 },
+        "imageUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
         "status": { "type": "string", "enum": ["draft", "published"] },
         "isVisible": { "type": "boolean" },
         "displayOrder": { "type": "integer" },
@@ -155,6 +157,7 @@
         "title": { "type": "string", "minLength": 1, "maxLength": 160 },
         "category": { "type": "string", "enum": ["professional_interest", "academic_interest", "personal_interest", "talent_strength", "career_interest"] },
         "description": { "type": "string", "minLength": 0, "maxLength": 1000 },
+        "imageUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
         "status": { "type": "string", "enum": ["draft", "published"] },
         "isVisible": { "type": "boolean" },
         "displayOrder": { "type": "integer" },
@@ -284,7 +287,7 @@
     },
     "MediaAsset": {
       "title": "MediaAsset",
-      "description": "Metadata for images and PDFs uploaded to Firebase Storage.",
+      "description": "Metadata for images and PDFs uploaded to Google Drive (and legacy Firebase Storage records).",
       "type": "object",
       "properties": {
         "fileName": { "type": "string", "minLength": 1, "maxLength": 200 },
@@ -294,6 +297,12 @@
         "sizeBytes": { "type": "integer" },
         "folder": { "type": "string", "minLength": 1, "maxLength": 80 },
         "uploadedBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "driveFileId": { "type": "string", "minLength": 0, "maxLength": 160 },
+        "driveFolderId": { "type": "string", "minLength": 0, "maxLength": 160 },
+        "driveFolderName": { "type": "string", "minLength": 0, "maxLength": 80 },
+        "downloadUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
+        "visibility": { "type": "string", "enum": ["public", "private"] },
+        "storageProvider": { "type": "string", "enum": ["google_drive", "firebase_storage"] },
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["fileName", "fileUrl", "storagePath", "mimeType", "sizeBytes", "folder", "uploadedBy", "createdAt"]

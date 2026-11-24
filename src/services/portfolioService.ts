@@ -17,9 +17,7 @@ import {
 } from 'firebase/firestore';
 import {
   deleteObject,
-  getDownloadURL,
   ref as storageRef,
-  uploadBytesResumable,
 } from 'firebase/storage';
 import {
   auth,
@@ -29,6 +27,13 @@ import {
   OperationType,
   storage,
 } from './firebase';
+import {
+  deleteGoogleDriveFileById,
+  uploadFileToGoogleDrive,
+  type DriveFileVisibility,
+  type DriveUploadCategory,
+} from './googleDriveUploadService';
+import type { UploadProgressSnapshot } from '../utils/uploadStateMachine';
 import { INITIAL_PORTFOLIO_DATA } from '../data/initialPortfolioData';
 import type {
   ActivityLogItem,
@@ -302,6 +307,7 @@ function sanitizeEntityPayload(collectionName: ManagedCollectionName, raw: Recor
         location: clampString(r.location, 160),
         description: clampString(r.description, 2500),
         category: clampString(r.category || 'Pendidikan Tinggi', 80),
+        imageUrls: clampStringArray(r.imageUrls, 8, 2048),
       };
     }
     case 'certificates': {
@@ -341,6 +347,7 @@ function sanitizeEntityPayload(collectionName: ManagedCollectionName, raw: Recor
         category: r.category && ['technical', 'soft', 'academic', 'language', 'tool'].includes(r.category) ? r.category : 'technical',
         proficiencyLabel: clampString(r.proficiencyLabel, 120),
         description: clampString(r.description, 800),
+        imageUrl: clampString(r.imageUrl, 2048),
       };
     }
     case 'interests': {
@@ -356,6 +363,7 @@ function sanitizeEntityPayload(collectionName: ManagedCollectionName, raw: Recor
             ? r.category
             : 'professional_interest',
         description: clampString(r.description, 1000),
+        imageUrl: clampString(r.imageUrl, 2048),
       };
     }
     case 'projects': {
@@ -487,60 +495,62 @@ export async function updateContactMessageStatus(
 
 export async function uploadMediaFile(
   file: File,
-  folder: 'profile' | 'certificates' | 'experiences' | 'organizations' | 'projects' | 'cv' | 'media',
-  onProgress?: (pct: number) => void
+  folder: DriveUploadCategory,
+  options?: {
+    visibility?: DriveFileVisibility;
+    signal?: AbortSignal;
+    onProgress?: (snapshot: UploadProgressSnapshot) => void;
+  }
 ): Promise<MediaAssetItem> {
-  const allowedMode = folder === 'cv' ? 'pdf' : folder === 'certificates' ? 'both' : 'image';
+  const allowedMode =
+    folder === 'cv' || folder === 'documents'
+      ? 'pdf'
+      : folder === 'certificates' || folder === 'media' || folder === 'other'
+      ? 'both'
+      : 'image';
+
   const check = validateUploadFile(file, allowedMode);
   if (!check.valid) {
     throw new Error(check.error || 'File tidak valid.');
   }
 
   const processedFile = check.fileType === 'image' ? await compressImageIfNeeded(file) : file;
-  const safeName = processedFile.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 140);
-  const storagePath = `portfolio/${folder}/${Date.now()}_${safeName}`;
-  const fileRef = storageRef(storage, storagePath);
+  const visibility: DriveFileVisibility = options?.visibility ?? 'public';
 
-  const fileUrl = await new Promise<string>((resolve, reject) => {
-    const task = uploadBytesResumable(fileRef, processedFile, {
-      contentType: processedFile.type,
-    });
-
-    task.on(
-      'state_changed',
-      (snap) => {
-        if (onProgress && snap.totalBytes > 0) {
-          onProgress(Math.round((snap.bytesTransferred / snap.totalBytes) * 100));
-        }
-      },
-      (err) => reject(err),
-      async () => {
-        try {
-          const url = await getDownloadURL(task.snapshot.ref);
-          resolve(url);
-        } catch (err) {
-          reject(err);
-        }
-      }
-    );
+  // Stage 1, 2, & 3: Resumable upload directly to Google Drive & confirmed finalization
+  const driveFile = await uploadFileToGoogleDrive({
+    file: processedFile,
+    category: folder,
+    visibility,
+    signal: options?.signal,
+    onProgress: (snap) => {
+      options?.onProgress?.(snap);
+    },
   });
 
+  // Save metadata to Firestore ONLY AFTER Google Drive confirms successful persistence
   const assetId = generateSafeDocId('asset');
   const uploadedBy = auth.currentUser?.uid || '';
   const assetDoc = {
-    fileName: clampString(processedFile.name, 200),
-    fileUrl: clampString(fileUrl, 2048),
-    storagePath: clampString(storagePath, 500),
-    mimeType: clampString(processedFile.type, 100),
-    sizeBytes: processedFile.size,
-    folder,
+    fileName: clampString(driveFile.fileName, 200),
+    fileUrl: clampString(driveFile.webViewLink, 2048),
+    storagePath: clampString(`gdrive://${driveFile.fileId}`, 500),
+    mimeType: clampString(driveFile.mimeType, 100),
+    sizeBytes: Math.max(1, Math.min(10485760, Math.round(driveFile.sizeBytes || processedFile.size))),
+    folder: clampString(driveFile.folderName || folder, 80),
     uploadedBy,
+    driveFileId: clampString(driveFile.fileId, 160),
+    driveFolderId: clampString(driveFile.folderId, 160),
+    driveFolderName: clampString(driveFile.folderName, 80),
+    downloadUrl: clampString(driveFile.downloadUrl, 2048),
+    visibility: driveFile.visibility,
+    storageProvider: 'google_drive' as const,
     createdAt: serverTimestamp(),
   };
 
   try {
     await setDoc(doc(db, 'mediaAssets', assetId), assetDoc);
-    await logAdminActivity('upload', 'mediaAssets', assetDoc.fileName);
+    await logAdminActivity('upload', 'mediaAssets', `${assetDoc.fileName} (${assetDoc.driveFolderName})`);
   } catch (error) {
     handleFirestoreError(error, OperationType.CREATE, `mediaAssets/${assetId}`);
   }
@@ -548,17 +558,26 @@ export async function uploadMediaFile(
   return {
     id: assetId,
     ...assetDoc,
-    createdAt: new Date().toISOString(),
+    createdAt: driveFile.createdTime || new Date().toISOString(),
   };
 }
 
 export async function deleteMediaAsset(asset: MediaAssetItem): Promise<void> {
   try {
-    if (asset.storagePath) {
+    const driveId =
+      asset.driveFileId ||
+      (asset.storagePath?.startsWith('gdrive://') ? asset.storagePath.slice('gdrive://'.length) : '');
+
+    if (driveId) {
+      await deleteGoogleDriveFileById(driveId).catch(() => {
+        // Proceed with Firestore metadata removal even if file was already removed in Google Drive
+      });
+    } else if (asset.storagePath) {
       await deleteObject(storageRef(storage, asset.storagePath)).catch(() => {
-        // Ignore missing storage blob if already removed
+        // Ignore missing legacy Firebase Storage blob if already removed or bucket inactive
       });
     }
+
     await deleteDoc(doc(db, 'mediaAssets', asset.id));
     await logAdminActivity('delete', 'mediaAssets', asset.fileName);
   } catch (error) {

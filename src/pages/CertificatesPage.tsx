@@ -7,7 +7,7 @@ import { filterCertificates } from '../utils/portfolioLogic';
 import { SafeImage } from '../components/ui/SafeImage';
 import { Modal } from '../components/ui/Modal';
 import { getCardTone } from '../utils/cardVariants';
-import { normalizeGoogleDrivePdfEmbedUrl } from '../utils/googleDriveMedia';
+import { getGoogleDriveDownloadUrl, normalizeGoogleDrivePdfEmbedUrl } from '../utils/googleDriveMedia';
 
 export const CertificatesPage: React.FC = () => {
   const { publicData } = usePortfolio();
@@ -304,7 +304,7 @@ export const CertificatesPage: React.FC = () => {
                       </button>
                       {cert.fileUrl && (
                         <a
-                          href={cert.fileUrl}
+                          href={getGoogleDriveDownloadUrl(cert.fileUrl)}
                           target="_blank"
                           rel="noopener noreferrer"
                           download={cert.fileName || undefined}
@@ -359,7 +359,9 @@ export const CertificatesPage: React.FC = () => {
                       <span>Buka PDF di Tab Baru</span>
                     </a>
                     <a
-                      href={selectedCert.fileUrl}
+                      href={getGoogleDriveDownloadUrl(selectedCert.fileUrl)}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       download={selectedCert.fileName || `${selectedCert.title}.pdf`}
                       className="brutal-btn-on-dark-outline px-4 py-2.5 text-xs font-bold inline-flex items-center gap-2"
                     >

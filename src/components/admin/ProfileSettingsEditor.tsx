@@ -201,12 +201,13 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
               folder="profile"
               acceptMode="image"
               label="Foto Profil"
+              defaultVisibility={form.status === 'published' && form.isVisible ? 'public' : 'private'}
               currentUrls={form.photoUrl ? [form.photoUrl] : []}
               onUploaded={(res) => updateField('photoUrl', res.fileUrl)}
               onRemoveUrl={() => updateField('photoUrl', '')}
             />
             <div>
-              <label htmlFor="prof-photo-url" className="block text-xs font-bold uppercase mb-1">Atau URL Foto Profil</label>
+              <label htmlFor="prof-photo-url" className="block text-xs font-bold uppercase mb-1">URL Foto Profil Tersimpan</label>
               <input
                 id="prof-photo-url"
                 type="text"
@@ -232,7 +233,8 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
               folder="cv"
               acceptMode="pdf"
               label="Dokumen CV (PDF)"
-              helperText="Untuk tombol Download CV"
+              helperText="Untuk tombol Download CV — tersimpan ke folder Dokumen"
+              defaultVisibility={form.status === 'published' && form.isVisible ? 'public' : 'private'}
               currentUrls={form.cvUrl ? [form.cvUrl] : []}
               onUploaded={(res) => {
                 updateField('cvUrl', res.fileUrl);
@@ -250,7 +252,7 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
                 type="text"
                 value={form.cvUrl}
                 onChange={(e) => updateField('cvUrl', e.target.value)}
-                placeholder="https://..."
+                placeholder="https://... atau tautan Google Drive PDF"
                 className="w-full brutal-input px-3 py-2 text-xs"
               />
             </div>
@@ -499,6 +501,24 @@ export const ContactAndSeoEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => 
               value={seoForm.ogDescription}
               onChange={(e) => { setSeoForm((p) => ({ ...p, ogDescription: e.target.value })); onDirtyChange(true); }}
               className="w-full brutal-input px-3 py-2 text-sm"
+            />
+          </div>
+          <div className="pt-2 border-t border-subtle">
+            <MediaUploader
+              folder="seo"
+              acceptMode="image"
+              label="Gambar Pratinjau Open Graph (Share Card)"
+              helperText="Opsional — tampil saat tautan website dibagikan"
+              defaultVisibility={seoForm.status === 'published' && seoForm.isVisible ? 'public' : 'private'}
+              currentUrls={seoForm.ogImageUrl ? [seoForm.ogImageUrl] : []}
+              onUploaded={(res) => {
+                setSeoForm((p) => ({ ...p, ogImageUrl: res.fileUrl }));
+                onDirtyChange(true);
+              }}
+              onRemoveUrl={() => {
+                setSeoForm((p) => ({ ...p, ogImageUrl: '' }));
+                onDirtyChange(true);
+              }}
             />
           </div>
         </div>

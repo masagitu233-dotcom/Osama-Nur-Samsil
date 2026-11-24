@@ -11,10 +11,12 @@ import { Modal } from '../ui/Modal';
 import { MediaUploader } from './MediaUploader';
 import { extractGoogleDriveInfo } from '../../utils/googleDriveMedia';
 
+import type { DriveUploadCategory } from '../../services/googleDriveUploadService';
+
 interface FieldSpec {
   key: string;
   label: string;
-  type: 'text' | 'textarea' | 'select' | 'checkbox' | 'stringList' | 'imageList' | 'certFile';
+  type: 'text' | 'textarea' | 'select' | 'checkbox' | 'stringList' | 'imageList' | 'imageSingle' | 'certFile';
   required?: boolean;
   placeholder?: string;
   options?: Array<{ value: string; label: string }>;
@@ -23,7 +25,7 @@ interface FieldSpec {
 interface CollectionConfig {
   title: string;
   subtitle: string;
-  uploadFolder?: 'certificates' | 'experiences' | 'organizations' | 'projects';
+  uploadFolder?: DriveUploadCategory;
   titleKey: string;
   metaKey: string;
   fields: FieldSpec[];
@@ -100,7 +102,8 @@ const COLLECTION_CONFIGS: Record<ManagedCollectionName, CollectionConfig> = {
   },
   education: {
     title: 'Riwayat Pendidikan',
-    subtitle: 'Kelola pendidikan formal, jurusan, institusi, dan tahun kelulusan.',
+    subtitle: 'Kelola pendidikan formal, jurusan, institusi, tahun kelulusan, dan foto dokumentasi pendidikan.',
+    uploadFolder: 'education',
     titleKey: 'institution',
     metaKey: 'fieldOfStudy',
     fields: [
@@ -112,6 +115,7 @@ const COLLECTION_CONFIGS: Record<ManagedCollectionName, CollectionConfig> = {
       { key: 'location', label: 'Lokasi', type: 'text' },
       { key: 'category', label: 'Kategori', type: 'text', required: true },
       { key: 'description', label: 'Deskripsi Akademik', type: 'textarea' },
+      { key: 'imageUrls', label: 'Foto Dokumentasi Pendidikan', type: 'imageList' },
     ],
     defaultValues: {
       institution: '',
@@ -122,6 +126,7 @@ const COLLECTION_CONFIGS: Record<ManagedCollectionName, CollectionConfig> = {
       location: 'Makassar, Sulawesi Selatan',
       category: 'Pendidikan Tinggi',
       description: '',
+      imageUrls: [],
     },
   },
   certificates: {
@@ -197,6 +202,7 @@ const COLLECTION_CONFIGS: Record<ManagedCollectionName, CollectionConfig> = {
   skills: {
     title: 'Keahlian, Perangkat & Bahasa',
     subtitle: 'Gunakan label tingkat kemampuan deskriptif buatan sendiri (bukan persentase otomatis).',
+    uploadFolder: 'skills',
     titleKey: 'name',
     metaKey: 'proficiencyLabel',
     fields: [
@@ -221,17 +227,20 @@ const COLLECTION_CONFIGS: Record<ManagedCollectionName, CollectionConfig> = {
         placeholder: 'Contoh: Menengah / Dasar / Aktif Digunakan',
       },
       { key: 'description', label: 'Penjelasan Singkat', type: 'textarea' },
+      { key: 'imageUrl', label: 'Gambar / Visual Pendukung (Opsional)', type: 'imageSingle' },
     ],
     defaultValues: {
       name: '',
       category: 'technical',
       proficiencyLabel: '',
       description: '',
+      imageUrl: '',
     },
   },
   interests: {
     title: 'Minat, Bakat & Arah Karier',
     subtitle: 'Kelola minat profesional, akademik, personal, bakat/kekuatan, dan bidang karier.',
+    uploadFolder: 'interests',
     titleKey: 'title',
     metaKey: 'category',
     fields: [
@@ -250,11 +259,13 @@ const COLLECTION_CONFIGS: Record<ManagedCollectionName, CollectionConfig> = {
         ],
       },
       { key: 'description', label: 'Deskripsi', type: 'textarea' },
+      { key: 'imageUrl', label: 'Gambar / Ilustrasi Pendukung (Opsional)', type: 'imageSingle' },
     ],
     defaultValues: {
       title: '',
       category: 'professional_interest',
       description: '',
+      imageUrl: '',
     },
   },
   projects: {
@@ -672,12 +683,15 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
 
             if (field.type === 'imageList') {
               const urls = Array.isArray(formState[field.key]) ? (formState[field.key] as string[]) : [];
+              const itemVisibility =
+                formState.status === 'published' && Boolean(formState.isVisible) ? 'public' : 'private';
               return (
                 <MediaUploader
                   key={field.key}
                   folder={config.uploadFolder || 'media'}
                   acceptMode="image"
                   multiple
+                  defaultVisibility={itemVisibility}
                   label={field.label}
                   currentUrls={urls}
                   onUploaded={(res) => setField(field.key, [...urls, res.fileUrl])}
@@ -686,15 +700,36 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
               );
             }
 
+            if (field.type === 'imageSingle') {
+              const currentImg = String(formState[field.key] ?? '');
+              const itemVisibility =
+                formState.status === 'published' && Boolean(formState.isVisible) ? 'public' : 'private';
+              return (
+                <MediaUploader
+                  key={field.key}
+                  folder={config.uploadFolder || 'media'}
+                  acceptMode="image"
+                  defaultVisibility={itemVisibility}
+                  label={field.label}
+                  currentUrls={currentImg ? [currentImg] : []}
+                  onUploaded={(res) => setField(field.key, res.fileUrl)}
+                  onRemoveUrl={() => setField(field.key, '')}
+                />
+              );
+            }
+
             if (field.type === 'certFile') {
               const currentUrl = String(formState.fileUrl ?? '');
+              const itemVisibility =
+                formState.status === 'published' && Boolean(formState.isVisible) ? 'public' : 'private';
               return (
                 <div key={field.key} className="space-y-3">
                   <MediaUploader
                     folder="certificates"
                     acceptMode="both"
+                    defaultVisibility={itemVisibility}
                     label={field.label}
-                    helperText="JPG, PNG, WebP, atau PDF"
+                    helperText="JPG, PNG, WebP, atau PDF — simpan ke Google Drive (Sertifikat) atau tempel tautan Drive"
                     currentUrls={currentUrl ? [currentUrl] : []}
                     onUploaded={(res) => {
                       setField('fileUrl', res.fileUrl);
@@ -702,6 +737,8 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                       setField('fileType', res.fileType);
                       if (res.fileType === 'image') {
                         setField('thumbnailUrl', res.fileUrl);
+                      } else {
+                        setField('thumbnailUrl', '');
                       }
                     }}
                     onRemoveUrl={() => {
@@ -711,7 +748,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     }}
                   />
                   <div>
-                    <label className="block text-xs font-bold uppercase mb-1">Atau URL File Sertifikat</label>
+                    <label className="block text-xs font-bold uppercase mb-1">URL File Sertifikat Tersimpan</label>
                     <input
                       type="text"
                       value={currentUrl}

@@ -11,6 +11,7 @@ import { usePortfolio } from '../context/PortfolioContext';
 import type { PublicRoute } from '../types/portfolio';
 import { SafeImage } from '../components/ui/SafeImage';
 import { getCardTone } from '../utils/cardVariants';
+import { getGoogleDriveDownloadUrl } from '../utils/googleDriveMedia';
 
 interface HomePageProps {
   onNavigate: (route: PublicRoute) => void;
@@ -30,7 +31,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
   const handleDownloadCv = () => {
     if (profile.cvUrl) {
       const link = document.createElement('a');
-      link.href = profile.cvUrl;
+      link.href = getGoogleDriveDownloadUrl(profile.cvUrl);
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.download = profile.cvFileName || 'CV-Osama-Nur-Samsil.pdf';

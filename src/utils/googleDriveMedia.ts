@@ -172,3 +172,25 @@ export function normalizeGoogleDrivePdfEmbedUrl(rawUrl: string | undefined | nul
   const rk = info.resourceKey ? `?resourcekey=${encodeURIComponent(info.resourceKey)}` : '';
   return `https://drive.google.com/file/d/${encodeURIComponent(info.fileId)}/preview${rk}`;
 }
+
+/**
+ * Converts Google Drive file URLs into direct download URLs for CV and PDF certificate downloads.
+ * Leaves non-Google Drive URLs untouched.
+ */
+export function getGoogleDriveDownloadUrl(rawUrl: string | undefined | null): string {
+  const trimmed = (rawUrl ?? '').trim();
+  if (!trimmed) return '';
+  const info = extractGoogleDriveInfo(trimmed);
+  if (!info) return trimmed;
+  const rk = info.resourceKey ? `&resourcekey=${encodeURIComponent(info.resourceKey)}` : '';
+  return `https://drive.google.com/uc?export=download&id=${encodeURIComponent(info.fileId)}${rk}`;
+}
+
+/**
+ * Builds a canonical Google Drive view URL from a file ID (preserving resourcekey if provided).
+ */
+export function buildCanonicalGoogleDriveViewUrl(fileId: string, resourceKey?: string): string {
+  const rk = resourceKey ? `?resourcekey=${encodeURIComponent(resourceKey)}` : '';
+  return `https://drive.google.com/file/d/${encodeURIComponent(fileId)}/view${rk}`;
+}
+

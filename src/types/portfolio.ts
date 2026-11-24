@@ -62,6 +62,7 @@ export interface EducationItem extends BaseContentMeta {
   location: string;
   description: string;
   category: string;
+  imageUrls?: string[];
 }
 
 export interface CertificateItem extends BaseContentMeta {
@@ -96,6 +97,7 @@ export interface SkillItem extends BaseContentMeta {
   category: SkillCategory;
   proficiencyLabel: string;
   description: string;
+  imageUrl?: string;
 }
 
 export type InterestCategory =
@@ -109,6 +111,7 @@ export interface InterestItem extends BaseContentMeta {
   title: string;
   category: InterestCategory;
   description: string;
+  imageUrl?: string;
 }
 
 export type ProjectCategory =
@@ -200,6 +203,12 @@ export interface MediaAssetItem {
   sizeBytes: number;
   folder: string;
   uploadedBy: string;
+  driveFileId?: string;
+  driveFolderId?: string;
+  driveFolderName?: string;
+  downloadUrl?: string;
+  visibility?: 'public' | 'private';
+  storageProvider?: 'google_drive' | 'firebase_storage';
   createdAt?: unknown;
 }
 

@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { usePortfolio } from '../context/PortfolioContext';
 import type { InterestCategory, SkillCategory } from '../types/portfolio';
 import { getCardTone, type CardTone } from '../utils/cardVariants';
+import { SafeImage } from '../components/ui/SafeImage';
 
 type FilterGroup = 'all' | 'skills' | 'languages' | 'interests';
 
@@ -152,6 +153,15 @@ export const SkillsPage: React.FC = () => {
                           className={`brutal-card p-5 flex flex-col justify-between ${tone.cardClass} ${tone.frameClass}`}
                         >
                           <div>
+                            {item.imageUrl && (
+                              <div className="aspect-[16/9] mb-3.5 border-2 border-[#013A42] bg-[#F8F8E1] overflow-hidden">
+                                <SafeImage
+                                  src={item.imageUrl}
+                                  alt={item.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            )}
                             <div className="flex items-baseline justify-between gap-3">
                               <h3 className="font-display text-lg font-extrabold">{item.name}</h3>
                               {item.proficiencyLabel && (
@@ -197,13 +207,24 @@ export const SkillsPage: React.FC = () => {
                 ) : (
                   <ul className="divide-y divide-[var(--card-border-subtle)]">
                     {items.map((item) => (
-                      <li key={item.id} className="py-3 first:pt-0 last:pb-0">
-                        <p className="font-bold text-sm sm:text-base">{item.title}</p>
-                        {item.description && (
-                          <p className="text-sm text-muted mt-1 leading-relaxed">
-                            {item.description}
-                          </p>
+                      <li key={item.id} className="py-3 first:pt-0 last:pb-0 flex items-start gap-3">
+                        {item.imageUrl && (
+                          <div className="w-14 h-14 shrink-0 border-2 border-[#013A42] bg-[#F8F8E1] overflow-hidden">
+                            <SafeImage
+                              src={item.imageUrl}
+                              alt={item.title}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
                         )}
+                        <div className="min-w-0 flex-1">
+                          <p className="font-bold text-sm sm:text-base">{item.title}</p>
+                          {item.description && (
+                            <p className="text-sm text-muted mt-1 leading-relaxed">
+                              {item.description}
+                            </p>
+                          )}
+                        </div>
                       </li>
                     ))}
                   </ul>
