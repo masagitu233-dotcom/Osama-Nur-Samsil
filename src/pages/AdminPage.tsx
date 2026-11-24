@@ -27,7 +27,7 @@ import { CollectionCrudManager, type CrudCollectionName } from '../components/ad
 import { DarsPublicationsSyncPanel } from '../components/admin/DarsPublicationsSyncPanel';
 import { MediaLibraryPanel, MessagesPanel } from '../components/admin/MessagesAndMediaPanel';
 import { Modal } from '../components/ui/Modal';
-import { refreshAosAfterTransition, scrollToTopInstant } from '../utils/aos';
+import { refreshAosAfterTransition, scrollToTopInstant, syncBodyAosAttributes } from '../utils/aos';
 
 interface AdminPageProps {
   onNavigate: (route: PublicRoute) => void;
@@ -79,6 +79,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
 
   useLayoutEffect(() => {
     scrollToTopInstant();
+    syncBodyAosAttributes();
   }, [activeTab, isAdmin]);
 
   useEffect(() => {

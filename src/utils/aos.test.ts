@@ -11,6 +11,7 @@ test('AOS_CONFIG defines consistent fade-up animation settings within spec', () 
   assert.equal(AOS_CONFIG.once, true);
   assert.equal(AOS_CONFIG.easing, 'ease-out-cubic');
   assert.equal(AOS_CONFIG.mirror, false);
+  assert.equal(AOS_CONFIG.disable, false);
   assert.equal(AOS_CONFIG.disableMutationObserver, true);
   assert.ok(
     typeof AOS_CONFIG.duration === 'number' &&
@@ -40,11 +41,17 @@ test('getAosStaggerDelay snaps to valid AOS 50ms increments and resets per row',
   assert.equal(getAosStaggerDelay(5, 100, 0), 0);
 });
 
-test('isElementBelowViewportFold accurately detects elements waiting below the trigger line', () => {
+test('isElementBelowViewportFold accurately detects elements waiting below the trigger line across desktop & mobile heights', () => {
+  // Desktop 1366x768: KPI cards at layoutTop 561 are above fold (768 - 120 = 648)
+  assert.equal(isElementBelowViewportFold(561, 768, 120), false);
+  assert.equal(isElementBelowViewportFold(648, 768, 120), true);
+
+  // Desktop 1440x900 & 1920x1080
   assert.equal(isElementBelowViewportFold(200, 900, 120), false);
   assert.equal(isElementBelowViewportFold(779, 900, 120), false);
   assert.equal(isElementBelowViewportFold(780, 900, 120), true);
-  assert.equal(isElementBelowViewportFold(1250, 900, 120), true);
+  assert.equal(isElementBelowViewportFold(959, 1080, 120), false);
+  assert.equal(isElementBelowViewportFold(960, 1080, 120), true);
 });
 
 test('isReducedMotionPreferred respects matchMedia prefers-reduced-motion', () => {

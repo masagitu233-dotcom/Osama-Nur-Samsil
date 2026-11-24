@@ -147,7 +147,7 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
                         data-aos-offset="-2000"
                         data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
                         aria-label={`Perbesar dokumentasi ${detail.institutionName} foto ${idx + 1} dari ${photos.length}`}
-                        className={`w-full block break-inside-avoid mb-3.5 border-2 bg-[#F8F8E1] shadow-[3px_3px_0_0_#013A42] hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_#013A42] transition-all cursor-pointer overflow-hidden text-left group ${
+                        className={`w-full block break-inside-avoid mb-3.5 border-2 bg-[#F8F8E1] shadow-[3px_3px_0_0_#013A42] hover:shadow-[4px_4px_0_0_#013A42] cursor-pointer overflow-hidden text-left group ${
                           isPrimary ? 'border-[#6C151E]' : 'border-[#013A42]'
                         }`}
                       >

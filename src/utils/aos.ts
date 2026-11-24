@@ -6,6 +6,7 @@ export const AOS_CONFIG: Readonly<AosOptions> = {
   once: true,
   offset: 120,
   mirror: false,
+  disable: false,
   anchorPlacement: 'top-bottom',
   disableMutationObserver: true,
 };
@@ -51,19 +52,36 @@ export function getAosStaggerDelay(
 }
 
 /**
- * Determines whether an element's top edge is strictly below the AOS
- * trigger fold for the current viewport and offset.
+ * Computes an element's untransformed document top coordinate by walking
+ * `offsetParent` (matching AOS v2.3.4's internal offset calculator) so initial
+ * CSS `transform: translate3d(0, Y, 0)` never inflates fold checks on desktop
+ * viewports such as 1366x768.
  */
-export function isElementBelowViewportFold(
-  rectTop: number,
-  viewportHeight: number,
-  offset: number = AOS_CONFIG.offset ?? 120
-): boolean {
-  return rectTop >= viewportHeight - offset;
+export function getElementLayoutTop(el: HTMLElement): number {
+  let top = 0;
+  let current: HTMLElement | null = el;
+  while (current && !Number.isNaN(current.offsetTop)) {
+    top += current.offsetTop - (current.tagName !== 'BODY' ? current.scrollTop : 0);
+    current = current.offsetParent as HTMLElement | null;
+  }
+  return top;
 }
 
 /**
- * Checks whether the user/system prefers reduced motion.
+ * Determines whether an element's untransformed layout top edge is strictly
+ * below the AOS trigger fold for the current viewport and offset.
+ */
+export function isElementBelowViewportFold(
+  layoutTop: number,
+  viewportHeight: number,
+  offset: number = AOS_CONFIG.offset ?? 120
+): boolean {
+  return layoutTop >= viewportHeight - offset;
+}
+
+/**
+ * Checks whether the user/system reports reduced motion (utility helper;
+ * AOS itself runs consistently across desktop & mobile with `disable: false`).
  */
 export function isReducedMotionPreferred(
   matchMediaFn?: (query: string) => { matches: boolean }
@@ -87,6 +105,19 @@ let pendingRaf1: number | null = null;
 let pendingRaf2: number | null = null;
 let pendingFollowupTimer: number | null = null;
 
+/**
+ * Pre-applies AOS duration/easing/delay attributes on `document.body` BEFORE
+ * the browser paints frame 1 so newly mounted `[data-aos]` elements already
+ * have `transition-duration: 0.8s`, `ease-out-cubic`, and `translate3d(0, 36px, 0)`
+ * committed prior to `.aos-animate` being added on frame 2.
+ */
+export function syncBodyAosAttributes(): void {
+  if (typeof document === 'undefined' || !document.body) return;
+  document.body.setAttribute('data-aos-easing', String(AOS_CONFIG.easing ?? 'ease-out-cubic'));
+  document.body.setAttribute('data-aos-duration', String(AOS_CONFIG.duration ?? 800));
+  document.body.setAttribute('data-aos-delay', '0');
+}
+
 function cancelScheduledRefresh(): void {
   if (typeof window === 'undefined') return;
   if (pendingRaf1 !== null) {
@@ -106,8 +137,8 @@ function cancelScheduledRefresh(): void {
 /**
  * When the page is at scroll top (initial load, route change, or async Firestore
  * data shifting lower sections downward), strips any stale `.aos-animate` class
- * from elements that are now strictly below the viewport fold so they wait
- * properly for user scrolling.
+ * from elements whose untransformed layout top is strictly below the viewport fold
+ * so they wait properly for user scrolling.
  */
 function stripStaleBelowFoldAnimations(): void {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
@@ -124,8 +155,8 @@ function stripStaleBelowFoldAnimations(): void {
     const effectiveOffset = Number.isFinite(parsedOffset) ? parsedOffset : defaultOffset;
     if (effectiveOffset < 0) return;
 
-    const rect = el.getBoundingClientRect();
-    if (isElementBelowViewportFold(rect.top, vh, effectiveOffset)) {
+    const layoutTop = getElementLayoutTop(el);
+    if (isElementBelowViewportFold(layoutTop, vh, effectiveOffset)) {
       el.classList.remove('aos-animate');
     }
   });
@@ -143,8 +174,9 @@ function revealVisibleElementsAtDocumentBottom(): void {
 
   const pendingEls = document.querySelectorAll<HTMLElement>('[data-aos].aos-init:not(.aos-animate)');
   pendingEls.forEach((el) => {
-    const rect = el.getBoundingClientRect();
-    if (rect.top < vh && rect.bottom > 0) {
+    const layoutTop = getElementLayoutTop(el);
+    const topInViewport = layoutTop - window.scrollY;
+    if (topInViewport < vh && topInViewport + el.offsetHeight > 0) {
       el.classList.add('aos-animate');
     }
   });
@@ -155,36 +187,45 @@ function attachGlobalAosListeners(): void {
   listenersAttached = true;
 
   window.addEventListener('scroll', revealVisibleElementsAtDocumentBottom, { passive: true });
+  window.addEventListener('resize', () => {
+    if (aosInitialized) {
+      AOS.refresh();
+      revealVisibleElementsAtDocumentBottom();
+    }
+  });
   window.addEventListener('load', () => {
-    if (aosInitialized && !isReducedMotionPreferred()) {
+    if (aosInitialized) {
       stripStaleBelowFoldAnimations();
       AOS.refresh();
+      revealVisibleElementsAtDocumentBottom();
     }
   });
 }
 
 /**
- * Guarantees `AOS.init()` executes exactly once, only when invoked inside
- * a post-paint tick (so it can never be cancelled by a sibling effect's
- * scheduled refresh in the same React commit).
+ * Guarantees `AOS.init()` executes exactly once across all viewports (desktop
+ * and mobile) without ever disabling or stripping `data-aos` attributes.
  */
 function ensureAosInitialized(): void {
   if (typeof window === 'undefined' || aosInitialized) return;
+  syncBodyAosAttributes();
   AOS.init({
     ...AOS_CONFIG,
-    disable: () => isReducedMotionPreferred(),
+    disable: false,
   });
   aosInitialized = true;
   attachGlobalAosListeners();
 }
 
 /**
- * Schedules a double-RAF callback so the browser paints at least one frame of
- * newly mounted `[data-aos]` elements in their initial hidden/offset CSS state
- * before AOS adds `.aos-animate` to elements inside the viewport.
+ * Schedules a double-RAF callback after ensuring `body` AOS transition attributes
+ * are already committed, so the browser paints frame 1 in the exact initial
+ * hidden/offset CSS state (`opacity: 0`, `translate3d(0, 36px, 0)`, `800ms`)
+ * before AOS adds `.aos-animate` to elements inside the viewport on frame 2.
  */
 function runAfterNextPaint(task: () => void): void {
   if (typeof window === 'undefined') return;
+  syncBodyAosAttributes();
   cancelScheduledRefresh();
   pendingRaf1 = window.requestAnimationFrame(() => {
     pendingRaf1 = null;
@@ -197,15 +238,15 @@ function runAfterNextPaint(task: () => void): void {
 
 /**
  * Initializes AOS once globally at application level.
- * Uses `disableMutationObserver: true` so AOS never stamps `.aos-animate`
- * prematurely during SPA route switches or async Firestore layout shifts.
+ * Uses `disableMutationObserver: true` and `disable: false` so AOS works
+ * consistently on every desktop and mobile screen without prematurely stamping
+ * `.aos-animate` during SPA route switches or async Firestore layout shifts.
  */
 export function initAosOnce(): void {
   if (typeof window === 'undefined' || aosInitialized) return;
 
   runAfterNextPaint(() => {
     ensureAosInitialized();
-    if (isReducedMotionPreferred()) return;
     stripStaleBelowFoldAnimations();
     AOS.refreshHard();
     stripStaleBelowFoldAnimations();
@@ -223,7 +264,6 @@ export function refreshAos(hard = true): void {
 
   runAfterNextPaint(() => {
     ensureAosInitialized();
-    if (isReducedMotionPreferred()) return;
     stripStaleBelowFoldAnimations();
     if (hard) {
       AOS.refreshHard();
@@ -236,16 +276,16 @@ export function refreshAos(hard = true): void {
 }
 
 /**
- * Synchronizes AOS after SPA route transitions or Admin tab switches.
- * Assumes scroll has already been reset to top before paint, waits for the
- * initial frame of the new route's DOM, then triggers AOS cleanly.
+ * Synchronizes AOS after initial mount, SPA route transitions, Firestore updates,
+ * or Admin tab switches. Waits for frame 1 paint with `body` AOS attributes
+ * already applied, then initializes/scans cleanly and recalculates once images
+ * and fonts settle.
  */
 export function refreshAosAfterTransition(): void {
   if (typeof window === 'undefined') return;
 
   runAfterNextPaint(() => {
     ensureAosInitialized();
-    if (isReducedMotionPreferred()) return;
     stripStaleBelowFoldAnimations();
     AOS.refreshHard();
     stripStaleBelowFoldAnimations();
@@ -254,7 +294,7 @@ export function refreshAosAfterTransition(): void {
     // Follow-up position recalculation after async images/fonts settle
     pendingFollowupTimer = window.setTimeout(() => {
       pendingFollowupTimer = null;
-      if (!aosInitialized || isReducedMotionPreferred()) return;
+      if (!aosInitialized) return;
       stripStaleBelowFoldAnimations();
       AOS.refresh();
       stripStaleBelowFoldAnimations();

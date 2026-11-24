@@ -6,7 +6,7 @@ import React, { useEffect, useLayoutEffect, useMemo } from 'react';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { PortfolioProvider, usePortfolio } from './context/PortfolioContext';
 import { useRouter } from './utils/router';
-import { initAosOnce, refreshAos, refreshAosAfterTransition, scrollToTopInstant } from './utils/aos';
+import { refreshAosAfterTransition, scrollToTopInstant, syncBodyAosAttributes } from './utils/aos';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { FloatingUtilityDock } from './components/layout/FloatingUtilityDock';
@@ -41,31 +41,18 @@ const AppShell: React.FC = () => {
     [publicData]
   );
 
-  // Ensure scroll is instantaneously at y=0 BEFORE paint on every route change (including popstate)
+  // Ensure scroll is at y=0 and body AOS transition attributes are committed BEFORE paint
   useLayoutEffect(() => {
     scrollToTopInstant();
+    syncBodyAosAttributes();
   }, [route]);
 
-  // Initialize AOS once actual content is ready (never while public skeleton is collapsing Footer into view)
-  useEffect(() => {
-    if (!loading || route === '/admin') {
-      initAosOnce();
-    }
-  }, [loading, route]);
-
-  // Re-scan AOS cleanly after every SPA route transition once content is mounted
+  // Single unified AOS lifecycle sync for initial load, SPA route switches, and live Firestore updates
   useEffect(() => {
     if (!loading || route === '/admin') {
       refreshAosAfterTransition();
     }
-  }, [route, loading]);
-
-  // Re-scan AOS whenever async Firestore snapshots populate or alter collection lengths
-  useEffect(() => {
-    if (!loading) {
-      refreshAos(true);
-    }
-  }, [dataFingerprint, loading]);
+  }, [route, loading, dataFingerprint]);
 
   const handleShareProfile = async () => {
     const shareUrl = window.location.origin;
