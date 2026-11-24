@@ -7,6 +7,7 @@ import { filterCertificates } from '../utils/portfolioLogic';
 import { SafeImage } from '../components/ui/SafeImage';
 import { Modal } from '../components/ui/Modal';
 import { getCardTone } from '../utils/cardVariants';
+import { normalizeGoogleDrivePdfEmbedUrl } from '../utils/googleDriveMedia';
 
 export const CertificatesPage: React.FC = () => {
   const { publicData } = usePortfolio();
@@ -342,7 +343,7 @@ export const CertificatesPage: React.FC = () => {
                 <div className="space-y-4">
                   <div className="border-[3px] border-[#6C151E] bg-[#F8F8E1] h-[460px] overflow-hidden shadow-[4px_4px_0_0_#8ACCD5]">
                     <iframe
-                      src={selectedCert.fileUrl}
+                      src={normalizeGoogleDrivePdfEmbedUrl(selectedCert.fileUrl)}
                       title={selectedCert.title}
                       className="w-full h-full"
                     />

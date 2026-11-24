@@ -8,6 +8,7 @@ import {
 } from '../../services/portfolioService';
 import type { ContactInfoData, ProfileData, SiteSettingsData } from '../../types/portfolio';
 import { MediaUploader } from './MediaUploader';
+import { extractGoogleDriveInfo } from '../../utils/googleDriveMedia';
 
 interface DirtyProps {
   onDirtyChange: (dirty: boolean) => void;
@@ -211,8 +212,18 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
                 type="text"
                 value={form.photoUrl}
                 onChange={(e) => updateField('photoUrl', e.target.value)}
+                placeholder="https://... atau tautan Google Drive"
                 className="w-full brutal-input px-3 py-2 text-xs"
               />
+              {(() => {
+                const driveInfo = extractGoogleDriveInfo(form.photoUrl);
+                if (!driveInfo) return null;
+                return (
+                  <p className="mt-1.5 text-[11px] font-mono-num font-bold text-[#0F3D3A]">
+                    Tautan Google Drive terdeteksi (ID: {driveInfo.fileId.slice(0, 10)}&hellip;) &mdash; ditampilkan otomatis sebagai gambar.
+                  </p>
+                );
+              })()}
             </div>
           </div>
 
