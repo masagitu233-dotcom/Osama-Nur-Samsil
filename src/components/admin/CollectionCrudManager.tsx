@@ -22,6 +22,7 @@ import {
 import type { DriveUploadCategory } from '../../services/googleDriveUploadService';
 import { normalizeProjectCategory } from '../../utils/projectsCatalog';
 import { normalizeCertificateCategoryLabel } from '../../utils/trainingClassification';
+import { getAosStaggerDelay } from '../../utils/aos';
 
 interface FieldSpec {
   key: string;
@@ -458,7 +459,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-3.5 border-b-2 border-brutal">
+      <div data-aos="fade-up" className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-3.5 border-b-2 border-brutal">
         <div>
           <span className="brutal-badge">Koleksi Firestore: /{collectionName}</span>
           <h1 className="font-display text-xl sm:text-2xl font-extrabold mt-1.5">{config.title}</h1>
@@ -476,7 +477,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
 
       {/* Items Table/List */}
       {items.length === 0 ? (
-        <div className="brutal-card surface-card p-6 text-center space-y-3">
+        <div data-aos="fade-up" className="brutal-card surface-card p-6 text-center space-y-3">
           <p className="font-display text-base font-bold">Belum ada data pada koleksi ini.</p>
           <button
             type="button"
@@ -494,6 +495,8 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
             return (
               <div
                 key={item.id}
+                data-aos="fade-up"
+                data-aos-delay={getAosStaggerDelay(idx, 50, 4)}
                 className="brutal-card surface-card p-3.5 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3"
               >
                 <div className="min-w-0">

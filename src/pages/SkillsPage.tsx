@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
 import { usePortfolio } from '../context/PortfolioContext';
 import type { InterestCategory, SkillCategory } from '../types/portfolio';
 import { getCardTone, type CardTone } from '../utils/cardVariants';
+import { getAosStaggerDelay } from '../utils/aos';
 import { SafeImage } from '../components/ui/SafeImage';
 
 type FilterGroup = 'all' | 'skills' | 'languages' | 'interests';
@@ -81,12 +81,7 @@ export const SkillsPage: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10">
-      <motion.header
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.28 }}
-        className="border-b-2 border-brutal pb-5 sm:pb-6"
-      >
+      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5 sm:pb-6">
         <span className="brutal-badge-green">05. Kapabilitas &amp; Potensi</span>
         <h1 className="font-display text-2xl sm:text-3xl lg:text-[34px] font-extrabold mt-2.5 text-balance leading-tight">
           Skills, Interests &amp; Talents
@@ -94,7 +89,7 @@ export const SkillsPage: React.FC = () => {
         <p className="mt-2.5 text-sm sm:text-[15px] text-muted max-w-2xl leading-relaxed">
           Keahlian teknis, perangkat kerja, kemampuan bahasa, minat profesional, serta bakat personal — seluruh tingkat kemampuan dideskripsikan secara objektif oleh pemilik portofolio tanpa skor persentase otomatis.
         </p>
-      </motion.header>
+      </header>
 
       {/* Filter Controls */}
       <div role="tablist" aria-label="Filter bagian keahlian dan minat" className="flex flex-wrap gap-2">
@@ -131,7 +126,7 @@ export const SkillsPage: React.FC = () => {
             const items = skills.filter((s) => s.category === sec.key);
             return (
               <section key={sec.key} aria-labelledby={`skill-sec-${sec.key}`}>
-                <div className="mb-3.5">
+                <div data-aos="fade-up" className="mb-3.5">
                   <span className={sec.sectionBadge}>{sec.index}</span>
                   <h2 id={`skill-sec-${sec.key}`} className="font-display text-xl sm:text-2xl font-extrabold mt-1.5">
                     {sec.title}
@@ -140,7 +135,7 @@ export const SkillsPage: React.FC = () => {
                 </div>
 
                 {items.length === 0 ? (
-                  <div className="brutal-card card-beige p-5 text-sm text-muted">
+                  <div data-aos="fade-up" className="brutal-card card-beige p-5 text-sm text-muted">
                     Belum ada item pada kategori {sec.title}. Tambahkan melalui Dashboard Admin.
                   </div>
                 ) : (
@@ -150,6 +145,8 @@ export const SkillsPage: React.FC = () => {
                       return (
                         <article
                           key={item.id}
+                          data-aos="fade-up"
+                          data-aos-delay={getAosStaggerDelay(idx, 60, 3)}
                           className={`brutal-card p-4 flex flex-col justify-between ${tone.cardClass} ${tone.frameClass}`}
                         >
                           <div>
@@ -196,6 +193,8 @@ export const SkillsPage: React.FC = () => {
             return (
               <section
                 key={sec.key}
+                data-aos="fade-up"
+                data-aos-delay={getAosStaggerDelay(idx, 80, 2)}
                 className={`brutal-card p-5 ${tone.cardClass} ${tone.frameClass}`}
               >
                 <span className={tone.badgeClass}>

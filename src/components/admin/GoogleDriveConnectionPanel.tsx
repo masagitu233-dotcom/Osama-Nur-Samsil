@@ -159,6 +159,7 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
   return (
     <section
       aria-label="Koneksi Penyimpanan Google Drive"
+      data-aos="fade-up"
       className={`brutal-card ${
         isConnected
           ? 'card-beige frame-shadow-green'

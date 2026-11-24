@@ -11,6 +11,7 @@ import {
 import { fetchDarsPublications } from '../../services/darsPublicationsService';
 import { SafeImage } from '../ui/SafeImage';
 import { getCardTone } from '../../utils/cardVariants';
+import { getAosStaggerDelay, refreshAos } from '../../utils/aos';
 
 const DEFAULT_PAGE_SIZE = 9;
 
@@ -80,6 +81,13 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
   useEffect(() => {
     setVisibleCount(initialPageSize);
   }, [selectedCategory, effectiveQuery, initialPageSize]);
+
+  // Refresh AOS whenever dynamic Dars articles load or pagination/filter updates
+  useEffect(() => {
+    if (!loading) {
+      refreshAos(true);
+    }
+  }, [loading, visibleCount, selectedCategory, effectiveQuery, articles.length]);
 
   const { visibleItems, hasMore, remainingCount } = useMemo(
     () => paginateDarsPublications(filteredArticles, visibleCount),
@@ -302,6 +310,8 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
               return (
                 <article
                   key={article.id}
+                  data-aos="fade-up"
+                  data-aos-delay={getAosStaggerDelay(idx, 70, 3)}
                   className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                 >
                   {/* Clickable 16:9 Cover Image -> Original Article URL */}

@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import { motion } from 'motion/react';
 import { Download, ExternalLink, FileText, Search, ZoomIn } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import type { CertificateItem } from '../types/portfolio';
@@ -7,6 +6,7 @@ import { filterCertificates } from '../utils/portfolioLogic';
 import { SafeImage } from '../components/ui/SafeImage';
 import { Modal } from '../components/ui/Modal';
 import { getCardTone } from '../utils/cardVariants';
+import { getAosStaggerDelay } from '../utils/aos';
 import { getGoogleDriveDownloadUrl, normalizeGoogleDrivePdfEmbedUrl } from '../utils/googleDriveMedia';
 import {
   groupCertificatesByTrainingScope,
@@ -54,12 +54,7 @@ export const CertificatesPage: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10">
-      <motion.header
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.28 }}
-        className="border-b-2 border-brutal pb-5 sm:pb-6"
-      >
+      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5 sm:pb-6">
         <span className="brutal-badge-bordo">04. Pengembangan Kompetensi</span>
         <h1 className="font-display text-2xl sm:text-3xl lg:text-[34px] font-extrabold mt-2.5 text-balance leading-tight">
           Sertifikat &amp; Riwayat Pelatihan
@@ -67,11 +62,11 @@ export const CertificatesPage: React.FC = () => {
         <p className="mt-2.5 text-sm sm:text-[15px] text-muted max-w-2xl leading-relaxed">
           Ringkasan bidang pelatihan dalam negeri maupun penyelenggara internasional, dilengkapi galeri dokumen sertifikat (JPG, PNG, WebP, dan PDF) yang dapat dicari, difilter, dan diunduh.
         </p>
-      </motion.header>
+      </header>
 
       {/* SECTION 01: TRAINING SUMMARY CARDS (Compact Live Certificate Counts Only) */}
       <section aria-labelledby="training-domains-heading" className="space-y-4">
-        <div>
+        <div data-aos="fade-up">
           <h2 id="training-domains-heading" className="font-display text-xl sm:text-2xl font-extrabold">
             01. Bidang Pelatihan yang Diikuti
           </h2>
@@ -84,6 +79,8 @@ export const CertificatesPage: React.FC = () => {
           {/* Domestic: Deep Green Card with Beige Text */}
           <div
             data-testid="training-card-domestic"
+            data-aos="fade-up"
+            data-aos-delay="0"
             className="brutal-card card-green frame-midnight p-5 flex flex-col justify-between gap-4"
           >
             <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b-2 border-[#8ACCD5]/50">
@@ -109,6 +106,8 @@ export const CertificatesPage: React.FC = () => {
           {/* International: Bordo Card with Beige Text */}
           <div
             data-testid="training-card-international"
+            data-aos="fade-up"
+            data-aos-delay="80"
             className="brutal-card card-bordo frame-midnight p-5 flex flex-col justify-between gap-4"
           >
             <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b-2 border-[#F8F8E1]/35">
@@ -135,7 +134,7 @@ export const CertificatesPage: React.FC = () => {
 
       {/* SECTION 02: CERTIFICATE GALLERY */}
       <section aria-labelledby="certificate-gallery-heading" className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+        <div data-aos="fade-up" className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
             <h2 id="certificate-gallery-heading" className="font-display text-xl sm:text-2xl font-extrabold">
               02. Galeri Sertifikat Terverifikasi
@@ -254,6 +253,8 @@ export const CertificatesPage: React.FC = () => {
               return (
                 <article
                   key={cert.id}
+                  data-aos="fade-up"
+                  data-aos-delay={getAosStaggerDelay(idx, 70, 3)}
                   className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col ${tone.cardClass} ${tone.frameClass}`}
                 >
                   {/* Certificate original document frame */}

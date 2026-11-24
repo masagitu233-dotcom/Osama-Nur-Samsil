@@ -3,6 +3,7 @@ import { Database, RefreshCw } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { seedInitialPortfolioToFirestore } from '../../services/portfolioService';
 import { getCardTone } from '../../utils/cardVariants';
+import { getAosStaggerDelay } from '../../utils/aos';
 import { GoogleDriveConnectionPanel } from './GoogleDriveConnectionPanel';
 
 interface AdminOverviewProps {
@@ -40,7 +41,7 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({ onSelectTab }) => 
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-3.5 border-b-2 border-brutal">
+      <div data-aos="fade-up" className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-3.5 border-b-2 border-brutal">
         <div>
           <span className="brutal-badge">Ringkasan CMS</span>
           <h1 className="font-display text-2xl font-extrabold mt-1.5">Dashboard Overview</h1>
@@ -63,7 +64,7 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({ onSelectTab }) => 
       </div>
 
       {!isFirestoreSeeded && (
-        <div className="brutal-card surface-highlight p-4 space-y-1.5">
+        <div data-aos="fade-up" className="brutal-card surface-highlight p-4 space-y-1.5">
           <p className="font-display font-extrabold text-sm sm:text-base">
             Database Firestore Belum Diisi Data Awal
           </p>
@@ -86,6 +87,8 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({ onSelectTab }) => 
               key={s.label}
               type="button"
               onClick={() => onSelectTab(s.tab)}
+              data-aos="fade-up"
+              data-aos-delay={getAosStaggerDelay(idx, 60, 4)}
               className={`text-left brutal-card brutal-card-interactive p-4 cursor-pointer ${tone.cardClass} ${tone.frameClass}`}
             >
               <p className={`font-mono-num text-2xl font-extrabold leading-none ${tone.isDark ? 'text-[#8ACCD5]' : ''}`}>
@@ -98,7 +101,7 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({ onSelectTab }) => 
       </div>
 
       {/* Recent Activity Log */}
-      <section className="brutal-card card-beige frame-shadow-green p-4 sm:p-5">
+      <section data-aos="fade-up" className="brutal-card card-beige frame-shadow-green p-4 sm:p-5">
         <h2 className="font-display text-lg font-extrabold mb-3">Aktivitas Pengelolaan Konten Terbaru</h2>
         {activityLogs.length === 0 ? (
           <p className="text-xs sm:text-sm text-muted">

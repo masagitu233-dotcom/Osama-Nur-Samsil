@@ -24,7 +24,7 @@ export const AdminAuthGate: React.FC<AdminAuthGateProps> = ({ onNavigate }) => {
           <span>Kembali ke Halaman Publik</span>
         </button>
 
-        <div className="brutal-card card-beige frame-shadow-bordo p-5 sm:p-6 space-y-4">
+        <div data-aos="fade-up" className="brutal-card card-beige frame-shadow-bordo p-5 sm:p-6 space-y-4">
           <div className="flex items-start justify-between gap-3 pb-4 border-b-2 border-brutal">
             <div>
               <span className="brutal-badge-bordo">Akses Terbatas &middot; CMS Admin</span>

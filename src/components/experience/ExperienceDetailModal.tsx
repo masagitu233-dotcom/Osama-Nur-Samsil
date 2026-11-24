@@ -4,6 +4,7 @@ import { Modal } from '../ui/Modal';
 import { SafeImage } from '../ui/SafeImage';
 import { PhotoLightbox } from './PhotoLightbox';
 import { resolveExperiencePrimaryPhoto } from '../../utils/experienceGallery';
+import { getAosStaggerDelay } from '../../utils/aos';
 
 export interface ExperienceDetailViewData {
   id: string;
@@ -58,7 +59,7 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
         {detail && (
           <div className="space-y-5">
             {/* Metadata Strip: Category, Institution, Period, Duration & Location */}
-            <div className="border-2 border-[#013A42] bg-[#F8F8E1] p-3.5 space-y-2">
+            <div data-aos="fade-up" data-aos-offset="-2000" className="border-2 border-[#013A42] bg-[#F8F8E1] p-3.5 space-y-2">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="brutal-badge-bordo">{detail.categoryLabel}</span>
                 <span className="font-display font-extrabold text-sm sm:text-base text-[#013A42]">
@@ -139,6 +140,9 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
                         key={`${detail.id}-photo-${idx}-${url}`}
                         type="button"
                         onClick={() => setLightboxIndex(idx)}
+                        data-aos="fade-up"
+                        data-aos-offset="-2000"
+                        data-aos-delay={getAosStaggerDelay(idx, 60, 3)}
                         aria-label={`Perbesar dokumentasi ${detail.institutionName} foto ${idx + 1} dari ${photos.length}`}
                         className={`w-full block break-inside-avoid mb-3.5 border-2 bg-[#F8F8E1] shadow-[3px_3px_0_0_#013A42] hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_#013A42] transition-all cursor-pointer overflow-hidden text-left group ${
                           isPrimary ? 'border-[#6C151E]' : 'border-[#013A42]'

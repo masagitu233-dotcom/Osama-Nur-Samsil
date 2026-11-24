@@ -8,6 +8,7 @@ import {
   type DarsPublicationItem,
 } from '../../utils/darsPublications';
 import { fetchDarsPublications } from '../../services/darsPublicationsService';
+import { refreshAos } from '../../utils/aos';
 
 export const DarsPublicationsSyncPanel: React.FC = () => {
   const [articles, setArticles] = useState<DarsPublicationItem[]>([]);
@@ -46,9 +47,15 @@ export const DarsPublicationsSyncPanel: React.FC = () => {
     return () => controller.abort();
   }, [loadSyncStatus]);
 
+  useEffect(() => {
+    if (!loading) {
+      refreshAos(true);
+    }
+  }, [loading, articles.length]);
+
   return (
     <div className="space-y-5">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-3.5 border-b-2 border-brutal">
+      <div data-aos="fade-up" className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-3.5 border-b-2 border-brutal">
         <div>
           <span className="brutal-badge-green">Integrasi Read-Only Otomatis</span>
           <h1 className="font-display text-xl sm:text-2xl font-extrabold mt-1.5">
@@ -81,7 +88,7 @@ export const DarsPublicationsSyncPanel: React.FC = () => {
       </div>
 
       {/* Integration Architecture Summary */}
-      <div className="brutal-card card-beige frame-shadow-green p-4 sm:p-5 space-y-3">
+      <div data-aos="fade-up" data-aos-delay={60} className="brutal-card card-beige frame-shadow-green p-4 sm:p-5 space-y-3">
         <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-[#0F3D3A]">
           <CheckCircle2 className="w-4 h-4 shrink-0" />
           <span>Sumber Tunggal Aktif: {DARS_SITE_BASE_URL}</span>
@@ -119,7 +126,7 @@ export const DarsPublicationsSyncPanel: React.FC = () => {
 
       {/* Read-only preview of latest synced articles */}
       {!loading && !errorMessage && articles.length > 0 && (
-        <section className="brutal-card card-beige p-4 sm:p-5 space-y-3">
+        <section data-aos="fade-up" className="brutal-card card-beige p-4 sm:p-5 space-y-3">
           <h2 className="font-display text-base sm:text-lg font-extrabold">
             Pratinjau Artikel Terbaru yang Tampil di Halaman Publik
           </h2>

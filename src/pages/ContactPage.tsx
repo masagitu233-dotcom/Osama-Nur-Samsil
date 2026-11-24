@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
 import { AlertCircle, ArrowUpRight, CheckCircle2, Mail, MessageSquare, Send } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { submitContactMessage } from '../services/portfolioService';
@@ -53,12 +52,7 @@ export const ContactPage: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10">
-      <motion.header
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.28 }}
-        className="border-b-2 border-brutal pb-5 sm:pb-6"
-      >
+      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5 sm:pb-6">
         <span className="brutal-badge">07. Hubungi Saya</span>
         <h1 className="font-display text-2xl sm:text-3xl lg:text-[34px] font-extrabold mt-2.5 text-balance leading-tight">
           Kolaborasi, Rekrutmen &amp; Diskusi Profesional
@@ -66,12 +60,12 @@ export const ContactPage: React.FC = () => {
         <p className="mt-2.5 text-sm sm:text-[15px] text-muted max-w-2xl leading-relaxed">
           {contacts.availabilityNote}
         </p>
-      </motion.header>
+      </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left: Editable Contact Channels */}
         <aside className="lg:col-span-5 space-y-4">
-          <div className="brutal-card card-beige frame-shadow-green p-5 space-y-3.5">
+          <div data-aos="fade-up" data-aos-delay="0" className="brutal-card card-beige frame-shadow-green p-5 space-y-3.5">
             <h2 className="font-display text-lg sm:text-xl font-extrabold">Saluran Kontak Resmi</h2>
 
             <div className="divide-y divide-[var(--card-border-subtle)] text-sm">
@@ -118,7 +112,7 @@ export const ContactPage: React.FC = () => {
           </div>
 
           {/* Professional Links */}
-          <div className="brutal-card card-green frame-midnight p-5 space-y-3">
+          <div data-aos="fade-up" data-aos-delay="80" className="brutal-card card-green frame-midnight p-5 space-y-3">
             <span className="brutal-badge">Jejaring Digital</span>
             <h2 className="font-display text-lg font-extrabold text-[#F8F8E1]">Media Sosial &amp; Tautan Profesional</h2>
             <div className="flex flex-col gap-1.5 text-sm font-bold">
@@ -179,7 +173,12 @@ export const ContactPage: React.FC = () => {
         </aside>
 
         {/* Right: Validated Contact Form */}
-        <section aria-labelledby="contact-form-heading" className="lg:col-span-7 brutal-card card-beige frame-shadow-bordo p-5 sm:p-6">
+        <section
+          aria-labelledby="contact-form-heading"
+          data-aos="fade-up"
+          data-aos-delay="100"
+          className="lg:col-span-7 brutal-card card-beige frame-shadow-bordo p-5 sm:p-6"
+        >
           <h2 id="contact-form-heading" className="font-display text-lg sm:text-xl font-extrabold mb-1.5">
             Kirim Pesan Langsung
           </h2>

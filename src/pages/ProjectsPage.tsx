@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import { motion } from 'motion/react';
 import { ExternalLink, Search } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import type { ProjectItem } from '../types/portfolio';
@@ -7,6 +6,7 @@ import { SafeImage } from '../components/ui/SafeImage';
 import { DarsLogo } from '../components/ui/DarsLogo';
 import { Modal } from '../components/ui/Modal';
 import { getCardTone } from '../utils/cardVariants';
+import { getAosStaggerDelay } from '../utils/aos';
 import {
   ACTIVE_PROJECT_CATEGORY_LABELS,
   ACTIVE_PROJECT_TABS,
@@ -46,12 +46,7 @@ export const ProjectsPage: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-9">
-      <motion.header
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.28 }}
-        className="border-b-2 border-brutal pb-5 sm:pb-6"
-      >
+      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5 sm:pb-6">
         <span className="brutal-badge-bordo">06. Karya &amp; Inisiatif Digital</span>
         <h1 className="font-display text-2xl sm:text-3xl lg:text-[34px] font-extrabold mt-2.5 text-balance leading-tight">
           Projects &amp; Works
@@ -59,7 +54,7 @@ export const ProjectsPage: React.FC = () => {
         <p className="mt-2.5 text-sm sm:text-[15px] text-muted max-w-2xl leading-relaxed">
           Katalog proyek website dan inisiatif digital, termasuk platform pembelajaran keislaman Dars with Osama beserta arsip artikel dan tulisan yang terbit secara otomatis.
         </p>
-      </motion.header>
+      </header>
 
       {/* Filters (Strictly 3 Categories) & Search */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5">
@@ -104,7 +99,7 @@ export const ProjectsPage: React.FC = () => {
       {/* SECTION A: WEBSITE & DIGITAL */}
       {showWebsiteSection && (
         <section aria-labelledby="website-projects-heading" className="space-y-5">
-          <div className="flex flex-wrap items-end justify-between gap-3 pb-2.5 border-b-2 border-brutal">
+          <div data-aos="fade-up" className="flex flex-wrap items-end justify-between gap-3 pb-2.5 border-b-2 border-brutal">
             <div>
               <span className="brutal-badge-green">Website &amp; Digital</span>
               <h2 id="website-projects-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1.5">
@@ -146,6 +141,8 @@ export const ProjectsPage: React.FC = () => {
                 return (
                   <article
                     key={proj.id}
+                    data-aos="fade-up"
+                    data-aos-delay={getAosStaggerDelay(idx, 80, 2)}
                     className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                   >
                     {isDars && !useCustomAsset ? (
@@ -224,7 +221,7 @@ export const ProjectsPage: React.FC = () => {
       {/* SECTION B: ARTIKEL & TULISAN */}
       {showArticleSection && (
         <section aria-labelledby="articles-works-heading" className="space-y-5">
-          <div className="flex flex-wrap items-end justify-between gap-3 pb-2.5 border-b-2 border-brutal">
+          <div data-aos="fade-up" className="flex flex-wrap items-end justify-between gap-3 pb-2.5 border-b-2 border-brutal">
             <div>
               <span className="brutal-badge-bordo">Artikel &amp; Tulisan</span>
               <h2 id="articles-works-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1.5">
@@ -243,7 +240,7 @@ export const ProjectsPage: React.FC = () => {
           {/* Preserve any manually stored article_writing items in portfolio Firestore without deleting them */}
           {filteredManualArticles.length > 0 && (
             <div className="pt-3 space-y-3.5">
-              <h3 className="font-display text-lg font-extrabold">
+              <h3 data-aos="fade-up" className="font-display text-lg font-extrabold">
                 Tulisan &amp; Arsip Tambahan
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
@@ -252,6 +249,8 @@ export const ProjectsPage: React.FC = () => {
                   return (
                     <article
                       key={proj.id}
+                      data-aos="fade-up"
+                      data-aos-delay={getAosStaggerDelay(idx, 70, 3)}
                       className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                     >
                       {proj.imageUrls[0] && (

@@ -2,10 +2,11 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { PortfolioProvider, usePortfolio } from './context/PortfolioContext';
 import { useRouter } from './utils/router';
+import { initAosOnce, refreshAosAfterTransition } from './utils/aos';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { FloatingUtilityDock } from './components/layout/FloatingUtilityDock';
@@ -23,6 +24,14 @@ import { AdminPage } from './pages/AdminPage';
 const AppShell: React.FC = () => {
   const { route, navigate } = useRouter();
   const { loading, publicData, showToast } = usePortfolio();
+
+  useEffect(() => {
+    initAosOnce();
+  }, []);
+
+  useEffect(() => {
+    refreshAosAfterTransition();
+  }, [route, loading]);
 
   const handleShareProfile = async () => {
     const shareUrl = window.location.origin;

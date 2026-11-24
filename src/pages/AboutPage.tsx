@@ -1,10 +1,10 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import type { InterestCategory, PublicRoute } from '../types/portfolio';
 import { SafeImage } from '../components/ui/SafeImage';
 import { getCardTone } from '../utils/cardVariants';
+import { getAosStaggerDelay } from '../utils/aos';
 
 interface AboutPageProps {
   onNavigate: (route: PublicRoute) => void;
@@ -28,12 +28,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10 sm:space-y-12">
       {/* Page Header */}
-      <motion.header
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.28 }}
-        className="border-b-2 border-brutal pb-5 sm:pb-6"
-      >
+      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5 sm:pb-6">
         <span className="brutal-badge-bordo">01. Tentang Saya</span>
         <h1 className="font-display text-2xl sm:text-3xl lg:text-[34px] font-extrabold mt-2.5 text-balance leading-tight">
           Biografi, Visi &amp; Arah Profesional
@@ -41,11 +36,11 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
         <p className="mt-2.5 text-sm sm:text-[15px] text-muted max-w-2xl leading-relaxed">
           {profile.headline} &middot; {profile.domicile}
         </p>
-      </motion.header>
+      </header>
 
       {/* Biography Split */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        <div className="lg:col-span-4 max-w-xs mx-auto lg:max-w-none w-full brutal-card card-bordo frame-midnight overflow-hidden">
+        <div data-aos="fade-up" className="lg:col-span-4 max-w-xs mx-auto lg:max-w-none w-full brutal-card card-bordo frame-midnight overflow-hidden">
           <div className="aspect-[4/4.2] bg-[#F8F8E1]">
             <SafeImage
               src={profile.photoUrl}
@@ -66,7 +61,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
         </div>
 
         <div className="lg:col-span-8 space-y-5">
-          <div className="brutal-card card-beige frame-shadow-green p-5 sm:p-6">
+          <div data-aos="fade-up" data-aos-delay="70" className="brutal-card card-beige frame-shadow-green p-5 sm:p-6">
             <h2 className="font-display text-lg sm:text-xl font-extrabold mb-3">Biografi Profesional</h2>
             <div className="space-y-3 text-sm sm:text-[15px] leading-relaxed text-muted whitespace-pre-line">
               {profile.biography || profile.shortBio}
@@ -74,7 +69,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
           </div>
 
           {profile.careerFocus && (
-            <div className="brutal-card card-blue frame-shadow-bordo p-5 sm:p-6">
+            <div data-aos="fade-up" data-aos-delay="120" className="brutal-card card-blue frame-shadow-bordo p-5 sm:p-6">
               <span className="brutal-badge-inverse mb-2">Arah Karier</span>
               <h2 className="font-display text-lg font-extrabold mb-1.5">Fokus Kolaborasi &amp; Karier</h2>
               <p className="text-sm leading-relaxed font-medium">{profile.careerFocus}</p>
@@ -85,7 +80,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
 
       {/* Vision & Mission */}
       <section aria-labelledby="vision-mission-heading">
-        <div className="mb-4">
+        <div data-aos="fade-up" className="mb-4">
           <span className="brutal-badge-green">02. Prinsip Kerja</span>
           <h2 id="vision-mission-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1.5">
             Visi &amp; Misi
@@ -93,13 +88,13 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div className="brutal-card card-green frame-midnight p-5 sm:p-6">
+          <div data-aos="fade-up" data-aos-delay="0" className="brutal-card card-green frame-midnight p-5 sm:p-6">
             <h3 className="font-display text-lg font-extrabold text-[#8ACCD5] mb-2">Visi</h3>
             <p className="text-sm leading-relaxed text-[#F8F8E1] whitespace-pre-line">
               {profile.vision || 'Belum ditambahkan. Dapat diperbarui melalui Dashboard Admin.'}
             </p>
           </div>
-          <div className="brutal-card card-midnight frame-shadow-bordo p-5 sm:p-6">
+          <div data-aos="fade-up" data-aos-delay="80" className="brutal-card card-midnight frame-shadow-bordo p-5 sm:p-6">
             <h3 className="font-display text-lg font-extrabold text-[#8ACCD5] mb-2">Misi</h3>
             <p className="text-sm leading-relaxed text-[#F8F8E1] whitespace-pre-line">
               {profile.mission || 'Belum ditambahkan. Dapat diperbarui melalui Dashboard Admin.'}
@@ -110,7 +105,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
 
       {/* Education Journey Snapshot */}
       <section aria-labelledby="about-edu-heading">
-        <div className="flex flex-wrap items-end justify-between gap-3 mb-4 pb-3 border-b-2 border-brutal">
+        <div data-aos="fade-up" className="flex flex-wrap items-end justify-between gap-3 mb-4 pb-3 border-b-2 border-brutal">
           <div>
             <h2 id="about-edu-heading" className="font-display text-xl sm:text-2xl font-extrabold">
               Riwayat &amp; Perjalanan Pendidikan
@@ -132,6 +127,8 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
             return (
               <div
                 key={edu.id}
+                data-aos="fade-up"
+                data-aos-delay={getAosStaggerDelay(idx, 70, 2)}
                 className={`brutal-card p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 ${tone.cardClass} ${tone.frameClass}`}
               >
                 <div>
@@ -164,6 +161,8 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
           return (
             <div
               key={sec.key}
+              data-aos="fade-up"
+              data-aos-delay={getAosStaggerDelay(idx, 80, 2)}
               className={`brutal-card p-5 ${tone.cardClass} ${tone.frameClass}`}
             >
               <span className={tone.badgeClass}>

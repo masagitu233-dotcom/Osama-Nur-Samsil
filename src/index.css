@@ -418,11 +418,36 @@
   text-wrap: balance;
 }
 
+/* ==================================================
+   AOS (ANIMATE ON SCROLL) SUBTLE EDITORIAL REFINEMENTS
+   ================================================== */
+
+/* Keep fade-up travel subtle (20px instead of AOS default 100px) */
+[data-aos="fade-up"] {
+  transform: translate3d(0, 20px, 0);
+}
+
+/* Keep buttons, links, forms, and admin controls interactive during animation */
+[data-aos] {
+  pointer-events: auto !important;
+}
+
+/* Preserve Neo-Brutalist interactive card lift after AOS completes */
+.brutal-card-interactive[data-aos].aos-animate:hover {
+  transform: translate(-2px, -2px);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  [data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }

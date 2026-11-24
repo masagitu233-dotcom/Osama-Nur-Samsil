@@ -27,6 +27,7 @@ import { CollectionCrudManager, type CrudCollectionName } from '../components/ad
 import { DarsPublicationsSyncPanel } from '../components/admin/DarsPublicationsSyncPanel';
 import { MediaLibraryPanel, MessagesPanel } from '../components/admin/MessagesAndMediaPanel';
 import { Modal } from '../components/ui/Modal';
+import { refreshAosAfterTransition } from '../utils/aos';
 
 interface AdminPageProps {
   onNavigate: (route: PublicRoute) => void;
@@ -75,6 +76,10 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [hasUnsavedChanges]);
+
+  useEffect(() => {
+    refreshAosAfterTransition();
+  }, [activeTab, isAdmin]);
 
   if (!isAdmin) {
     return <AdminAuthGate onNavigate={onNavigate} />;

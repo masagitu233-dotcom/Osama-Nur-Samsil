@@ -14,6 +14,7 @@ import { SafeImage } from '../ui/SafeImage';
 import { Modal } from '../ui/Modal';
 import { MediaUploader } from './MediaUploader';
 import { GoogleDriveConnectionPanel } from './GoogleDriveConnectionPanel';
+import { getAosStaggerDelay } from '../../utils/aos';
 
 export const MessagesPanel: React.FC = () => {
   const { contactMessages, showToast } = usePortfolio();
@@ -42,22 +43,24 @@ export const MessagesPanel: React.FC = () => {
 
   return (
     <div className="space-y-5">
-      <div className="pb-3.5 border-b-2 border-brutal">
+      <div data-aos="fade-up" className="pb-3.5 border-b-2 border-brutal">
         <span className="brutal-badge">Kotak Masuk Pengunjung</span>
         <h1 className="font-display text-2xl font-extrabold mt-1.5">Pesan Kontak ({contactMessages.length})</h1>
       </div>
 
       {contactMessages.length === 0 ? (
-        <div className="brutal-card surface-card p-6 text-sm text-muted">
+        <div data-aos="fade-up" className="brutal-card surface-card p-6 text-sm text-muted">
           Belum ada pesan masuk dari formulir kontak publik.
         </div>
       ) : (
         <div className="space-y-3.5">
-          {contactMessages.map((msg) => {
+          {contactMessages.map((msg, idx) => {
             const isNew = msg.status === 'new';
             return (
               <article
                 key={msg.id}
+                data-aos="fade-up"
+                data-aos-delay={getAosStaggerDelay(idx, 60, 2)}
                 className={`brutal-card p-4 sm:p-5 space-y-2.5 ${isNew ? 'surface-highlight' : 'surface-card'}`}
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
@@ -172,14 +175,14 @@ export const MediaLibraryPanel: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="pb-3.5 border-b-2 border-brutal">
+      <div data-aos="fade-up" className="pb-3.5 border-b-2 border-brutal">
         <span className="brutal-badge">Google Drive Storage</span>
         <h1 className="font-display text-2xl font-extrabold mt-1.5">Pustaka Media &amp; Dokumen</h1>
       </div>
 
       <GoogleDriveConnectionPanel compact />
 
-      <div className="brutal-card surface-card p-4 sm:p-5 space-y-3.5">
+      <div data-aos="fade-up" data-aos-delay={60} className="brutal-card surface-card p-4 sm:p-5 space-y-3.5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-subtle">
           <label htmlFor="media-folder-select" className="text-xs font-bold uppercase tracking-wider">
             Folder Tujuan Google Drive (Portfolio Website)
@@ -209,16 +212,21 @@ export const MediaLibraryPanel: React.FC = () => {
       </div>
 
       {mediaAssets.length === 0 ? (
-        <div className="brutal-card surface-card p-6 text-sm text-muted">
+        <div data-aos="fade-up" className="brutal-card surface-card p-6 text-sm text-muted">
           Belum ada file yang tercatat pada Pustaka Media. Hubungkan akun Google Drive Anda di atas, lalu gunakan area unggah manual atau drag-and-drop untuk menyimpan foto profil, sertifikat, dokumentasi kegiatan, atau CV PDF.
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {mediaAssets.map((asset) => {
+          {mediaAssets.map((asset, idx) => {
             const isPdf = asset.mimeType === 'application/pdf';
             const downloadHref = asset.downloadUrl || getGoogleDriveDownloadUrl(asset.fileUrl);
             return (
-              <article key={asset.id} className="brutal-card surface-card overflow-hidden flex flex-col">
+              <article
+                key={asset.id}
+                data-aos="fade-up"
+                data-aos-delay={getAosStaggerDelay(idx, 60, 4)}
+                className="brutal-card surface-card overflow-hidden flex flex-col"
+              >
                 <div className="aspect-[16/10] border-b-2 border-brutal overflow-hidden bg-[#8ACCD5]/25 relative">
                   {isPdf ? (
                     <div className="w-full h-full flex flex-col items-center justify-center p-3 text-center surface-highlight">

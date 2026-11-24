@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -19,6 +18,7 @@ import {
   prepareWebsiteProjects,
 } from '../utils/projectsCatalog';
 import { resolveExperiencePrimaryPhoto } from '../utils/experienceGallery';
+import { getAosStaggerDelay } from '../utils/aos';
 
 interface HomePageProps {
   onNavigate: (route: PublicRoute) => void;
@@ -60,10 +60,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
       {/* HERO SECTION: Balanced split with circular 1:1 profile photo on the RIGHT (Desktop & Mobile) */}
       <section aria-label="Perkenalan utama" className="pt-5 sm:pt-7">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          <div
+            data-aos="fade-up"
             className="card-beige brutal-card frame-shadow-green p-4 sm:p-6 lg:p-8"
           >
             {/* Top Split: Identity & Bio on LEFT, Circular Profile Photo on RIGHT */}
@@ -92,7 +90,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               </div>
 
               {/* Circular 1:1 Profile Photo on RIGHT */}
-              <div className="shrink-0 flex flex-col items-center gap-2.5">
+              <div className="shrink-0 flex flex-col items-center gap-2.5" data-aos="fade-up" data-aos-delay="100">
                 <div
                   data-testid="hero-profile-photo-circle"
                   className="w-[84px] h-[84px] min-[390px]:w-[96px] min-[390px]:h-[96px] sm:w-28 sm:h-28 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full p-1 sm:p-1.5 bg-[#6C151E] border-2 border-[#013A42] shadow-[4px_4px_0_0_#013A42]"
@@ -185,13 +183,15 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                 <span>Bagikan</span>
               </button>
             </div>
-          </motion.div>
+          </div>
 
           {/* Full-Width 4-Column Portfolio Index Strip */}
           <div className="mt-5 grid grid-cols-2 lg:grid-cols-4 gap-3.5">
             <button
               type="button"
               onClick={() => onNavigate('/experience')}
+              data-aos="fade-up"
+              data-aos-delay="0"
               className="text-left brutal-card brutal-card-interactive card-beige frame-midnight p-4 cursor-pointer"
             >
               <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none">
@@ -206,6 +206,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             <button
               type="button"
               onClick={() => onNavigate('/projects')}
+              data-aos="fade-up"
+              data-aos-delay="60"
               className="text-left brutal-card brutal-card-interactive card-blue frame-shadow-bordo p-4 cursor-pointer"
             >
               <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none">
@@ -220,6 +222,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             <button
               type="button"
               onClick={() => onNavigate('/skills')}
+              data-aos="fade-up"
+              data-aos-delay="120"
               className="text-left brutal-card brutal-card-interactive card-green frame-midnight p-4 cursor-pointer"
             >
               <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none text-[#8ACCD5]">
@@ -234,6 +238,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             <button
               type="button"
               onClick={() => onNavigate('/certificates')}
+              data-aos="fade-up"
+              data-aos-delay="180"
               className="text-left brutal-card brutal-card-interactive card-bordo frame-midnight p-4 cursor-pointer"
             >
               <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none text-[#8ACCD5]">
@@ -250,7 +256,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
 
       {/* SECTION 01: RINGKASAN BIDANG KEAHLIAN */}
       <section aria-labelledby="home-skills-heading" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5 pb-3 border-b-2 border-brutal">
+        <div data-aos="fade-up" className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5 pb-3 border-b-2 border-brutal">
           <div>
             <span className="brutal-badge-bordo">01. Bidang Keahlian</span>
             <h2 id="home-skills-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1.5 text-balance">
@@ -268,7 +274,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <div className="brutal-card card-beige frame-shadow-bordo p-5 flex flex-col justify-between">
+          <div data-aos="fade-up" data-aos-delay="0" className="brutal-card card-beige frame-shadow-bordo p-5 flex flex-col justify-between">
             <div>
               <p className="font-mono-num text-[11px] font-bold text-[#6C151E] uppercase">
                 Akademik &amp; Pembinaan
@@ -285,7 +291,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             </div>
           </div>
 
-          <div className="brutal-card card-green frame-midnight p-5 flex flex-col justify-between">
+          <div data-aos="fade-up" data-aos-delay="70" className="brutal-card card-green frame-midnight p-5 flex flex-col justify-between">
             <div>
               <p className="font-mono-num text-[11px] font-bold text-[#8ACCD5] uppercase">
                 Teknologi &amp; Perangkat Digital
@@ -302,7 +308,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             </div>
           </div>
 
-          <div className="brutal-card card-midnight frame-shadow-bordo p-5 flex flex-col justify-between">
+          <div data-aos="fade-up" data-aos-delay="140" className="brutal-card card-midnight frame-shadow-bordo p-5 flex flex-col justify-between">
             <div>
               <p className="font-mono-num text-[11px] font-bold text-[#8ACCD5] uppercase">
                 Bahasa &amp; Komunikasi
@@ -338,7 +344,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
 
       {/* SECTION 02: PROYEK & PENGALAMAN UNGGULAN (Beserta Foto Masing-Masing) */}
       <section aria-labelledby="home-featured-heading" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5 pb-3 border-b-2 border-brutal">
+        <div data-aos="fade-up" className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5 pb-3 border-b-2 border-brutal">
           <div>
             <span className="brutal-badge-green">02. Sorotan Utama</span>
             <h2 id="home-featured-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1.5 text-balance">
@@ -366,7 +372,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
           {/* Featured Project Spotlight */}
           {featuredProject && (
-            <article className="lg:col-span-6 brutal-card card-beige frame-shadow-bordo overflow-hidden flex flex-col">
+            <article data-aos="fade-up" className="lg:col-span-6 brutal-card card-beige frame-shadow-bordo overflow-hidden flex flex-col">
               <div className="border-b-2 border-[#6C151E] overflow-hidden">
                 {isDarsPlatformProject(featuredProject) && !hasCustomUploadedDarsAsset(featuredProject) ? (
                   <div className="w-full min-h-[180px] sm:min-h-[200px] bg-[#0F3D3A] flex flex-col items-center justify-center p-5 sm:p-6">
@@ -436,6 +442,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                 <article
                   key={exp.id}
                   data-testid={`home-featured-exp-${idx}`}
+                  data-aos="fade-up"
+                  data-aos-delay={getAosStaggerDelay(idx, 70, 3)}
                   className={`brutal-card brutal-card-interactive p-4 flex-1 flex flex-col justify-between gap-3 ${tone.cardClass} ${tone.frameClass}`}
                 >
                   <div className="flex items-start gap-3.5">

@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import { motion } from 'motion/react';
 import { LayoutGrid, List, Search } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import type { ExperienceCategory, ExperienceItem, OrganizationItem } from '../types/portfolio';
@@ -7,6 +6,7 @@ import { filterExperiences } from '../utils/portfolioLogic';
 import { SafeImage } from '../components/ui/SafeImage';
 import { getCardTone } from '../utils/cardVariants';
 import { resolveExperiencePrimaryPhoto } from '../utils/experienceGallery';
+import { getAosStaggerDelay } from '../utils/aos';
 import {
   ExperienceDetailModal,
   type ExperienceDetailViewData,
@@ -79,12 +79,7 @@ export const ExperiencePage: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10">
-      <motion.header
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.28 }}
-        className="border-b-2 border-brutal pb-5 sm:pb-6"
-      >
+      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5 sm:pb-6">
         <span className="brutal-badge-green">02. Rekam Jejak &amp; Dedikasi</span>
         <h1 className="font-display text-2xl sm:text-3xl lg:text-[34px] font-extrabold mt-2.5 text-balance leading-tight">
           Pengalaman Pembinaan, Mengajar, Organisasi &amp; Kepanitiaan
@@ -92,7 +87,7 @@ export const ExperiencePage: React.FC = () => {
         <p className="mt-2.5 text-sm sm:text-[15px] text-muted max-w-2xl leading-relaxed">
           Pilih kartu pengalaman untuk membuka rincian peran, tanggung jawab, dan galeri foto dokumentasi lengkap.
         </p>
-      </motion.header>
+      </header>
 
       {/* Filter & View Controls */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5">
@@ -193,6 +188,8 @@ export const ExperiencePage: React.FC = () => {
             return (
               <article
                 key={exp.id}
+                data-aos="fade-up"
+                data-aos-delay={getAosStaggerDelay(idx, 70, 3)}
                 className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
               >
                 <div className={`aspect-[16/9] w-full overflow-hidden border-b-2 ${photoFrameBorder} bg-[#F8F8E1] shrink-0`}>
@@ -236,6 +233,8 @@ export const ExperiencePage: React.FC = () => {
             return (
               <li
                 key={exp.id}
+                data-aos="fade-up"
+                data-aos-delay={getAosStaggerDelay(idx, 60, 2)}
                 className={`brutal-card p-4 sm:p-5 grid grid-cols-1 md:grid-cols-12 gap-4 items-center ${tone.cardClass} ${tone.frameClass}`}
               >
                 <div className="md:col-span-4 aspect-[16/9] w-full border-2 border-[#013A42] bg-[#F8F8E1] overflow-hidden">
@@ -269,7 +268,7 @@ export const ExperiencePage: React.FC = () => {
 
       {/* Organizations Section */}
       <section aria-labelledby="org-heading" className="pt-4">
-        <div className="mb-5 pb-3 border-b-2 border-brutal">
+        <div data-aos="fade-up" className="mb-5 pb-3 border-b-2 border-brutal">
           <span className="brutal-badge-bordo">Kepemimpinan Organisasi</span>
           <h2 id="org-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1.5">
             Pengalaman Organisasi
@@ -295,6 +294,8 @@ export const ExperiencePage: React.FC = () => {
               return (
                 <article
                   key={org.id}
+                  data-aos="fade-up"
+                  data-aos-delay={getAosStaggerDelay(idx, 70, 3)}
                   className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                 >
                   <div className={`aspect-[16/9] w-full overflow-hidden border-b-2 ${photoFrameBorder} bg-[#F8F8E1] shrink-0`}>
