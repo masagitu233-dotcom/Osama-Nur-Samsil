@@ -361,7 +361,7 @@ export const INITIAL_PORTFOLIO_DATA: PortfolioBundle = {
     {
       id: 'proj_dars_with_osama',
       title: 'Dars with Osama',
-      category: 'dars_with_osama',
+      category: 'website_digital',
       period: 'Aktif Berjalan',
       description:
         'Platform pembelajaran digital yang memuat materi pendidikan Islam, artikel ilmiah, dan materi pembelajaran terstruktur agar mudah diakses oleh pelajar, mahasiswa, dan masyarakat umum.',

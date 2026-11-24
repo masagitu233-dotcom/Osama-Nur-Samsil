@@ -12,7 +12,7 @@ const FOOTER_LINKS: Array<{ label: string; route: PublicRoute }> = [
   { label: 'Beranda', route: '/' },
   { label: 'About Me', route: '/about' },
   { label: 'Experience', route: '/experience' },
-  { label: 'Education & Knowledge', route: '/education' },
+  { label: 'Education & Publications', route: '/education' },
   { label: 'Certificates & Training', route: '/certificates' },
   { label: 'Skills & Talents', route: '/skills' },
   { label: 'Projects & Works', route: '/projects' },

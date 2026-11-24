@@ -68,6 +68,8 @@ import {
   PUBLIC_PROFILE_PATH,
   shouldSyncPublicProfile,
 } from '../utils/publicProfileSync';
+import { MAX_EXPERIENCE_PHOTOS, normalizeExperienceGallery } from '../utils/experienceGallery';
+import { normalizeCertificateCategoryLabel } from '../utils/trainingClassification';
 
 const PUBLIC_PROFILE_SYNC_COLLECTIONS = new Set<ManagedCollectionName>([
   'education',
@@ -341,6 +343,7 @@ function sanitizeEntityPayload(collectionName: ManagedCollectionName, raw: Recor
   switch (collectionName) {
     case 'experiences': {
       const r = raw as Partial<ExperienceItem>;
+      const gallery = normalizeExperienceGallery(r.imageUrls, r.primaryImageUrl, MAX_EXPERIENCE_PHOTOS);
       return {
         ...common,
         institution: clampString(r.institution, 200),
@@ -351,12 +354,14 @@ function sanitizeEntityPayload(collectionName: ManagedCollectionName, raw: Recor
         location: clampString(r.location, 160),
         description: clampString(r.description, 3000),
         responsibilities: clampStringArray(r.responsibilities, 12, 400),
-        imageUrls: clampStringArray(r.imageUrls, 8, 2048),
+        imageUrls: gallery.imageUrls,
+        primaryImageUrl: gallery.primaryImageUrl,
         featured: Boolean(r.featured),
       };
     }
     case 'organizations': {
       const r = raw as Partial<OrganizationItem>;
+      const gallery = normalizeExperienceGallery(r.imageUrls, r.primaryImageUrl, MAX_EXPERIENCE_PHOTOS);
       return {
         ...common,
         organizationName: clampString(r.organizationName, 200),
@@ -365,7 +370,8 @@ function sanitizeEntityPayload(collectionName: ManagedCollectionName, raw: Recor
         period: clampString(r.period, 100),
         description: clampString(r.description, 3000),
         responsibilities: clampStringArray(r.responsibilities, 12, 400),
-        imageUrls: clampStringArray(r.imageUrls, 8, 2048),
+        imageUrls: gallery.imageUrls,
+        primaryImageUrl: gallery.primaryImageUrl,
       };
     }
     case 'education': {
@@ -390,7 +396,7 @@ function sanitizeEntityPayload(collectionName: ManagedCollectionName, raw: Recor
         title: clampString(r.title, 200),
         issuer: clampString(r.issuer, 200),
         year: clampString(r.year, 40),
-        category: clampString(r.category || 'Dalam Negeri', 80),
+        category: clampString(normalizeCertificateCategoryLabel(r.category || 'Dalam Negeri'), 80),
         field: clampString(r.field || 'Umum', 100),
         description: clampString(r.description, 2000),
         fileUrl: clampString(r.fileUrl, 2048),

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
-import { Download, ExternalLink, FileText, Search, ZoomIn } from 'lucide-react';
+import { ChevronDown, ChevronUp, Download, ExternalLink, FileText, Search, ZoomIn } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import type { CertificateItem } from '../types/portfolio';
 import { filterCertificates } from '../utils/portfolioLogic';
@@ -8,6 +8,14 @@ import { SafeImage } from '../components/ui/SafeImage';
 import { Modal } from '../components/ui/Modal';
 import { getCardTone } from '../utils/cardVariants';
 import { getGoogleDriveDownloadUrl, normalizeGoogleDrivePdfEmbedUrl } from '../utils/googleDriveMedia';
+import {
+  cleanDisplayBulletPrefix,
+  groupCertificatesByTrainingScope,
+  groupTrainingsByScope,
+  normalizeCertificateCategoryLabel,
+} from '../utils/trainingClassification';
+
+const INITIAL_TRAINING_CERTS_SHOWN = 5;
 
 export const CertificatesPage: React.FC = () => {
   const { publicData } = usePortfolio();
@@ -18,9 +26,18 @@ export const CertificatesPage: React.FC = () => {
   const [field, setField] = useState('all');
   const [year, setYear] = useState('all');
   const [selectedCert, setSelectedCert] = useState<CertificateItem | null>(null);
+  const [expandDomestic, setExpandDomestic] = useState(false);
+  const [expandInternational, setExpandInternational] = useState(false);
 
   const categories = useMemo(
-    () => Array.from(new Set(certificates.map((c) => c.category).filter(Boolean))).sort(),
+    () =>
+      Array.from(
+        new Set(
+          certificates
+            .map((c) => normalizeCertificateCategoryLabel(c.category))
+            .filter(Boolean)
+        )
+      ).sort(),
     [certificates]
   );
   const fields = useMemo(
@@ -37,8 +54,20 @@ export const CertificatesPage: React.FC = () => {
     [certificates, query, category, field, year]
   );
 
-  const domesticTrainings = trainings.filter((t) => t.scope === 'domestic');
-  const internationalTrainings = trainings.filter((t) => t.scope === 'international');
+  const groupedTrainings = useMemo(() => groupTrainingsByScope(trainings), [trainings]);
+  const groupedCerts = useMemo(() => groupCertificatesByTrainingScope(certificates), [certificates]);
+
+  const domesticTrainings = groupedTrainings.domestic;
+  const internationalTrainings = groupedTrainings.international;
+  const domesticCerts = groupedCerts.domestic;
+  const internationalCerts = groupedCerts.international;
+
+  const visibleDomesticCerts = expandDomestic
+    ? domesticCerts
+    : domesticCerts.slice(0, INITIAL_TRAINING_CERTS_SHOWN);
+  const visibleInternationalCerts = expandInternational
+    ? internationalCerts
+    : internationalCerts.slice(0, INITIAL_TRAINING_CERTS_SHOWN);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
@@ -64,23 +93,35 @@ export const CertificatesPage: React.FC = () => {
             01. Bidang Pelatihan yang Diikuti
           </h2>
           <p className="text-sm text-muted mt-1">
-            Cakupan materi pengembangan kapasitas dari penyelenggara nasional dan internasional.
+            Pengelompokan otomatis pelatihan nasional (dalam negeri) dan internasional (luar negeri) berdasarkan kategori data pelatihan &amp; sertifikat yang tersimpan.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           {/* Domestic: Deep Green Card with Beige Text */}
-          <div className="brutal-card card-green frame-midnight p-6 sm:p-7 space-y-5">
-            <div className="flex items-center justify-between gap-2 pb-3 border-b-2 border-[#8ACCD5]/50">
-              <h3 className="font-display text-xl font-extrabold text-[#F8F8E1]">Pelatihan Dalam Negeri</h3>
+          <div
+            data-testid="training-card-domestic"
+            className="brutal-card card-green frame-midnight p-6 sm:p-7 space-y-5"
+          >
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b-2 border-[#8ACCD5]/50">
+              <div>
+                <h3 className="font-display text-xl font-extrabold text-[#F8F8E1]">
+                  Pelatihan Dalam Negeri
+                </h3>
+                <p className="text-xs font-mono-num text-[#8ACCD5] mt-0.5">
+                  {domesticCerts.length} Sertifikat Terdaftar
+                  {domesticTrainings.length > 0 ? ` · ${domesticTrainings.length} Ringkasan Bidang` : ''}
+                </p>
+              </div>
               <span className="brutal-badge">Nasional</span>
             </div>
-            {domesticTrainings.length === 0 ? (
+
+            {domesticTrainings.length === 0 && domesticCerts.length === 0 ? (
               <p className="text-sm text-muted">Belum ada data pelatihan dalam negeri.</p>
             ) : (
               <div className="space-y-5">
                 {domesticTrainings.map((t) => (
-                  <article key={t.id} className="space-y-2">
+                  <article key={t.id} className="space-y-2 pb-4 border-b border-[#8ACCD5]/30 last:border-b-0 last:pb-0">
                     <p className="font-bold text-base text-[#F8F8E1]">{t.title}</p>
                     {t.organizer && (
                       <p className="text-xs font-mono-num text-[#8ACCD5] font-semibold">
@@ -95,22 +136,112 @@ export const CertificatesPage: React.FC = () => {
                     )}
                   </article>
                 ))}
+
+                {visibleDomesticCerts.length > 0 && (
+                  <div className="space-y-3">
+                    {visibleDomesticCerts.map((cert) => {
+                      const displayTitle = cleanDisplayBulletPrefix(cert.title) || cert.title;
+                      const displayIssuer = cleanDisplayBulletPrefix(cert.issuer) || cert.issuer;
+                      const displayDesc = cleanDisplayBulletPrefix(cert.description);
+                      return (
+                        <article
+                          key={cert.id}
+                          className="border-2 border-[#8ACCD5]/60 bg-[#013A42]/55 p-3.5 flex items-start gap-3.5 hover:border-[#F8F8E1] transition-colors"
+                        >
+                          <button
+                            type="button"
+                            onClick={() => setSelectedCert(cert)}
+                            aria-label={`Lihat sertifikat ${displayTitle}`}
+                            className="w-20 h-14 sm:w-24 sm:h-16 shrink-0 border-2 border-[#8ACCD5] bg-[#F8F8E1] overflow-hidden cursor-pointer"
+                          >
+                            {cert.fileType === 'pdf' && !cert.thumbnailUrl ? (
+                              <span className="w-full h-full flex items-center justify-center bg-[#8ACCD5] text-[#013A42]">
+                                <FileText className="w-5 h-5" aria-hidden="true" />
+                              </span>
+                            ) : (
+                              <SafeImage
+                                src={cert.thumbnailUrl || cert.fileUrl}
+                                alt={displayTitle}
+                                fallbackLabel={displayTitle}
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                          </button>
+
+                          <div className="min-w-0 flex-1 space-y-1">
+                            <button
+                              type="button"
+                              onClick={() => setSelectedCert(cert)}
+                              className="text-left font-display font-bold text-sm sm:text-base text-[#F8F8E1] hover:text-[#8ACCD5] hover:underline leading-snug cursor-pointer"
+                            >
+                              {displayTitle}
+                            </button>
+                            <p className="text-xs font-mono-num text-[#8ACCD5] font-semibold leading-snug">
+                              {displayIssuer}
+                              {cert.year ? ` · ${cert.year}` : ''}
+                              {cert.field ? ` · ${cert.field}` : ''}
+                            </p>
+                            {displayDesc && (
+                              <p className="text-xs text-[#F8F8E1]/85 leading-relaxed line-clamp-2">
+                                {displayDesc}
+                              </p>
+                            )}
+                          </div>
+                        </article>
+                      );
+                    })}
+
+                    {domesticCerts.length > INITIAL_TRAINING_CERTS_SHOWN && (
+                      <button
+                        type="button"
+                        onClick={() => setExpandDomestic((prev) => !prev)}
+                        className="w-full brutal-btn-on-dark py-2 px-3 text-xs font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                      >
+                        {expandDomestic ? (
+                          <>
+                            <ChevronUp className="w-4 h-4" aria-hidden="true" />
+                            <span>Tampilkan Lebih Sedikit</span>
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="w-4 h-4" aria-hidden="true" />
+                            <span>Lihat Semua Pelatihan Dalam Negeri ({domesticCerts.length})</span>
+                          </>
+                        )}
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>
 
           {/* International: Bordo Card with Beige Text */}
-          <div className="brutal-card card-bordo frame-midnight p-6 sm:p-7 space-y-5">
-            <div className="flex items-center justify-between gap-2 pb-3 border-b-2 border-[#F8F8E1]/35">
-              <h3 className="font-display text-xl font-extrabold text-[#F8F8E1]">Pelatihan Internasional / Luar Negeri</h3>
+          <div
+            data-testid="training-card-international"
+            className="brutal-card card-bordo frame-midnight p-6 sm:p-7 space-y-5"
+          >
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b-2 border-[#F8F8E1]/35">
+              <div>
+                <h3 className="font-display text-xl font-extrabold text-[#F8F8E1]">
+                  Pelatihan Internasional / Luar Negeri
+                </h3>
+                <p className="text-xs font-mono-num text-[#8ACCD5] mt-0.5">
+                  {internationalCerts.length} Sertifikat Terdaftar
+                  {internationalTrainings.length > 0
+                    ? ` · ${internationalTrainings.length} Ringkasan Bidang`
+                    : ''}
+                </p>
+              </div>
               <span className="brutal-badge-beige">Internasional</span>
             </div>
-            {internationalTrainings.length === 0 ? (
+
+            {internationalTrainings.length === 0 && internationalCerts.length === 0 ? (
               <p className="text-sm text-muted">Belum ada data pelatihan internasional.</p>
             ) : (
               <div className="space-y-5">
                 {internationalTrainings.map((t) => (
-                  <article key={t.id} className="space-y-2">
+                  <article key={t.id} className="space-y-2 pb-4 border-b border-[#F8F8E1]/25 last:border-b-0 last:pb-0">
                     <p className="font-bold text-base text-[#F8F8E1]">{t.title}</p>
                     {t.organizer && (
                       <p className="text-xs font-mono-num text-[#8ACCD5] font-semibold">
@@ -125,6 +256,82 @@ export const CertificatesPage: React.FC = () => {
                     )}
                   </article>
                 ))}
+
+                {visibleInternationalCerts.length > 0 && (
+                  <div className="space-y-3">
+                    {visibleInternationalCerts.map((cert) => {
+                      const displayTitle = cleanDisplayBulletPrefix(cert.title) || cert.title;
+                      const displayIssuer = cleanDisplayBulletPrefix(cert.issuer) || cert.issuer;
+                      const displayDesc = cleanDisplayBulletPrefix(cert.description);
+                      return (
+                        <article
+                          key={cert.id}
+                          className="border-2 border-[#F8F8E1]/45 bg-[#013A42]/35 p-3.5 flex items-start gap-3.5 hover:border-[#8ACCD5] transition-colors"
+                        >
+                          <button
+                            type="button"
+                            onClick={() => setSelectedCert(cert)}
+                            aria-label={`Lihat sertifikat ${displayTitle}`}
+                            className="w-20 h-14 sm:w-24 sm:h-16 shrink-0 border-2 border-[#F8F8E1] bg-[#F8F8E1] overflow-hidden cursor-pointer"
+                          >
+                            {cert.fileType === 'pdf' && !cert.thumbnailUrl ? (
+                              <span className="w-full h-full flex items-center justify-center bg-[#8ACCD5] text-[#013A42]">
+                                <FileText className="w-5 h-5" aria-hidden="true" />
+                              </span>
+                            ) : (
+                              <SafeImage
+                                src={cert.thumbnailUrl || cert.fileUrl}
+                                alt={displayTitle}
+                                fallbackLabel={displayTitle}
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                          </button>
+
+                          <div className="min-w-0 flex-1 space-y-1">
+                            <button
+                              type="button"
+                              onClick={() => setSelectedCert(cert)}
+                              className="text-left font-display font-bold text-sm sm:text-base text-[#F8F8E1] hover:text-[#8ACCD5] hover:underline leading-snug cursor-pointer"
+                            >
+                              {displayTitle}
+                            </button>
+                            <p className="text-xs font-mono-num text-[#8ACCD5] font-semibold leading-snug">
+                              {displayIssuer}
+                              {cert.year ? ` · ${cert.year}` : ''}
+                              {cert.field ? ` · ${cert.field}` : ''}
+                            </p>
+                            {displayDesc && (
+                              <p className="text-xs text-[#F8F8E1]/85 leading-relaxed line-clamp-2">
+                                {displayDesc}
+                              </p>
+                            )}
+                          </div>
+                        </article>
+                      );
+                    })}
+
+                    {internationalCerts.length > INITIAL_TRAINING_CERTS_SHOWN && (
+                      <button
+                        type="button"
+                        onClick={() => setExpandInternational((prev) => !prev)}
+                        className="w-full brutal-btn-on-dark py-2 px-3 text-xs font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                      >
+                        {expandInternational ? (
+                          <>
+                            <ChevronUp className="w-4 h-4" aria-hidden="true" />
+                            <span>Tampilkan Lebih Sedikit</span>
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="w-4 h-4" aria-hidden="true" />
+                            <span>Lihat Semua Pelatihan Internasional ({internationalCerts.length})</span>
+                          </>
+                        )}
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>

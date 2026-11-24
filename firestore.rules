@@ -160,7 +160,7 @@ service cloud.firestore {
       return data.keys().hasAll(['institution', 'role', 'category', 'period', 'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'])
         && data.keys().hasOnly([
           'institution', 'role', 'category', 'period', 'duration', 'location',
-          'description', 'responsibilities', 'imageUrls', 'featured',
+          'description', 'responsibilities', 'imageUrls', 'primaryImageUrl', 'featured',
           'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'
         ])
         && isBoundedString(data.institution, 1, 200)
@@ -171,7 +171,8 @@ service cloud.firestore {
         && (!('location' in data) || isBoundedString(data.location, 0, 160))
         && (!('description' in data) || isBoundedString(data.description, 0, 3000))
         && (!('responsibilities' in data) || isBoundedStringList(data.responsibilities, 12))
-        && (!('imageUrls' in data) || isBoundedStringList(data.imageUrls, 8))
+        && (!('imageUrls' in data) || isBoundedStringList(data.imageUrls, 20))
+        && (!('primaryImageUrl' in data) || isBoundedString(data.primaryImageUrl, 0, 2048))
         && (!('featured' in data) || data.featured is bool)
         && isValidStatus(data.status)
         && data.isVisible is bool
@@ -184,7 +185,7 @@ service cloud.firestore {
       return data.keys().hasAll(['organizationName', 'role', 'category', 'period', 'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'])
         && data.keys().hasOnly([
           'organizationName', 'role', 'category', 'period', 'description',
-          'responsibilities', 'imageUrls',
+          'responsibilities', 'imageUrls', 'primaryImageUrl',
           'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'
         ])
         && isBoundedString(data.organizationName, 1, 200)
@@ -193,7 +194,8 @@ service cloud.firestore {
         && isBoundedString(data.period, 1, 100)
         && (!('description' in data) || isBoundedString(data.description, 0, 3000))
         && (!('responsibilities' in data) || isBoundedStringList(data.responsibilities, 12))
-        && (!('imageUrls' in data) || isBoundedStringList(data.imageUrls, 8))
+        && (!('imageUrls' in data) || isBoundedStringList(data.imageUrls, 20))
+        && (!('primaryImageUrl' in data) || isBoundedString(data.primaryImageUrl, 0, 2048))
         && isValidStatus(data.status)
         && data.isVisible is bool
         && data.displayOrder is int && data.displayOrder >= 0 && data.displayOrder <= 10000

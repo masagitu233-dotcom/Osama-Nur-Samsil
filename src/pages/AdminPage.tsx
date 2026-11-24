@@ -20,11 +20,11 @@ import {
 } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import type { PublicRoute } from '../types/portfolio';
-import type { ManagedCollectionName } from '../services/portfolioService';
 import { AdminAuthGate } from '../components/admin/AdminAuthGate';
 import { AdminOverview } from '../components/admin/AdminOverview';
 import { ContactAndSeoEditor, ProfileEditor } from '../components/admin/ProfileSettingsEditor';
-import { CollectionCrudManager } from '../components/admin/CollectionCrudManager';
+import { CollectionCrudManager, type CrudCollectionName } from '../components/admin/CollectionCrudManager';
+import { DarsPublicationsSyncPanel } from '../components/admin/DarsPublicationsSyncPanel';
 import { MediaLibraryPanel, MessagesPanel } from '../components/admin/MessagesAndMediaPanel';
 import { Modal } from '../components/ui/Modal';
 
@@ -35,7 +35,8 @@ interface AdminPageProps {
 type AdminTab =
   | 'overview'
   | 'profile'
-  | ManagedCollectionName
+  | CrudCollectionName
+  | 'dars_publications'
   | 'contacts_seo'
   | 'messages'
   | 'media';
@@ -51,7 +52,7 @@ const SIDEBAR_ITEMS: Array<{ id: AdminTab; label: string; icon: React.ComponentT
   { id: 'skills', label: 'Keahlian & Bahasa', icon: Sparkles },
   { id: 'interests', label: 'Minat & Bakat', icon: Heart },
   { id: 'projects', label: 'Proyek & Karya', icon: FolderKanban },
-  { id: 'publications', label: 'Publikasi & Kajian', icon: BookOpen },
+  { id: 'dars_publications', label: 'Publikasi (Dars)', icon: BookOpen },
   { id: 'contacts_seo', label: 'Kontak & SEO', icon: Settings },
   { id: 'messages', label: 'Pesan Masuk', icon: Mail },
   { id: 'media', label: 'Pustaka Media', icon: ImageIcon },
@@ -94,7 +95,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
 
   const unreadCount = contactMessages.filter((m) => m.status === 'new').length;
 
-  const isCollectionTab = (tab: AdminTab): tab is ManagedCollectionName =>
+  const isCollectionTab = (tab: AdminTab): tab is CrudCollectionName =>
     [
       'experiences',
       'organizations',
@@ -104,7 +105,6 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
       'skills',
       'interests',
       'projects',
-      'publications',
     ].includes(tab);
 
   return (
@@ -202,6 +202,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
             onDirtyChange={setHasUnsavedChanges}
           />
         )}
+        {activeTab === 'dars_publications' && <DarsPublicationsSyncPanel />}
         {activeTab === 'contacts_seo' && <ContactAndSeoEditor onDirtyChange={setHasUnsavedChanges} />}
         {activeTab === 'messages' && <MessagesPanel />}
         {activeTab === 'media' && <MediaLibraryPanel />}

@@ -10,8 +10,14 @@ import {
 import { usePortfolio } from '../context/PortfolioContext';
 import type { PublicRoute } from '../types/portfolio';
 import { SafeImage } from '../components/ui/SafeImage';
+import { DarsLogo } from '../components/ui/DarsLogo';
 import { getCardTone } from '../utils/cardVariants';
 import { getGoogleDriveDownloadUrl } from '../utils/googleDriveMedia';
+import {
+  hasCustomUploadedDarsAsset,
+  isDarsPlatformProject,
+  prepareWebsiteProjects,
+} from '../utils/projectsCatalog';
 
 interface HomePageProps {
   onNavigate: (route: PublicRoute) => void;
@@ -24,7 +30,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
 
   const featuredExperiences = experiences.filter((e) => e.featured).slice(0, 3);
   const shownExperiences = featuredExperiences.length > 0 ? featuredExperiences : experiences.slice(0, 3);
-  const featuredProject = projects.find((p) => p.featured) || projects[0];
+  const websiteProjects = prepareWebsiteProjects(projects);
+  const featuredProject = websiteProjects.find((p) => p.featured) || websiteProjects[0];
   const languageSkills = skills.filter((s) => s.category === 'language');
   const toolSkills = skills.filter((s) => s.category === 'tool' || s.category === 'technical');
 
@@ -232,7 +239,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               className="text-left brutal-card brutal-card-interactive card-blue frame-shadow-bordo p-5 cursor-pointer"
             >
               <p className="font-mono-num text-2xl sm:text-3xl font-extrabold">
-                {String(projects.length).padStart(2, '0')}
+                {String(Math.max(projects.length, websiteProjects.length)).padStart(2, '0')}
               </p>
               <p className="font-display font-bold text-sm mt-1">Proyek &amp; Karya Digital</p>
               <p className="text-xs text-muted mt-0.5">
@@ -394,12 +401,23 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
           {featuredProject && (
             <article className="lg:col-span-7 brutal-card card-beige frame-shadow-bordo overflow-hidden flex flex-col">
               <div className="aspect-[16/10] w-full border-b-[3px] border-[#6C151E] overflow-hidden">
-                <SafeImage
-                  src={featuredProject.imageUrls[0]}
-                  alt={featuredProject.title}
-                  fallbackLabel={featuredProject.title}
-                  className="w-full h-full object-cover"
-                />
+                {isDarsPlatformProject(featuredProject) && !hasCustomUploadedDarsAsset(featuredProject) ? (
+                  <div className="w-full h-full bg-[#0F3D3A] flex flex-col items-center justify-center p-6 sm:p-8 relative">
+                    <div className="bg-[#F8F8E1] border-[3px] border-[#013A42] shadow-[6px_6px_0_0_#013A42] p-4 sm:p-5">
+                      <DarsLogo className="w-24 h-24" />
+                    </div>
+                    <p className="mt-4 font-display text-sm font-extrabold uppercase tracking-wider text-[#8ACCD5]">
+                      Platform Digital · darswithosama.netlify.app
+                    </p>
+                  </div>
+                ) : (
+                  <SafeImage
+                    src={featuredProject.imageUrls[0]}
+                    alt={featuredProject.title}
+                    fallbackLabel={featuredProject.title}
+                    className="w-full h-full object-cover"
+                  />
+                )}
               </div>
               <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between">
                 <div>

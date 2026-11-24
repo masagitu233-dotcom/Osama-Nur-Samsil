@@ -20,7 +20,7 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({ onSelectTab }) => 
     { label: 'Pengalaman', count: adminData.experiences.length, tab: 'experiences' },
     { label: 'Organisasi', count: adminData.organizations.length, tab: 'organizations' },
     { label: 'Proyek & Karya', count: adminData.projects.length, tab: 'projects' },
-    { label: 'Publikasi & Kajian', count: adminData.publications.length, tab: 'publications' },
+    { label: 'Pelatihan', count: adminData.trainings.length, tab: 'trainings' },
     { label: 'Keahlian & Bahasa', count: adminData.skills.length, tab: 'skills' },
     { label: 'Pesan Masuk Baru', count: unreadMessages, tab: 'messages' },
     { label: 'Aset Media', count: mediaAssets.length, tab: 'media' },

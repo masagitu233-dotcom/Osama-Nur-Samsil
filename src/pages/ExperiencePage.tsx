@@ -5,15 +5,19 @@ import { usePortfolio } from '../context/PortfolioContext';
 import type { ExperienceCategory, ExperienceItem, OrganizationItem } from '../types/portfolio';
 import { filterExperiences } from '../utils/portfolioLogic';
 import { SafeImage } from '../components/ui/SafeImage';
-import { Modal } from '../components/ui/Modal';
 import { getCardTone } from '../utils/cardVariants';
+import { resolveExperiencePrimaryPhoto } from '../utils/experienceGallery';
+import {
+  ExperienceDetailModal,
+  type ExperienceDetailViewData,
+} from '../components/experience/ExperienceDetailModal';
 
 const CATEGORY_TABS: Array<{ value: ExperienceCategory | 'all'; label: string }> = [
   { value: 'all', label: 'Semua' },
   { value: 'mentoring', label: 'Pembinaan' },
   { value: 'teaching', label: 'Mengajar' },
   { value: 'committee', label: 'Kepanitiaan' },
-  { value: 'work', label: 'Pekerjaan' },
+  { value: 'work', label: 'Pengalaman Kerja' },
 ];
 
 function categoryLabel(cat: ExperienceCategory): string {
@@ -25,8 +29,40 @@ function categoryLabel(cat: ExperienceCategory): string {
     case 'committee':
       return 'Kepanitiaan';
     case 'work':
-      return 'Pekerjaan';
+      return 'Pengalaman Kerja';
   }
+}
+
+function toExperienceDetail(exp: ExperienceItem): ExperienceDetailViewData {
+  return {
+    id: exp.id,
+    role: exp.role,
+    categoryLabel: categoryLabel(exp.category),
+    institutionName: exp.institution,
+    period: exp.period,
+    duration: exp.duration,
+    location: exp.location,
+    description: exp.description,
+    responsibilities: exp.responsibilities,
+    responsibilitiesHeading: 'Tanggung Jawab & Program',
+    imageUrls: exp.imageUrls,
+    primaryImageUrl: exp.primaryImageUrl,
+  };
+}
+
+function toOrganizationDetail(org: OrganizationItem): ExperienceDetailViewData {
+  return {
+    id: org.id,
+    role: org.role,
+    categoryLabel: org.category || 'Organisasi',
+    institutionName: org.organizationName,
+    period: org.period,
+    description: org.description,
+    responsibilities: org.responsibilities,
+    responsibilitiesHeading: 'Amanah & Program Kerja',
+    imageUrls: org.imageUrls,
+    primaryImageUrl: org.primaryImageUrl,
+  };
 }
 
 export const ExperiencePage: React.FC = () => {
@@ -34,8 +70,7 @@ export const ExperiencePage: React.FC = () => {
   const [category, setCategory] = useState<ExperienceCategory | 'all'>('all');
   const [query, setQuery] = useState('');
   const [viewMode, setViewMode] = useState<'cards' | 'timeline'>('cards');
-  const [selectedExp, setSelectedExp] = useState<ExperienceItem | null>(null);
-  const [selectedOrg, setSelectedOrg] = useState<OrganizationItem | null>(null);
+  const [selectedDetail, setSelectedDetail] = useState<ExperienceDetailViewData | null>(null);
 
   const filteredExperiences = useMemo(
     () => filterExperiences(publicData.experiences, category, query),
@@ -55,7 +90,7 @@ export const ExperiencePage: React.FC = () => {
           Pengalaman Pembinaan, Mengajar, Organisasi &amp; Kepanitiaan
         </h1>
         <p className="mt-4 text-base text-muted max-w-3xl">
-          Klik setiap pengalaman untuk membuka dokumentasi foto, rincian tanggung jawab, dan catatan kontribusi secara lengkap.
+          Pilih kartu pengalaman untuk membuka rincian peran, tanggung jawab, dan galeri foto dokumentasi lengkap.
         </p>
       </motion.header>
 
@@ -128,7 +163,7 @@ export const ExperiencePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Experience List (Planned 5-Color Variation Cycle) */}
+      {/* Experience List — Concise Uniform-Height Neo-Brutalist Cards with 16:9 Primary Photo */}
       {filteredExperiences.length === 0 ? (
         <div className="brutal-card card-beige p-10 text-center">
           <p className="font-display text-lg font-bold">Tidak ada pengalaman yang cocok dengan filter saat ini.</p>
@@ -144,57 +179,46 @@ export const ExperiencePage: React.FC = () => {
           </button>
         </div>
       ) : viewMode === 'cards' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
           {filteredExperiences.map((exp, idx) => {
             const tone = getCardTone(idx, ['beige', 'blue', 'green', 'bordo', 'midnight']);
+            const primaryPhoto = resolveExperiencePrimaryPhoto(exp.imageUrls, exp.primaryImageUrl);
             const photoFrameBorder =
               tone.tone === 'beige'
                 ? 'border-[#6C151E]'
                 : tone.tone === 'blue'
                 ? 'border-[#013A42]'
                 : 'border-[#8ACCD5]';
+
             return (
               <article
                 key={exp.id}
-                className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col ${tone.cardClass} ${tone.frameClass}`}
+                className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
               >
-                {exp.imageUrls[0] && (
-                  <div className={`aspect-[16/10] border-b-[3px] ${photoFrameBorder} overflow-hidden bg-[#F8F8E1]`}>
-                    <SafeImage
-                      src={exp.imageUrls[0]}
-                      alt={`${exp.role} di ${exp.institution}`}
-                      fallbackLabel={exp.institution}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
-                <div className="p-6 flex-1 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center justify-between gap-2 text-xs font-mono-num">
-                      <span className={tone.badgeClass}>
-                        {String(idx + 1).padStart(2, '0')}. {categoryLabel(exp.category)}
-                      </span>
-                      <span className="font-bold">{exp.period}</span>
-                    </div>
-                    <h2 className="font-display text-xl font-extrabold mt-3 leading-snug">{exp.role}</h2>
-                    <p className="text-sm font-bold text-muted mt-1">
+                <div className={`aspect-[16/9] w-full overflow-hidden border-b-[3px] ${photoFrameBorder} bg-[#F8F8E1] shrink-0`}>
+                  <SafeImage
+                    src={primaryPhoto}
+                    alt={`Foto utama ${exp.institution}`}
+                    fallbackLabel={exp.institution}
+                    className="w-full h-full block object-cover object-[50%_22%]"
+                  />
+                </div>
+
+                <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between gap-5">
+                  <div className="flex-1 flex flex-col items-start gap-2.5">
+                    <span className={tone.badgeClass}>
+                      {categoryLabel(exp.category)}
+                    </span>
+                    <h2 className="font-display text-lg sm:text-[19px] font-extrabold leading-snug min-h-[3.5rem]">
                       {exp.institution}
-                    </p>
-                    {exp.duration && (
-                      <p className="text-xs font-mono-num text-muted mt-1">
-                        Durasi: {exp.duration}
-                      </p>
-                    )}
-                    <p className="text-sm text-muted mt-3 leading-relaxed">
-                      {exp.description}
-                    </p>
+                    </h2>
                   </div>
 
-                  <div className="mt-6 pt-4 border-t border-subtle">
+                  <div className="mt-auto pt-4 border-t border-subtle">
                     <button
                       type="button"
-                      onClick={() => setSelectedExp(exp)}
-                      className={`${tone.buttonClass} w-full py-2.5 text-xs font-bold cursor-pointer`}
+                      onClick={() => setSelectedDetail(toExperienceDetail(exp))}
+                      className={`${tone.buttonClass} w-full py-2.5 px-4 text-xs font-bold cursor-pointer`}
                     >
                       Lihat Detail &amp; Tanggung Jawab
                     </button>
@@ -208,40 +232,34 @@ export const ExperiencePage: React.FC = () => {
         <ol className="space-y-5">
           {filteredExperiences.map((exp, idx) => {
             const tone = getCardTone(idx, ['beige', 'blue', 'green', 'bordo', 'midnight']);
+            const primaryPhoto = resolveExperiencePrimaryPhoto(exp.imageUrls, exp.primaryImageUrl);
             return (
               <li
                 key={exp.id}
-                className={`brutal-card p-6 grid grid-cols-1 md:grid-cols-12 gap-5 items-start ${tone.cardClass} ${tone.frameClass}`}
+                className={`brutal-card p-5 sm:p-6 grid grid-cols-1 md:grid-cols-12 gap-5 items-center ${tone.cardClass} ${tone.frameClass}`}
               >
-                <div className="md:col-span-3 space-y-1.5">
-                  <span className={tone.badgeClass}>
-                    {String(idx + 1).padStart(2, '0')}. {categoryLabel(exp.category)}
-                  </span>
-                  <p className="font-display font-extrabold text-lg pt-1">{exp.period}</p>
-                  {exp.duration && (
-                    <p className="text-xs font-mono-num text-muted">{exp.duration}</p>
-                  )}
+                <div className="md:col-span-4 aspect-[16/9] w-full border-[2.5px] border-[#013A42] bg-[#F8F8E1] overflow-hidden">
+                  <SafeImage
+                    src={primaryPhoto}
+                    alt={`Foto utama ${exp.institution}`}
+                    fallbackLabel={exp.institution}
+                    className="w-full h-full block object-cover object-[50%_22%]"
+                  />
                 </div>
-                <div className="md:col-span-9 space-y-3">
-                  <div>
-                    <h2 className="font-display text-xl font-extrabold">{exp.role}</h2>
-                    <p className="text-sm font-bold text-muted">{exp.institution}</p>
+                <div className="md:col-span-8 flex flex-col items-start gap-3">
+                  <span className={tone.badgeClass}>{categoryLabel(exp.category)}</span>
+                  <h2 className="font-display text-xl sm:text-2xl font-extrabold leading-snug">
+                    {exp.institution}
+                  </h2>
+                  <div className="pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedDetail(toExperienceDetail(exp))}
+                      className={`${tone.buttonClass} px-4 py-2.5 text-xs font-bold cursor-pointer`}
+                    >
+                      Lihat Detail &amp; Tanggung Jawab
+                    </button>
                   </div>
-                  <p className="text-sm text-muted leading-relaxed">{exp.description}</p>
-                  {exp.responsibilities.length > 0 && (
-                    <ul className="list-disc pl-5 space-y-1 text-sm text-muted">
-                      {exp.responsibilities.map((r, i) => (
-                        <li key={i}>{r}</li>
-                      ))}
-                    </ul>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => setSelectedExp(exp)}
-                    className={`${tone.buttonClass} px-4 py-2 text-xs font-bold cursor-pointer`}
-                  >
-                    Buka Detail &amp; Dokumentasi
-                  </button>
                 </div>
               </li>
             );
@@ -249,7 +267,7 @@ export const ExperiencePage: React.FC = () => {
         </ol>
       )}
 
-      {/* Organizations Section (Planned Cycle: Bordo, Beige, Green, Blue) */}
+      {/* Organizations Section — Concise Uniform-Height 16:9 Cards Matching Experience Cards */}
       <section aria-labelledby="org-heading" className="pt-6">
         <div className="mb-6 pb-3 border-b-2 border-brutal">
           <span className="brutal-badge-bordo">Kepemimpinan Organisasi</span>
@@ -263,38 +281,50 @@ export const ExperiencePage: React.FC = () => {
             Belum ada data organisasi yang dipublikasikan.
           </p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             {publicData.organizations.map((org, idx) => {
               const tone = getCardTone(idx, ['bordo', 'beige', 'green', 'blue']);
+              const primaryPhoto = resolveExperiencePrimaryPhoto(org.imageUrls, org.primaryImageUrl);
+              const photoFrameBorder =
+                tone.tone === 'beige'
+                  ? 'border-[#6C151E]'
+                  : tone.tone === 'blue'
+                  ? 'border-[#013A42]'
+                  : 'border-[#8ACCD5]';
+
               return (
                 <article
                   key={org.id}
-                  className={`brutal-card brutal-card-interactive p-6 flex flex-col justify-between ${tone.cardClass} ${tone.frameClass}`}
+                  className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                 >
-                  <div>
-                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono-num">
-                      <span className={tone.badgeClass}>
-                        {org.category}
-                      </span>
-                      <span className="font-bold">{org.period}</span>
-                    </div>
-                    <h3 className="font-display text-2xl font-extrabold mt-3">{org.role}</h3>
-                    <p className="text-sm font-bold text-muted mt-1">
-                      {org.organizationName}
-                    </p>
-                    <p className="text-sm text-muted mt-3 leading-relaxed">
-                      {org.description}
-                    </p>
+                  <div className={`aspect-[16/9] w-full overflow-hidden border-b-[3px] ${photoFrameBorder} bg-[#F8F8E1] shrink-0`}>
+                    <SafeImage
+                      src={primaryPhoto}
+                      alt={`Foto utama ${org.organizationName}`}
+                      fallbackLabel={org.organizationName}
+                      className="w-full h-full block object-cover object-[50%_22%]"
+                    />
                   </div>
 
-                  <div className="mt-5 pt-4 border-t border-subtle">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedOrg(org)}
-                      className={`${tone.buttonClass} px-4 py-2 text-xs font-bold cursor-pointer`}
-                    >
-                      Lihat Rincian Organisasi
-                    </button>
+                  <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between gap-5">
+                    <div className="flex-1 flex flex-col items-start gap-2.5">
+                      <span className={tone.badgeClass}>
+                        {org.category || 'Organisasi'}
+                      </span>
+                      <h3 className="font-display text-lg sm:text-[19px] font-extrabold leading-snug min-h-[3.5rem]">
+                        {org.organizationName}
+                      </h3>
+                    </div>
+
+                    <div className="mt-auto pt-4 border-t border-subtle">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedDetail(toOrganizationDetail(org))}
+                        className={`${tone.buttonClass} w-full py-2.5 px-4 text-xs font-bold cursor-pointer`}
+                      >
+                        Lihat Detail &amp; Tanggung Jawab
+                      </button>
+                    </div>
                   </div>
                 </article>
               );
@@ -303,102 +333,11 @@ export const ExperiencePage: React.FC = () => {
         )}
       </section>
 
-      {/* Detail Modal: Experience */}
-      <Modal
-        open={Boolean(selectedExp)}
-        onClose={() => setSelectedExp(null)}
-        title={selectedExp?.role || ''}
-        subtitle={
-          selectedExp
-            ? `${selectedExp.institution} · ${selectedExp.period}${selectedExp.duration ? ` · ${selectedExp.duration}` : ''}`
-            : undefined
-        }
-      >
-        {selectedExp && (
-          <div className="space-y-6">
-            {selectedExp.imageUrls.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {selectedExp.imageUrls.map((url, idx) => (
-                  <div
-                    key={idx}
-                    className={`border-[3px] aspect-[4/3] overflow-hidden shadow-[4px_4px_0_0_#013A42] ${
-                      idx % 2 === 0 ? 'border-[#6C151E]' : 'border-[#0F3D3A]'
-                    }`}
-                  >
-                    <SafeImage
-                      src={url}
-                      alt={`Dokumentasi ${selectedExp.institution} ${idx + 1}`}
-                      fallbackLabel={selectedExp.institution}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-            <div>
-              <h3 className="font-display font-bold text-base mb-2">Deskripsi</h3>
-              <p className="text-sm sm:text-base leading-relaxed text-muted whitespace-pre-line">
-                {selectedExp.description}
-              </p>
-            </div>
-            {selectedExp.responsibilities.length > 0 && (
-              <div>
-                <h3 className="font-display font-bold text-base mb-2">Tanggung Jawab Utama</h3>
-                <ul className="list-disc pl-5 space-y-1.5 text-sm sm:text-base text-muted">
-                  {selectedExp.responsibilities.map((item, idx) => (
-                    <li key={idx}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        )}
-      </Modal>
-
-      {/* Detail Modal: Organization */}
-      <Modal
-        open={Boolean(selectedOrg)}
-        onClose={() => setSelectedOrg(null)}
-        title={selectedOrg?.role || ''}
-        subtitle={selectedOrg ? `${selectedOrg.organizationName} · ${selectedOrg.period}` : undefined}
-      >
-        {selectedOrg && (
-          <div className="space-y-5">
-            {selectedOrg.imageUrls.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {selectedOrg.imageUrls.map((url, idx) => (
-                  <div
-                    key={idx}
-                    className={`border-[3px] aspect-[4/3] overflow-hidden shadow-[4px_4px_0_0_#013A42] ${
-                      idx % 2 === 0 ? 'border-[#6C151E]' : 'border-[#0F3D3A]'
-                    }`}
-                  >
-                    <SafeImage
-                      src={url}
-                      alt={`Dokumentasi ${selectedOrg.organizationName} ${idx + 1}`}
-                      fallbackLabel={selectedOrg.organizationName}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-            <p className="text-sm sm:text-base leading-relaxed text-muted whitespace-pre-line">
-              {selectedOrg.description}
-            </p>
-            {selectedOrg.responsibilities.length > 0 && (
-              <div>
-                <h3 className="font-display font-bold text-base mb-2">Amanah &amp; Program Kerja</h3>
-                <ul className="list-disc pl-5 space-y-1.5 text-sm sm:text-base text-muted">
-                  {selectedOrg.responsibilities.map((item, idx) => (
-                    <li key={idx}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        )}
-      </Modal>
+      {/* Unified Detail Modal + Natural-Ratio Responsive Documentation Gallery + Lightbox */}
+      <ExperienceDetailModal
+        detail={selectedDetail}
+        onClose={() => setSelectedDetail(null)}
+      />
     </div>
   );
 };

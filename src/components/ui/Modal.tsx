@@ -8,6 +8,7 @@ interface ModalProps {
   subtitle?: string;
   maxWidthClass?: string;
   variant?: 'default' | 'lightbox';
+  disableEscapeClose?: boolean;
   children: React.ReactNode;
 }
 
@@ -18,12 +19,13 @@ export const Modal: React.FC<ModalProps> = ({
   subtitle,
   maxWidthClass = 'max-w-3xl',
   variant = 'default',
+  disableEscapeClose = false,
   children,
 }) => {
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape' && !disableEscapeClose) onClose();
     };
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -32,7 +34,7 @@ export const Modal: React.FC<ModalProps> = ({
       document.body.style.overflow = prevOverflow;
       window.removeEventListener('keydown', onKeyDown);
     };
-  }, [open, onClose]);
+  }, [open, onClose, disableEscapeClose]);
 
   if (!open) return null;
 

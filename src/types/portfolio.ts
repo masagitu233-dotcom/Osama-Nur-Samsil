@@ -86,6 +86,7 @@ export interface ExperienceItem extends BaseContentMeta {
   description: string;
   responsibilities: string[];
   imageUrls: string[];
+  primaryImageUrl?: string;
   featured: boolean;
 }
 
@@ -97,6 +98,7 @@ export interface OrganizationItem extends BaseContentMeta {
   description: string;
   responsibilities: string[];
   imageUrls: string[];
+  primaryImageUrl?: string;
 }
 
 export interface EducationItem extends BaseContentMeta {

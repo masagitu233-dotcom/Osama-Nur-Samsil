@@ -9,14 +9,24 @@ import {
 import type { BaseContentMeta } from '../../types/portfolio';
 import { Modal } from '../ui/Modal';
 import { MediaUploader } from './MediaUploader';
+import { ExperiencePhotoManager } from './ExperiencePhotoManager';
 import { extractGoogleDriveInfo } from '../../utils/googleDriveMedia';
+import {
+  addExperiencePhotos,
+  MAX_EXPERIENCE_PHOTOS,
+  removeExperiencePhotoAt,
+  reorderExperiencePhoto,
+  selectPrimaryExperiencePhoto,
+} from '../../utils/experienceGallery';
 
 import type { DriveUploadCategory } from '../../services/googleDriveUploadService';
+import { normalizeProjectCategory } from '../../utils/projectsCatalog';
+import { normalizeCertificateCategoryLabel } from '../../utils/trainingClassification';
 
 interface FieldSpec {
   key: string;
   label: string;
-  type: 'text' | 'textarea' | 'select' | 'checkbox' | 'stringList' | 'imageList' | 'imageSingle' | 'certFile';
+  type: 'text' | 'textarea' | 'select' | 'checkbox' | 'stringList' | 'imageList' | 'experienceGallery' | 'imageSingle' | 'certFile';
   required?: boolean;
   placeholder?: string;
   options?: Array<{ value: string; label: string }>;
@@ -32,7 +42,9 @@ interface CollectionConfig {
   defaultValues: Record<string, unknown>;
 }
 
-const COLLECTION_CONFIGS: Record<ManagedCollectionName, CollectionConfig> = {
+export type CrudCollectionName = Exclude<ManagedCollectionName, 'publications'>;
+
+const COLLECTION_CONFIGS: Record<CrudCollectionName, CollectionConfig> = {
   experiences: {
     title: 'Pengalaman (Pembinaan, Mengajar, Kepanitiaan & Kerja)',
     subtitle: 'Kelola riwayat pengalaman beserta foto dokumentasi dan daftar tanggung jawab.',
@@ -59,7 +71,7 @@ const COLLECTION_CONFIGS: Record<ManagedCollectionName, CollectionConfig> = {
       { key: 'location', label: 'Lokasi', type: 'text', placeholder: 'Makassar, Sulawesi Selatan' },
       { key: 'description', label: 'Deskripsi', type: 'textarea' },
       { key: 'responsibilities', label: 'Daftar Tanggung Jawab (1 baris per poin)', type: 'stringList' },
-      { key: 'imageUrls', label: 'Dokumentasi Foto', type: 'imageList' },
+      { key: 'imageUrls', label: 'Galeri Foto Dokumentasi & Foto Utama', type: 'experienceGallery' },
       { key: 'featured', label: 'Tampilkan di Sorotan Beranda (Home)', type: 'checkbox' },
     ],
     defaultValues: {
@@ -72,6 +84,7 @@ const COLLECTION_CONFIGS: Record<ManagedCollectionName, CollectionConfig> = {
       description: '',
       responsibilities: [],
       imageUrls: [],
+      primaryImageUrl: '',
       featured: false,
     },
   },
@@ -88,7 +101,7 @@ const COLLECTION_CONFIGS: Record<ManagedCollectionName, CollectionConfig> = {
       { key: 'period', label: 'Periode Jabatan', type: 'text', required: true },
       { key: 'description', label: 'Deskripsi', type: 'textarea' },
       { key: 'responsibilities', label: 'Tanggung Jawab / Program (1 baris per poin)', type: 'stringList' },
-      { key: 'imageUrls', label: 'Foto Dokumentasi', type: 'imageList' },
+      { key: 'imageUrls', label: 'Galeri Foto Dokumentasi & Foto Utama', type: 'experienceGallery' },
     ],
     defaultValues: {
       role: '',
@@ -98,6 +111,7 @@ const COLLECTION_CONFIGS: Record<ManagedCollectionName, CollectionConfig> = {
       description: '',
       responsibilities: [],
       imageUrls: [],
+      primaryImageUrl: '',
     },
   },
   education: {
@@ -145,7 +159,7 @@ const COLLECTION_CONFIGS: Record<ManagedCollectionName, CollectionConfig> = {
         type: 'select',
         required: true,
         options: [
-          { value: 'Dalam Negeri', label: 'Dalam Negeri' },
+          { value: 'Dalam Negeri', label: 'Dalam Negeri (Nasional)' },
           { value: 'Internasional', label: 'Internasional / Luar Negeri' },
         ],
       },
@@ -270,7 +284,7 @@ const COLLECTION_CONFIGS: Record<ManagedCollectionName, CollectionConfig> = {
   },
   projects: {
     title: 'Proyek & Karya Digital',
-    subtitle: 'Kelola Dars with Osama, website, artikel, materi pembelajaran, serta desain & media.',
+    subtitle: 'Kelola proyek Website & Digital (termasuk Dars with Osama) serta Artikel & Tulisan tambahan. Artikel Dars with Osama disinkronkan otomatis.',
     uploadFolder: 'projects',
     titleKey: 'title',
     metaKey: 'category',
@@ -282,12 +296,8 @@ const COLLECTION_CONFIGS: Record<ManagedCollectionName, CollectionConfig> = {
         type: 'select',
         required: true,
         options: [
-          { value: 'dars_with_osama', label: 'Dars with Osama' },
           { value: 'website_digital', label: 'Website & Digital' },
           { value: 'article_writing', label: 'Artikel & Tulisan' },
-          { value: 'learning_material', label: 'Materi Pembelajaran' },
-          { value: 'design_media', label: 'Desain & Media' },
-          { value: 'other', label: 'Lainnya' },
         ],
       },
       { key: 'period', label: 'Periode', type: 'text', placeholder: '2025 / Aktif Berjalan' },
@@ -310,43 +320,10 @@ const COLLECTION_CONFIGS: Record<ManagedCollectionName, CollectionConfig> = {
       featured: false,
     },
   },
-  publications: {
-    title: 'Publikasi, Karya Tulis & Kajian Keilmuan',
-    subtitle: 'Kelola karya tulis, artikel, minat penelitian, dan bidang kajian akademik.',
-    titleKey: 'title',
-    metaKey: 'category',
-    fields: [
-      { key: 'title', label: 'Judul Karya / Kajian', type: 'text', required: true },
-      {
-        key: 'category',
-        label: 'Kategori',
-        type: 'select',
-        required: true,
-        options: [
-          { value: 'publication', label: 'Publikasi Ilmiah' },
-          { value: 'article', label: 'Artikel & Tulisan' },
-          { value: 'research_interest', label: 'Minat Penelitian' },
-          { value: 'study_field', label: 'Bidang Keilmuan & Kajian' },
-        ],
-      },
-      { key: 'venue', label: 'Penerbit / Lembaga / Platform', type: 'text' },
-      { key: 'year', label: 'Tahun', type: 'text' },
-      { key: 'summary', label: 'Ringkasan', type: 'textarea' },
-      { key: 'url', label: 'Tautan Baca / Referensi', type: 'text', placeholder: 'https://...' },
-    ],
-    defaultValues: {
-      title: '',
-      category: 'article',
-      venue: '',
-      year: '',
-      summary: '',
-      url: '',
-    },
-  },
 };
 
 interface CollectionCrudManagerProps {
-  collectionName: ManagedCollectionName;
+  collectionName: CrudCollectionName;
   onDirtyChange: (dirty: boolean) => void;
 }
 
@@ -382,7 +359,14 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
 
   const openEditModal = (item: BaseContentMeta & Record<string, unknown>) => {
     setEditingId(item.id);
-    setFormState({ ...config.defaultValues, ...item });
+    const merged: Record<string, unknown> = { ...config.defaultValues, ...item };
+    if (collectionName === 'projects' && typeof merged.category === 'string') {
+      merged.category = normalizeProjectCategory(merged.category);
+    }
+    if (collectionName === 'certificates' && typeof merged.category === 'string') {
+      merged.category = normalizeCertificateCategoryLabel(merged.category);
+    }
+    setFormState(merged);
     setModalOpen(true);
     onDirtyChange(false);
   };
@@ -523,6 +507,11 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     <span className="text-muted font-semibold">
                       &middot; {item.isVisible ? 'Tampil' : 'Disembunyikan'}
                     </span>
+                    {(collectionName === 'experiences' || collectionName === 'organizations') && (
+                      <span className="text-muted font-semibold">
+                        &middot; {Array.isArray(item.imageUrls) ? item.imageUrls.length : 0} foto
+                      </span>
+                    )}
                   </div>
                   <h2 className="font-display text-lg font-extrabold mt-1.5 truncate">{displayTitle}</h2>
                   {displayMeta && (
@@ -681,6 +670,79 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
               );
             }
 
+            if (field.type === 'experienceGallery') {
+              const urls = Array.isArray(formState.imageUrls) ? (formState.imageUrls as string[]) : [];
+              const primaryUrl = String(formState.primaryImageUrl ?? '');
+              const itemVisibility =
+                formState.status === 'published' && Boolean(formState.isVisible) ? 'public' : 'private';
+              return (
+                <ExperiencePhotoManager
+                  key={field.key}
+                  folder={config.uploadFolder || 'experiences'}
+                  label={field.label}
+                  imageUrls={urls}
+                  primaryImageUrl={primaryUrl}
+                  defaultVisibility={itemVisibility}
+                  onAddPhoto={(res) => {
+                    setFormState((prev) => {
+                      const prevUrls = Array.isArray(prev.imageUrls) ? (prev.imageUrls as string[]) : [];
+                      const prevPrimary = String(prev.primaryImageUrl ?? '');
+                      const next = addExperiencePhotos(
+                        prevUrls,
+                        [res.fileUrl],
+                        prevPrimary,
+                        MAX_EXPERIENCE_PHOTOS
+                      );
+                      return {
+                        ...prev,
+                        imageUrls: next.imageUrls,
+                        primaryImageUrl: next.primaryImageUrl,
+                      };
+                    });
+                    onDirtyChange(true);
+                  }}
+                  onRemovePhoto={(idx) => {
+                    setFormState((prev) => {
+                      const prevUrls = Array.isArray(prev.imageUrls) ? (prev.imageUrls as string[]) : [];
+                      const prevPrimary = String(prev.primaryImageUrl ?? '');
+                      const next = removeExperiencePhotoAt(prevUrls, idx, prevPrimary);
+                      return {
+                        ...prev,
+                        imageUrls: next.imageUrls,
+                        primaryImageUrl: next.primaryImageUrl,
+                      };
+                    });
+                    onDirtyChange(true);
+                  }}
+                  onReorderPhoto={(fromIdx, toIdx) => {
+                    setFormState((prev) => {
+                      const prevUrls = Array.isArray(prev.imageUrls) ? (prev.imageUrls as string[]) : [];
+                      const prevPrimary = String(prev.primaryImageUrl ?? '');
+                      const next = reorderExperiencePhoto(prevUrls, fromIdx, toIdx, prevPrimary);
+                      return {
+                        ...prev,
+                        imageUrls: next.imageUrls,
+                        primaryImageUrl: next.primaryImageUrl,
+                      };
+                    });
+                    onDirtyChange(true);
+                  }}
+                  onSelectPrimary={(url) => {
+                    setFormState((prev) => {
+                      const prevUrls = Array.isArray(prev.imageUrls) ? (prev.imageUrls as string[]) : [];
+                      const next = selectPrimaryExperiencePhoto(prevUrls, url);
+                      return {
+                        ...prev,
+                        imageUrls: next.imageUrls,
+                        primaryImageUrl: next.primaryImageUrl,
+                      };
+                    });
+                    onDirtyChange(true);
+                  }}
+                />
+              );
+            }
+
             if (field.type === 'imageList') {
               const urls = Array.isArray(formState[field.key]) ? (formState[field.key] as string[]) : [];
               const itemVisibility =
@@ -694,8 +756,26 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                   defaultVisibility={itemVisibility}
                   label={field.label}
                   currentUrls={urls}
-                  onUploaded={(res) => setField(field.key, [...urls, res.fileUrl])}
-                  onRemoveUrl={(url) => setField(field.key, urls.filter((u) => u !== url))}
+                  onUploaded={(res) => {
+                    setFormState((prev) => {
+                      const prevUrls = Array.isArray(prev[field.key]) ? (prev[field.key] as string[]) : [];
+                      return {
+                        ...prev,
+                        [field.key]: prevUrls.includes(res.fileUrl) ? prevUrls : [...prevUrls, res.fileUrl],
+                      };
+                    });
+                    onDirtyChange(true);
+                  }}
+                  onRemoveUrl={(url) => {
+                    setFormState((prev) => {
+                      const prevUrls = Array.isArray(prev[field.key]) ? (prev[field.key] as string[]) : [];
+                      return {
+                        ...prev,
+                        [field.key]: prevUrls.filter((u) => u !== url),
+                      };
+                    });
+                    onDirtyChange(true);
+                  }}
                 />
               );
             }

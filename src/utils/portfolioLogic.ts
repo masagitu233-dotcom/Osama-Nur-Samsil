@@ -6,6 +6,8 @@ import type {
   ProjectCategory,
   ProjectItem,
 } from '../types/portfolio';
+import { normalizeCertificateCategoryLabel } from './trainingClassification';
+import { normalizeProjectCategory } from './projectsCatalog';
 
 export function filterPublicItems<T extends BaseContentMeta>(items: T[]): T[] {
   return [...items]
@@ -29,8 +31,15 @@ export function filterCertificates(
   params: CertificateFilterParams
 ): CertificateItem[] {
   const q = params.query.trim().toLowerCase();
+  const normalizedFilterCategory =
+    params.category && params.category !== 'all'
+      ? normalizeCertificateCategoryLabel(params.category)
+      : '';
   return certificates.filter((cert) => {
-    if (params.category && params.category !== 'all' && cert.category !== params.category) {
+    if (
+      normalizedFilterCategory &&
+      normalizeCertificateCategoryLabel(cert.category) !== normalizedFilterCategory
+    ) {
       return false;
     }
     if (params.field && params.field !== 'all' && cert.field !== params.field) {
@@ -71,9 +80,16 @@ export function filterProjects(
   query: string
 ): ProjectItem[] {
   const q = query.trim().toLowerCase();
+  const isActiveCategory = category === 'website_digital' || category === 'article_writing';
   return projects.filter((proj) => {
-    if (category !== 'all' && proj.category !== category) {
-      return false;
+    if (category !== 'all') {
+      if (isActiveCategory) {
+        if (normalizeProjectCategory(proj.category) !== category) {
+          return false;
+        }
+      } else if (proj.category !== category) {
+        return false;
+      }
     }
     if (q) {
       const haystack = `${proj.title} ${proj.description} ${proj.documentation} ${proj.period}`.toLowerCase();

@@ -49,6 +49,7 @@ interface MediaUploaderProps {
   currentUrls?: string[];
   defaultVisibility?: DriveFileVisibility;
   allowDriveLink?: boolean;
+  hideAttachedList?: boolean;
   onUploaded: (result: MediaUploadResult) => void;
   onRemoveUrl?: (url: string) => void;
 }
@@ -100,6 +101,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
   currentUrls = [],
   defaultVisibility = 'public',
   allowDriveLink,
+  hideAttachedList = false,
   onUploaded,
   onRemoveUrl,
 }) => {
@@ -170,6 +172,9 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
     }
 
     setPending((prev) => {
+      if (multiple) {
+        return [...prev, ...nextPending];
+      }
       prev.forEach((p) => p.previewUrl && URL.revokeObjectURL(p.previewUrl));
       return nextPending;
     });
@@ -177,6 +182,15 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
     if (inputRef.current) {
       inputRef.current.value = '';
     }
+  };
+
+  const removePendingAt = (indexToRemove: number) => {
+    if (isBusy) return;
+    setPending((prev) => {
+      const target = prev[indexToRemove];
+      if (target?.previewUrl) URL.revokeObjectURL(target.previewUrl);
+      return prev.filter((_, idx) => idx !== indexToRemove);
+    });
   };
 
   const handleUploadConfirm = async () => {
@@ -471,7 +485,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                       <img
                         src={item.previewUrl}
                         alt={item.file.name}
-                        className="w-14 h-14 object-cover border-2 border-brutal shrink-0"
+                        className="w-14 h-14 object-contain bg-[#F8F8E1] border-2 border-brutal shrink-0"
                       />
                     ) : (
                       <div className="w-14 h-14 bg-[#013A42] text-[#F8F8E1] border-2 border-brutal flex items-center justify-center shrink-0">
@@ -482,6 +496,16 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                       <p className="font-bold truncate">{item.file.name}</p>
                       <p className="font-mono-num text-muted">{formatBytes(item.file.size)}</p>
                     </div>
+                    {!isBusy && (
+                      <button
+                        type="button"
+                        onClick={() => removePendingAt(idx)}
+                        aria-label={`Hapus ${item.file.name} dari antrean unggah`}
+                        className="p-1 text-[#6C151E] hover:bg-[#8ACCD5]/40 border border-transparent hover:border-[#013A42] cursor-pointer shrink-0"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
@@ -664,7 +688,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
       )}
 
       {/* Currently Attached Files */}
-      {currentUrls.length > 0 && (
+      {!hideAttachedList && currentUrls.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
           {currentUrls.map((url, idx) => {
             const isPdf = url.toLowerCase().includes('.pdf') || acceptMode === 'pdf';
