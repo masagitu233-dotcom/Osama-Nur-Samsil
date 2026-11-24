@@ -87,11 +87,11 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Header & Source Attribution Bar */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
-        <div className="space-y-1.5">
-          <p className={`${compactHeader ? 'text-sm' : 'text-sm sm:text-base'} text-muted max-w-3xl leading-relaxed`}>
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-3.5">
+        <div className="space-y-1">
+          <p className={`${compactHeader ? 'text-xs sm:text-sm' : 'text-sm'} text-muted max-w-2xl leading-relaxed`}>
             Seluruh artikel dan karya tulis yang dipublikasikan di{' '}
             <a
               href={DARS_SITE_BASE_URL}
@@ -105,7 +105,7 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
           {!loading && !errorMessage && (
             <span className="brutal-badge-green">
               {articles.length} Artikel Terbit
@@ -115,7 +115,7 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
             type="button"
             onClick={() => loadArticles(true)}
             disabled={loading || refreshing}
-            className="brutal-btn brutal-btn-outline px-3.5 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
+            className="brutal-btn brutal-btn-outline px-3 py-1.5 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} aria-hidden="true" />
             <span>{refreshing ? 'Memuat...' : 'Segarkan'}</span>
@@ -124,7 +124,7 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
             href={`${DARS_SITE_BASE_URL}/?view=blog`}
             target="_blank"
             rel="noopener noreferrer"
-            className="brutal-btn brutal-btn-primary px-3.5 py-2 text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap"
+            className="brutal-btn brutal-btn-primary px-3 py-1.5 text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap"
           >
             <span>Buka Dars with Osama</span>
             <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
@@ -132,14 +132,14 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
         </div>
       </div>
 
-      {/* Filter & Search Controls (shown once articles exist) */}
+      {/* Filter & Search Controls */}
       {!loading && !errorMessage && articles.length > 0 && (
-        <div className="brutal-card card-beige frame-shadow-green p-4 sm:p-5 space-y-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="brutal-card card-beige frame-shadow-green p-3.5 sm:p-4 space-y-3">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5">
             {!hideSearchBar ? (
               <div className="relative flex-1 max-w-md">
                 <Search
-                  className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-muted"
+                  className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted"
                   aria-hidden="true"
                 />
                 <input
@@ -148,7 +148,7 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
                   onChange={(e) => setInternalQuery(e.target.value)}
                   placeholder="Cari judul artikel atau kategori..."
                   aria-label="Cari publikasi dan karya tulis"
-                  className="w-full brutal-input pl-10 pr-4 py-2 text-sm"
+                  className="w-full brutal-input pl-9 pr-3 py-1.5 text-sm"
                 />
               </div>
             ) : (
@@ -162,15 +162,15 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
           </div>
 
           {categories.length > 0 && (
-            <div role="tablist" aria-label="Filter kategori artikel" className="flex flex-wrap gap-2">
+            <div role="tablist" aria-label="Filter kategori artikel" className="flex flex-wrap gap-1.5">
               <button
                 type="button"
                 role="tab"
                 aria-selected={selectedCategory === 'all'}
                 onClick={() => setSelectedCategory('all')}
-                className={`px-3.5 py-1.5 text-xs font-bold border-2 border-brutal cursor-pointer transition-colors ${
+                className={`px-3 py-1 text-xs font-bold border-2 border-brutal cursor-pointer transition-colors ${
                   selectedCategory === 'all'
-                    ? 'card-blue shadow-[3px_3px_0_0_#013A42]'
+                    ? 'card-blue shadow-[2.5px_2.5px_0_0_#013A42]'
                     : 'card-beige hover:bg-[#8ACCD5] hover:text-[#013A42]'
                 }`}
               >
@@ -185,9 +185,9 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
                     role="tab"
                     aria-selected={active}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-3.5 py-1.5 text-xs font-bold border-2 border-brutal cursor-pointer transition-colors ${
+                    className={`px-3 py-1 text-xs font-bold border-2 border-brutal cursor-pointer transition-colors ${
                       active
-                        ? 'card-blue shadow-[3px_3px_0_0_#013A42]'
+                        ? 'card-blue shadow-[2.5px_2.5px_0_0_#013A42]'
                         : 'card-beige hover:bg-[#8ACCD5] hover:text-[#013A42]'
                     }`}
                   >
@@ -205,20 +205,20 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
         <div
           aria-busy="true"
           aria-label="Memuat daftar publikasi dari Dars with Osama"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
         >
           {Array.from({ length: 6 }).map((_, idx) => (
             <div
               key={idx}
               className="brutal-card card-beige overflow-hidden flex flex-col"
             >
-              <div className="aspect-[16/9] w-full brutal-skeleton animate-pulse border-b-[3px] border-[#013A42]" />
-              <div className="p-5 space-y-3">
-                <div className="h-5 w-28 brutal-skeleton animate-pulse" />
-                <div className="h-6 w-full brutal-skeleton animate-pulse" />
-                <div className="h-6 w-3/4 brutal-skeleton animate-pulse" />
-                <div className="pt-3 border-t border-subtle">
-                  <div className="h-9 w-full brutal-skeleton animate-pulse" />
+              <div className="aspect-[16/9] w-full brutal-skeleton animate-pulse border-b-2 border-[#013A42]" />
+              <div className="p-4 space-y-2.5">
+                <div className="h-4 w-24 brutal-skeleton animate-pulse" />
+                <div className="h-5 w-full brutal-skeleton animate-pulse" />
+                <div className="h-5 w-3/4 brutal-skeleton animate-pulse" />
+                <div className="pt-2.5 border-t border-subtle">
+                  <div className="h-8 w-full brutal-skeleton animate-pulse" />
                 </div>
               </div>
             </div>
@@ -226,27 +226,27 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
         </div>
       )}
 
-      {/* Honest Error State (Zero Fake Fallback Articles) */}
+      {/* Honest Error State */}
       {!loading && errorMessage && (
         <div
           role="alert"
-          className="brutal-card card-bordo frame-midnight p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+          className="brutal-card card-bordo frame-midnight p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5"
         >
-          <div className="flex items-start gap-3.5">
-            <div className="w-10 h-10 shrink-0 border-2 border-[#F8F8E1] bg-[#013A42] text-[#8ACCD5] flex items-center justify-center">
-              <AlertTriangle className="w-5 h-5" aria-hidden="true" />
+          <div className="flex items-start gap-3">
+            <div className="w-9 h-9 shrink-0 border-2 border-[#F8F8E1] bg-[#013A42] text-[#8ACCD5] flex items-center justify-center">
+              <AlertTriangle className="w-4 h-4" aria-hidden="true" />
             </div>
             <div>
-              <h3 className="font-display text-lg font-extrabold text-[#F8F8E1]">
+              <h3 className="font-display text-base font-extrabold text-[#F8F8E1]">
                 Gagal Memuat Artikel dari Dars with Osama
               </h3>
-              <p className="text-sm text-[#F8F8E1]/90 mt-1 leading-relaxed">{errorMessage}</p>
+              <p className="text-xs sm:text-sm text-[#F8F8E1]/90 mt-1 leading-relaxed">{errorMessage}</p>
             </div>
           </div>
           <button
             type="button"
             onClick={() => loadArticles(true)}
-            className="brutal-btn-on-dark px-4 py-2.5 text-xs font-bold inline-flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0"
+            className="brutal-btn-on-dark px-3.5 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
           >
             <RefreshCw className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Coba Muat Ulang</span>
@@ -256,8 +256,8 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
 
       {/* Empty Published State */}
       {!loading && !errorMessage && articles.length === 0 && (
-        <div className="brutal-card card-beige p-8 text-center space-y-2">
-          <p className="font-display text-lg font-extrabold">
+        <div className="brutal-card card-beige p-6 text-center space-y-1.5">
+          <p className="font-display text-base font-extrabold">
             Belum Ada Artikel yang Dipublikasikan
           </p>
           <p className="text-sm text-muted max-w-xl mx-auto">
@@ -268,8 +268,8 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
 
       {/* No Filter Match State */}
       {!loading && !errorMessage && articles.length > 0 && filteredArticles.length === 0 && (
-        <div className="brutal-card card-beige p-8 text-center space-y-3">
-          <p className="font-display text-lg font-bold">
+        <div className="brutal-card card-beige p-6 text-center space-y-3">
+          <p className="font-display text-base font-bold">
             Tidak ada artikel yang cocok dengan pencarian atau kategori tersebut.
           </p>
           <button
@@ -288,7 +288,7 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
       {/* Live Articles Catalog Grid */}
       {!loading && !errorMessage && visibleItems.length > 0 && (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
             {visibleItems.map((article, idx) => {
               const tone = getCardTone(idx, ['beige', 'blue', 'green', 'bordo', 'midnight']);
               const formattedDate = formatPublicationDateId(article.publishedAt);
@@ -310,7 +310,7 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Baca artikel: ${article.title}`}
-                    className={`block aspect-[16/9] w-full overflow-hidden border-b-[3px] ${coverBorderClass} bg-[#F8F8E1] shrink-0 group`}
+                    className={`block aspect-[16/9] w-full overflow-hidden border-b-2 ${coverBorderClass} bg-[#F8F8E1] shrink-0 group`}
                   >
                     <SafeImage
                       src={article.coverImageUrl}
@@ -320,11 +320,11 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
                     />
                   </a>
 
-                  {/* Card Body: Category, Date, Clickable Title & Aligned Bottom Action */}
-                  <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between gap-4">
-                    <div className="space-y-3">
+                  {/* Card Body */}
+                  <div className="p-4 flex-1 flex flex-col justify-between gap-3.5">
+                    <div className="space-y-2">
                       {(article.category || formattedDate) && (
-                        <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                        <div className="flex flex-wrap items-center justify-between gap-1.5 text-xs">
                           {article.category && (
                             <span className={tone.badgeClass}>{article.category}</span>
                           )}
@@ -340,7 +340,7 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
                         </div>
                       )}
 
-                      <h3 className="font-display text-base sm:text-lg font-extrabold leading-snug">
+                      <h3 className="font-display text-[15px] sm:text-base font-extrabold leading-snug">
                         <a
                           href={article.url}
                           target="_blank"
@@ -352,12 +352,12 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
                       </h3>
                     </div>
 
-                    <div className="mt-auto pt-3.5 border-t border-subtle">
+                    <div className="mt-auto pt-3 border-t border-subtle">
                       <a
                         href={article.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`${tone.buttonClass} w-full py-2.5 px-4 text-xs font-bold inline-flex items-center justify-center gap-2`}
+                        className={`${tone.buttonClass} w-full py-2 px-3.5 text-xs font-bold inline-flex items-center justify-center gap-1.5`}
                       >
                         <span>Baca Artikel Asli</span>
                         <ExternalLink className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
@@ -371,11 +371,11 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
 
           {/* Progressive Pagination Controls */}
           {hasMore && (
-            <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+            <div className="pt-1 flex flex-wrap items-center justify-center gap-2.5">
               <button
                 type="button"
                 onClick={() => setVisibleCount((prev) => prev + initialPageSize)}
-                className="brutal-btn brutal-btn-primary px-6 py-3 text-xs sm:text-sm font-bold cursor-pointer"
+                className="brutal-btn brutal-btn-primary px-5 py-2 text-xs font-bold cursor-pointer"
               >
                 Tampilkan Lebih Banyak ({Math.min(initialPageSize, remainingCount)} lagi)
               </button>
@@ -383,7 +383,7 @@ export const DarsPublicationsCatalog: React.FC<DarsPublicationsCatalogProps> = (
                 <button
                   type="button"
                   onClick={() => setVisibleCount(filteredArticles.length)}
-                  className="brutal-btn brutal-btn-outline px-5 py-3 text-xs sm:text-sm font-bold cursor-pointer"
+                  className="brutal-btn brutal-btn-outline px-4 py-2 text-xs font-bold cursor-pointer"
                 >
                   Tampilkan Semua ({filteredArticles.length})
                 </button>

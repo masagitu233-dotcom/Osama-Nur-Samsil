@@ -110,13 +110,13 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
   return (
     <div className="min-h-screen surface-page flex flex-col lg:flex-row">
       {/* Mobile Admin Top Bar */}
-      <div className="lg:hidden sticky top-0 z-30 h-14 px-4 bg-[#013A42] text-[#F8F8E1] border-b-2 border-[#8ACCD5] flex items-center justify-between">
-        <span className="font-display font-extrabold text-sm tracking-tight">ADMIN CMS &middot; OSAMA</span>
+      <div className="lg:hidden sticky top-0 z-30 h-12 px-4 bg-[#013A42] text-[#F8F8E1] border-b-2 border-[#8ACCD5] flex items-center justify-between">
+        <span className="font-display font-extrabold text-[13px] tracking-tight">ADMIN CMS &middot; OSAMA</span>
         <button
           type="button"
           onClick={() => setSidebarOpen((p) => !p)}
           aria-label="Toggle menu admin"
-          className="brutal-btn-on-dark p-2 cursor-pointer"
+          className="brutal-btn-on-dark p-1.5 cursor-pointer"
         >
           {sidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
         </button>
@@ -126,16 +126,16 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
       <aside
         className={`${
           sidebarOpen ? 'block' : 'hidden'
-        } lg:block w-full lg:w-64 shrink-0 bg-[#013A42] text-[#F8F8E1] border-b-2 lg:border-b-0 lg:border-r-2 border-[#8ACCD5] flex flex-col justify-between`}
+        } lg:block w-full lg:w-56 shrink-0 bg-[#013A42] text-[#F8F8E1] border-b-2 lg:border-b-0 lg:border-r-2 border-[#8ACCD5] flex flex-col justify-between`}
       >
-        <div className="p-4 space-y-5">
-          <div className="hidden lg:block pb-4 border-b-2 border-[#8ACCD5]/40">
-            <p className="font-mono-num text-[11px] font-bold text-[#8ACCD5] uppercase tracking-wider">Portfolio CMS</p>
-            <p className="font-display font-extrabold text-lg leading-tight mt-0.5 text-[#F8F8E1]">OSAMA NUR SAMSIL</p>
-            <p className="text-xs text-[#F8F8E1]/75 truncate mt-1">{user?.email}</p>
+        <div className="p-3 space-y-3.5">
+          <div className="hidden lg:block pb-3 border-b-2 border-[#8ACCD5]/40">
+            <p className="font-mono-num text-[10px] font-bold text-[#8ACCD5] uppercase tracking-wider">Portfolio CMS</p>
+            <p className="font-display font-extrabold text-base leading-tight mt-0.5 text-[#F8F8E1]">OSAMA NUR SAMSIL</p>
+            <p className="text-[11px] text-[#F8F8E1]/75 truncate mt-1">{user?.email}</p>
           </div>
 
-          <nav aria-label="Menu CMS Admin" className="space-y-1">
+          <nav aria-label="Menu CMS Admin" className="space-y-0.5">
             {SIDEBAR_ITEMS.map((item) => {
               const Icon = item.icon;
               const active = activeTab === item.id;
@@ -144,19 +144,19 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
                   key={item.id}
                   type="button"
                   onClick={() => requestTabChange(item.id)}
-                  className={`w-full flex items-center justify-between gap-2.5 px-3 py-2.5 text-xs font-bold border-2 transition-colors cursor-pointer text-left ${
+                  className={`w-full flex items-center justify-between gap-2 px-2.5 py-2 text-xs font-bold border-2 transition-colors cursor-pointer text-left ${
                     active
-                      ? 'bg-[#8ACCD5] text-[#013A42] border-[#F8F8E1] shadow-[3px_3px_0_0_#F8F8E1]'
+                      ? 'bg-[#8ACCD5] text-[#013A42] border-[#F8F8E1] shadow-[2px_2px_0_0_#F8F8E1]'
                       : 'text-[#F8F8E1] border-transparent hover:bg-[#8ACCD5]/15 hover:border-[#8ACCD5]'
                   }`}
                 >
-                  <span className="flex items-center gap-2.5 min-w-0">
-                    <Icon className="w-4 h-4 shrink-0" aria-hidden="true" />
+                  <span className="flex items-center gap-2 min-w-0">
+                    <Icon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                     <span className="truncate">{item.label}</span>
                   </span>
                   {item.id === 'messages' && unreadCount > 0 && (
                     <span
-                      className={`font-mono-num text-[11px] font-extrabold px-1.5 py-0.5 ${
+                      className={`font-mono-num text-[10px] font-extrabold px-1.5 py-0.5 ${
                         active ? 'bg-[#6C151E] text-[#F8F8E1]' : 'bg-[#6C151E] text-[#F8F8E1]'
                       }`}
                     >
@@ -169,11 +169,11 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
           </nav>
         </div>
 
-        <div className="p-4 border-t-2 border-[#8ACCD5]/40 space-y-2.5">
+        <div className="p-3 border-t-2 border-[#8ACCD5]/40 space-y-2">
           <button
             type="button"
             onClick={() => onNavigate('/')}
-            className="w-full brutal-btn-on-dark px-3 py-2 text-xs font-bold inline-flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full brutal-btn-on-dark px-2.5 py-1.5 text-xs font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer"
           >
             <ExternalLink className="w-3.5 h-3.5" />
             <span>Lihat Website Publik</span>
@@ -181,7 +181,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
           <button
             type="button"
             onClick={logoutAdmin}
-            className="w-full brutal-btn-on-dark-outline px-3 py-2 text-xs font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+            className="w-full brutal-btn-on-dark-outline px-2.5 py-1.5 text-xs font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>Logout</span>
@@ -190,7 +190,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-10 max-w-6xl">
+      <main className="flex-1 min-w-0 p-4 sm:p-5 lg:p-7 max-w-5xl">
         {activeTab === 'overview' && (
           <AdminOverview onSelectTab={(tab) => requestTabChange(tab as AdminTab)} />
         )}
@@ -215,7 +215,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
         title="Perubahan Belum Disimpan"
         maxWidthClass="max-w-md"
       >
-        <p className="text-sm mb-6">
+        <p className="text-sm mb-5">
           Anda memiliki perubahan yang belum disimpan. Jika berpindah halaman sekarang, perubahan tersebut akan hilang. Lanjutkan berpindah?
         </p>
         <div className="flex justify-end gap-3">

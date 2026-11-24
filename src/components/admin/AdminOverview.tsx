@@ -39,19 +39,19 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({ onSelectTab }) => 
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 border-b-2 border-brutal">
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-3.5 border-b-2 border-brutal">
         <div>
           <span className="brutal-badge">Ringkasan CMS</span>
-          <h1 className="font-display text-3xl font-extrabold mt-2">Dashboard Overview</h1>
+          <h1 className="font-display text-2xl font-extrabold mt-1.5">Dashboard Overview</h1>
         </div>
         <button
           type="button"
           onClick={handleSeed}
           disabled={seeding}
-          className="brutal-btn brutal-btn-primary px-4 py-2.5 text-xs font-bold inline-flex items-center gap-2 cursor-pointer whitespace-nowrap disabled:opacity-60"
+          className="brutal-btn brutal-btn-primary px-3.5 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap disabled:opacity-60"
         >
-          {seeding ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Database className="w-4 h-4" />}
+          {seeding ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Database className="w-3.5 h-3.5" />}
           <span>
             {seeding
               ? 'Menyinkronkan...'
@@ -63,11 +63,11 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({ onSelectTab }) => 
       </div>
 
       {!isFirestoreSeeded && (
-        <div className="brutal-card surface-highlight p-5 space-y-2">
-          <p className="font-display font-extrabold text-base">
+        <div className="brutal-card surface-highlight p-4 space-y-1.5">
+          <p className="font-display font-extrabold text-sm sm:text-base">
             Database Firestore Belum Diisi Data Awal
           </p>
-          <p className="text-sm leading-relaxed">
+          <p className="text-xs sm:text-sm leading-relaxed">
             Saat ini halaman publik menampilkan data bawaan (fallback). Klik tombol{' '}
             <strong>&ldquo;Simpan Data Awal ke Firestore&rdquo;</strong> di atas agar seluruh profil, pengalaman, proyek Dars with Osama, keahlian, dan pelatihan tersimpan permanen di Cloud Firestore dan siap diedit secara langsung.
           </p>
@@ -78,7 +78,7 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({ onSelectTab }) => 
       <GoogleDriveConnectionPanel />
 
       {/* Metrics Grid (Planned 4-Color Card Alternation: Beige, Blue, Green, Bordo) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
         {stats.map((s, idx) => {
           const tone = getCardTone(idx, ['beige', 'blue', 'green', 'bordo']);
           return (
@@ -86,44 +86,44 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({ onSelectTab }) => 
               key={s.label}
               type="button"
               onClick={() => onSelectTab(s.tab)}
-              className={`text-left brutal-card brutal-card-interactive p-5 cursor-pointer ${tone.cardClass} ${tone.frameClass}`}
+              className={`text-left brutal-card brutal-card-interactive p-4 cursor-pointer ${tone.cardClass} ${tone.frameClass}`}
             >
-              <p className={`font-mono-num text-3xl font-extrabold ${tone.isDark ? 'text-[#8ACCD5]' : ''}`}>
+              <p className={`font-mono-num text-2xl font-extrabold leading-none ${tone.isDark ? 'text-[#8ACCD5]' : ''}`}>
                 {String(s.count).padStart(2, '0')}
               </p>
-              <p className="font-display font-bold text-sm mt-1.5">{s.label}</p>
+              <p className="font-display font-bold text-xs sm:text-[13px] mt-1.5">{s.label}</p>
             </button>
           );
         })}
       </div>
 
       {/* Recent Activity Log */}
-      <section className="brutal-card card-beige frame-shadow-green p-6">
-        <h2 className="font-display text-xl font-extrabold mb-4">Aktivitas Pengelolaan Konten Terbaru</h2>
+      <section className="brutal-card card-beige frame-shadow-green p-4 sm:p-5">
+        <h2 className="font-display text-lg font-extrabold mb-3">Aktivitas Pengelolaan Konten Terbaru</h2>
         {activityLogs.length === 0 ? (
-          <p className="text-sm text-muted">
+          <p className="text-xs sm:text-sm text-muted">
             Belum ada log aktivitas tercatat di Firestore. Setiap perubahan konten (tambah, ubah, hapus, unggah media) akan muncul di sini.
           </p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm border-collapse">
+            <table className="w-full text-left text-xs sm:text-sm border-collapse">
               <thead>
-                <tr className="border-b-2 border-brutal font-mono-num text-xs uppercase">
-                  <th className="py-2.5 pr-4">Aksi</th>
-                  <th className="py-2.5 pr-4">Modul</th>
-                  <th className="py-2.5 pr-4">Item</th>
-                  <th className="py-2.5">Admin</th>
+                <tr className="border-b-2 border-brutal font-mono-num text-[11px] uppercase">
+                  <th className="py-2 pr-3">Aksi</th>
+                  <th className="py-2 pr-3">Modul</th>
+                  <th className="py-2 pr-3">Item</th>
+                  <th className="py-2">Admin</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[var(--border-subtle)]">
                 {activityLogs.slice(0, 12).map((log) => (
                   <tr key={log.id}>
-                    <td className="py-2.5 pr-4">
+                    <td className="py-2 pr-3">
                       <span className="brutal-badge uppercase">{log.action}</span>
                     </td>
-                    <td className="py-2.5 pr-4 font-semibold">{log.module}</td>
-                    <td className="py-2.5 pr-4">{log.itemTitle}</td>
-                    <td className="py-2.5 text-xs text-muted">{log.actorEmail}</td>
+                    <td className="py-2 pr-3 font-semibold">{log.module}</td>
+                    <td className="py-2 pr-3">{log.itemTitle}</td>
+                    <td className="py-2 text-xs text-muted">{log.actorEmail}</td>
                   </tr>
                 ))}
               </tbody>

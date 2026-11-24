@@ -59,23 +59,23 @@ export const ExperiencePhotoManager: React.FC<ExperiencePhotoManagerProps> = ({
       />
 
       {/* Attached Documentation Gallery Manager */}
-      <div className="border-2 border-brutal bg-[#F8F8E1] p-4 space-y-3">
-        <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b-2 border-subtle">
-          <div className="flex items-center gap-2">
+      <div className="border-2 border-brutal bg-[#F8F8E1] p-3.5 space-y-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b-2 border-subtle">
+          <div className="flex items-center gap-1.5">
             <ImageIcon className="w-4 h-4 text-[#013A42]" aria-hidden="true" />
-            <span className="font-display font-extrabold text-sm text-[#013A42]">
+            <span className="font-display font-extrabold text-xs sm:text-sm text-[#013A42]">
               Galeri Foto Pengalaman ({imageUrls.length} / {MAX_EXPERIENCE_PHOTOS})
             </span>
           </div>
           {imageUrls.length > 0 && (
-            <span className="font-mono-num text-[11px] font-bold text-[#0F3D3A]">
+            <span className="font-mono-num text-[10px] font-bold text-[#0F3D3A]">
               Foto Utama tampil di Card &middot; Semua foto tampil di Detail
             </span>
           )}
         </div>
 
         {imageUrls.length === 0 ? (
-          <p className="text-xs text-muted py-3 text-center">
+          <p className="text-xs text-muted py-2.5 text-center">
             Belum ada foto dokumentasi pada pengalaman ini. Unggah satu atau beberapa foto di atas, atau tempel tautan Google Drive.
           </p>
         ) : (
@@ -84,7 +84,7 @@ export const ExperiencePhotoManager: React.FC<ExperiencePhotoManagerProps> = ({
               Seret kartu foto atau gunakan tombol panah untuk mengatur urutan galeri. Klik <strong>Jadikan Foto Utama</strong> kapan saja tanpa perlu mengunggah ulang.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-start">
               {imageUrls.map((url, idx) => {
                 const isPrimary = activePrimaryUrl === url;
                 const isDragging = draggedIndex === idx;
@@ -145,22 +145,22 @@ export const ExperiencePhotoManager: React.FC<ExperiencePhotoManagerProps> = ({
                     </div>
 
                     {/* Natural-ratio uncropped preview */}
-                    <div className="w-full bg-[#F8F8E1] p-1.5">
+                    <div className="w-full bg-[#F8F8E1] p-1">
                       <SafeImage
                         src={url}
                         alt={`Pratinjau dokumentasi ${idx + 1}`}
                         fallbackLabel={`Foto ${idx + 1}`}
-                        className="w-full h-auto max-h-56 block object-contain mx-auto"
+                        className="w-full h-auto max-h-40 block object-contain mx-auto"
                       />
                     </div>
 
                     {/* Action Controls: Set Primary + Reorder + Delete */}
-                    <div className="p-2 border-t-2 border-[#013A42] bg-[#F8F8E1] space-y-2">
+                    <div className="p-1.5 border-t-2 border-[#013A42] bg-[#F8F8E1] space-y-1.5">
                       {!isPrimary && (
                         <button
                           type="button"
                           onClick={() => onSelectPrimary(url)}
-                          className="w-full brutal-btn brutal-btn-secondary py-1.5 px-2 text-[11px] font-bold inline-flex items-center justify-center gap-1 cursor-pointer"
+                          className="w-full brutal-btn brutal-btn-secondary py-1 px-2 text-[11px] font-bold inline-flex items-center justify-center gap-1 cursor-pointer"
                         >
                           <Star className="w-3 h-3" aria-hidden="true" />
                           <span>Jadikan Foto Utama</span>

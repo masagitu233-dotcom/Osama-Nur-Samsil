@@ -48,8 +48,43 @@ export function isDarsPlatformProject(project: Pick<ProjectItem, 'id' | 'title' 
   return title === 'dars with osama' || project.category === 'dars_with_osama';
 }
 
-export function hasCustomUploadedDarsAsset(project: Pick<ProjectItem, 'imageUrls'>): boolean {
-  const first = (project.imageUrls?.[0] || '').trim();
+type ProjectPhotoSource = {
+  imageUrls?: readonly string[] | null;
+  primaryImageUrl?: string | null;
+  photoUrl?: string | null;
+  thumbnailUrl?: string | null;
+};
+
+/**
+ * Resolves the primary display photo URL for a Project card without mutating stored data.
+ * Prioritizes an explicit primaryImageUrl, then the first non-empty URL in imageUrls,
+ * then defensive legacy single-image fields if present.
+ */
+export function resolveProjectPrimaryPhoto(project: ProjectPhotoSource | undefined | null): string {
+  if (!project) return '';
+
+  const explicitPrimary = typeof project.primaryImageUrl === 'string' ? project.primaryImageUrl.trim() : '';
+  if (explicitPrimary) return explicitPrimary;
+
+  if (Array.isArray(project.imageUrls)) {
+    for (const entry of project.imageUrls) {
+      if (typeof entry === 'string' && entry.trim()) {
+        return entry.trim();
+      }
+    }
+  }
+
+  const legacyPhoto = typeof project.photoUrl === 'string' ? project.photoUrl.trim() : '';
+  if (legacyPhoto) return legacyPhoto;
+
+  const legacyThumb = typeof project.thumbnailUrl === 'string' ? project.thumbnailUrl.trim() : '';
+  if (legacyThumb) return legacyThumb;
+
+  return '';
+}
+
+export function hasCustomUploadedDarsAsset(project: ProjectPhotoSource): boolean {
+  const first = resolveProjectPrimaryPhoto(project);
   if (!first) return false;
   return first !== GENERIC_STOCK_DARS_PATH;
 }

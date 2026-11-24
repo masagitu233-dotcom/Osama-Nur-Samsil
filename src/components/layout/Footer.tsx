@@ -29,22 +29,22 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onShareProfile }) =>
   };
 
   return (
-    <footer className="mt-24 border-t-4 border-[#8ACCD5] bg-[#013A42] text-[#F8F8E1]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
+    <footer className="mt-14 sm:mt-16 border-t-[3px] border-[#8ACCD5] bg-[#013A42] text-[#F8F8E1]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-9 sm:py-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
           {/* Brand & Summary */}
-          <div className="md:col-span-5 space-y-4">
-            <h2 className="font-display text-2xl font-extrabold tracking-tight text-[#F8F8E1]">
+          <div className="md:col-span-5 space-y-3">
+            <h2 className="font-display text-lg sm:text-xl font-extrabold tracking-tight text-[#F8F8E1]">
               {profile.fullName.toUpperCase()}
             </h2>
-            <p className="text-sm text-[#F8F8E1]/85 max-w-md leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#F8F8E1]/85 max-w-md leading-relaxed">
               {profile.headline}. Berdomisili di {profile.domicile}.
             </p>
-            <div className="flex flex-wrap items-center gap-3 pt-2">
+            <div className="flex flex-wrap items-center gap-2.5 pt-1">
               <button
                 type="button"
                 onClick={onShareProfile}
-                className="brutal-btn-on-dark px-4 py-2 text-xs font-bold inline-flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                className="brutal-btn-on-dark px-3.5 py-1.5 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
               >
                 <Share2 className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>Bagikan Tautan Profil</span>
@@ -54,10 +54,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onShareProfile }) =>
 
           {/* Sitemap */}
           <div className="md:col-span-4">
-            <h3 className="font-display text-sm font-extrabold uppercase tracking-wider text-[#8ACCD5] mb-4">
+            <h3 className="font-display text-xs font-extrabold uppercase tracking-wider text-[#8ACCD5] mb-3">
               Navigasi Portofolio
             </h3>
-            <ul className="grid grid-cols-2 gap-y-2.5 gap-x-4 text-sm">
+            <ul className="grid grid-cols-2 gap-y-2 gap-x-4 text-xs sm:text-[13px]">
               {FOOTER_LINKS.map((item) => (
                 <li key={item.route}>
                   <a
@@ -73,11 +73,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onShareProfile }) =>
           </div>
 
           {/* External Links & Admin */}
-          <div className="md:col-span-3 space-y-4">
-            <h3 className="font-display text-sm font-extrabold uppercase tracking-wider text-[#8ACCD5]">
+          <div className="md:col-span-3 space-y-3">
+            <h3 className="font-display text-xs font-extrabold uppercase tracking-wider text-[#8ACCD5]">
               Tautan &amp; Akses
             </h3>
-            <ul className="space-y-2.5 text-sm">
+            <ul className="space-y-2 text-xs sm:text-[13px]">
               {contacts.websiteUrl && (
                 <li>
                   <a
@@ -87,7 +87,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onShareProfile }) =>
                     className="inline-flex items-center gap-1.5 font-semibold text-[#8ACCD5] hover:text-[#F8F8E1] transition-colors"
                   >
                     <span>Dars with Osama</span>
-                    <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                    <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
                   </a>
                 </li>
               )}
@@ -100,7 +100,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onShareProfile }) =>
                     className="inline-flex items-center gap-1.5 font-medium text-[#8ACCD5] hover:text-[#F8F8E1] transition-colors"
                   >
                     <span>LinkedIn</span>
-                    <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                    <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
                   </a>
                 </li>
               )}
@@ -113,11 +113,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onShareProfile }) =>
                     className="inline-flex items-center gap-1.5 font-medium text-[#8ACCD5] hover:text-[#F8F8E1] transition-colors"
                   >
                     <span>GitHub</span>
-                    <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                    <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
                   </a>
                 </li>
               )}
-              <li className="pt-2">
+              <li className="pt-1">
                 <a
                   href="/admin"
                   onClick={(e) => handleNav(e, '/admin')}
@@ -131,7 +131,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onShareProfile }) =>
           </div>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-[#8ACCD5]/35 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[#F8F8E1]/80">
+        <div className="mt-8 pt-4 border-t border-[#8ACCD5]/35 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-[#F8F8E1]/80">
           <p className="font-mono-num">
             &copy; {new Date().getFullYear()} {profile.fullName}. Hak cipta dilindungi.
           </p>

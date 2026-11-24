@@ -10,6 +10,7 @@ import {
   isDarsPlatformProject,
   normalizeProjectCategory,
   prepareWebsiteProjects,
+  resolveProjectPrimaryPhoto,
 } from './projectsCatalog';
 
 const baseMeta = {
@@ -101,4 +102,21 @@ test('isDarsPlatformProject does not mistake individual article links for the pl
     false
   );
   assert.equal(filterWebsiteProjectsByQuery(prepareWebsiteProjects([]), 'keislaman').length, 1);
+});
+
+test('resolveProjectPrimaryPhoto prioritizes primaryImageUrl, skips empty slots, and preserves Drive URLs', () => {
+  assert.equal(
+    resolveProjectPrimaryPhoto({
+      primaryImageUrl: 'https://drive.google.com/file/d/primary123/view',
+      imageUrls: ['https://drive.google.com/file/d/other456/view'],
+    }),
+    'https://drive.google.com/file/d/primary123/view'
+  );
+  assert.equal(
+    resolveProjectPrimaryPhoto({
+      imageUrls: ['   ', 'https://drive.google.com/file/d/second789/view?usp=drive_link'],
+    }),
+    'https://drive.google.com/file/d/second789/view?usp=drive_link'
+  );
+  assert.equal(resolveProjectPrimaryPhoto({ imageUrls: [] }), '');
 });

@@ -165,29 +165,29 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
           : needsReconnect
           ? 'card-beige frame-shadow-bordo'
           : 'card-blue frame-midnight'
-      } ${compact ? 'p-4 sm:p-5' : 'p-5 sm:p-6'} space-y-4`}
+      } ${compact ? 'p-3.5 sm:p-4' : 'p-4 sm:p-5'} space-y-3`}
     >
-      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-        <div className="space-y-1.5 min-w-0">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+        <div className="space-y-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2">
             <span className={badgeClass}>{statusLabel}</span>
             <span className="font-mono-num text-[11px] font-bold uppercase text-muted">
               Google Drive API v3 &middot; Penyimpanan Utama
             </span>
           </div>
-          <h2 className="font-display text-lg sm:text-xl font-extrabold flex items-center gap-2">
+          <h2 className="font-display text-base sm:text-lg font-extrabold flex items-center gap-2">
             {isConnected ? (
-              <CheckCircle2 className="w-5 h-5 text-[#0F3D3A] shrink-0" aria-hidden="true" />
+              <CheckCircle2 className="w-4 h-4 text-[#0F3D3A] shrink-0" aria-hidden="true" />
             ) : needsReconnect ? (
-              <ShieldAlert className="w-5 h-5 text-[#6C151E] shrink-0" aria-hidden="true" />
+              <ShieldAlert className="w-4 h-4 text-[#6C151E] shrink-0" aria-hidden="true" />
             ) : notConfigured ? (
-              <AlertTriangle className="w-5 h-5 text-[#6C151E] shrink-0" aria-hidden="true" />
+              <AlertTriangle className="w-4 h-4 text-[#6C151E] shrink-0" aria-hidden="true" />
             ) : (
-              <CloudOff className="w-5 h-5 shrink-0" aria-hidden="true" />
+              <CloudOff className="w-4 h-4 shrink-0" aria-hidden="true" />
             )}
             <span>Integrasi Google Drive Pengelola</span>
           </h2>
-          <p className="text-xs sm:text-sm text-muted leading-relaxed">
+          <p className="text-xs sm:text-[13px] text-muted leading-relaxed">
             {loading
               ? 'Memeriksa status token offline terenkripsi di server Netlify...'
               : statusData?.message ||
@@ -252,7 +252,7 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
       )}
 
       {!loading && statusData && (
-        <div className="pt-3 border-t-2 border-subtle grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div className="pt-2.5 border-t-2 border-subtle grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <div className="space-y-1">
             <p className="font-mono-num uppercase font-bold text-muted">Akun Pemilik yang Diizinkan</p>
             <p className="font-mono-num font-bold break-all">
@@ -288,13 +288,13 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
               )}
             </div>
             {!compact && (
-              <div className="flex flex-wrap gap-1.5 pt-1">
+              <div className="flex flex-wrap gap-1 pt-1">
                 {EXPECTED_SUBFOLDERS.map((folderName) => {
                   const hasId = Boolean(statusData.folders?.[folderName]);
                   return (
                     <span
                       key={folderName}
-                      className={`px-2 py-0.5 font-mono-num text-[11px] font-bold border border-[#013A42] ${
+                      className={`px-1.5 py-0.5 font-mono-num text-[10px] font-bold border border-[#013A42] ${
                         hasId ? 'bg-[#0F3D3A] text-[#F8F8E1]' : 'bg-[#F8F8E1] text-[#013A42]'
                       }`}
                     >
@@ -309,7 +309,7 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
       )}
 
       {!loading && statusData && (statusData.missingConfig.length > 0 || status === 'backend_unavailable') && (
-        <div className="p-3.5 border-2 border-[#013A42] bg-[#F8F8E1] text-[#013A42] space-y-1.5 text-xs">
+        <div className="p-3 border-2 border-[#013A42] bg-[#F8F8E1] text-[#013A42] space-y-1 text-xs">
           <p className="font-bold flex items-center gap-1.5">
             <Cloud className="w-4 h-4 shrink-0" />
             <span>Catatan Konfigurasi Deployment Netlify:</span>

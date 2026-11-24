@@ -17,7 +17,7 @@ export const Modal: React.FC<ModalProps> = ({
   onClose,
   title,
   subtitle,
-  maxWidthClass = 'max-w-3xl',
+  maxWidthClass = 'max-w-2xl',
   variant = 'default',
   disableEscapeClose = false,
   children,
@@ -45,20 +45,20 @@ export const Modal: React.FC<ModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#013A42]/80"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-[#013A42]/80"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div
-        className={`w-full ${maxWidthClass} max-h-[90vh] flex flex-col overflow-hidden ${
+        className={`w-full ${maxWidthClass} max-h-[88vh] flex flex-col overflow-hidden ${
           isLightbox
             ? 'card-midnight brutal-card-on-dark'
             : 'card-beige brutal-card frame-shadow-bordo'
         }`}
       >
         <div
-          className={`flex items-start justify-between gap-4 px-6 py-4 border-b-2 ${
+          className={`flex items-start justify-between gap-3 px-5 py-3.5 border-b-2 ${
             isLightbox
               ? 'border-[#8ACCD5] bg-[#013A42] text-[#F8F8E1]'
               : 'border-[#013A42] card-blue text-[#013A42]'
@@ -67,14 +67,14 @@ export const Modal: React.FC<ModalProps> = ({
           <div className="min-w-0">
             {subtitle && (
               <p
-                className={`font-mono-num text-xs font-bold mb-0.5 ${
+                className={`font-mono-num text-[11px] font-bold mb-0.5 ${
                   isLightbox ? 'text-[#8ACCD5]' : 'text-[#013A42]/85'
                 }`}
               >
                 {subtitle}
               </p>
             )}
-            <h2 id="modal-title" className="font-display text-xl font-extrabold leading-tight break-words">
+            <h2 id="modal-title" className="font-display text-lg sm:text-xl font-extrabold leading-tight break-words">
               {title}
             </h2>
           </div>
@@ -86,12 +86,12 @@ export const Modal: React.FC<ModalProps> = ({
               isLightbox
                 ? 'brutal-btn-on-dark'
                 : 'brutal-btn brutal-btn-primary'
-            } p-2 shrink-0 cursor-pointer`}
+            } p-1.5 shrink-0 cursor-pointer`}
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
-        <div className="p-6 overflow-y-auto">{children}</div>
+        <div className="p-4 sm:p-5 overflow-y-auto">{children}</div>
       </div>
     </div>
   );

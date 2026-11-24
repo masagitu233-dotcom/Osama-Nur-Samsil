@@ -457,27 +457,27 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b-2 border-brutal">
+    <div className="space-y-5">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-3.5 border-b-2 border-brutal">
         <div>
           <span className="brutal-badge">Koleksi Firestore: /{collectionName}</span>
-          <h1 className="font-display text-2xl sm:text-3xl font-extrabold mt-2">{config.title}</h1>
-          <p className="text-sm text-muted mt-1">{config.subtitle}</p>
+          <h1 className="font-display text-xl sm:text-2xl font-extrabold mt-1.5">{config.title}</h1>
+          <p className="text-xs sm:text-sm text-muted mt-0.5">{config.subtitle}</p>
         </div>
         <button
           type="button"
           onClick={openCreateModal}
-          className="brutal-btn brutal-btn-primary px-4 py-2.5 text-xs font-bold inline-flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0"
+          className="brutal-btn brutal-btn-primary px-3.5 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-3.5 h-3.5" />
           <span>Tambah Item Baru</span>
         </button>
       </div>
 
       {/* Items Table/List */}
       {items.length === 0 ? (
-        <div className="brutal-card surface-card p-8 text-center space-y-3">
-          <p className="font-display text-lg font-bold">Belum ada data pada koleksi ini.</p>
+        <div className="brutal-card surface-card p-6 text-center space-y-3">
+          <p className="font-display text-base font-bold">Belum ada data pada koleksi ini.</p>
           <button
             type="button"
             onClick={openCreateModal}
@@ -487,17 +487,17 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
           </button>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {items.map((item, idx) => {
             const displayTitle = String(item[config.titleKey] || '(Tanpa Judul)');
             const displayMeta = String(item[config.metaKey] || '');
             return (
               <div
                 key={item.id}
-                className="brutal-card surface-card p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4"
+                className="brutal-card surface-card p-3.5 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3"
               >
                 <div className="min-w-0">
-                  <div className="flex flex-wrap items-center gap-2 text-xs font-mono-num">
+                  <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono-num">
                     <span className="font-bold text-muted">#{String(item.displayOrder ?? idx + 1).padStart(2, '0')}</span>
                     <span
                       className={item.status === 'published' ? 'brutal-badge' : 'brutal-badge-inverse'}
@@ -513,19 +513,19 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                       </span>
                     )}
                   </div>
-                  <h2 className="font-display text-lg font-extrabold mt-1.5 truncate">{displayTitle}</h2>
+                  <h2 className="font-display text-[15px] sm:text-base font-extrabold mt-1 truncate">{displayTitle}</h2>
                   {displayMeta && (
-                    <p className="text-sm text-muted truncate">{displayMeta}</p>
+                    <p className="text-xs sm:text-[13px] text-muted truncate">{displayMeta}</p>
                   )}
                 </div>
 
-                <div className="flex flex-wrap items-center gap-2 shrink-0">
+                <div className="flex flex-wrap items-center gap-1.5 shrink-0">
                   <button
                     type="button"
                     onClick={() => handleReorder(idx, -1)}
                     disabled={idx === 0}
                     aria-label={`Naikkan urutan ${displayTitle}`}
-                    className="brutal-btn brutal-btn-outline p-2 cursor-pointer disabled:opacity-40"
+                    className="brutal-btn brutal-btn-outline p-1.5 cursor-pointer disabled:opacity-40"
                   >
                     <ArrowUp className="w-3.5 h-3.5" />
                   </button>
@@ -534,14 +534,14 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     onClick={() => handleReorder(idx, 1)}
                     disabled={idx === items.length - 1}
                     aria-label={`Turunkan urutan ${displayTitle}`}
-                    className="brutal-btn brutal-btn-outline p-2 cursor-pointer disabled:opacity-40"
+                    className="brutal-btn brutal-btn-outline p-1.5 cursor-pointer disabled:opacity-40"
                   >
                     <ArrowDown className="w-3.5 h-3.5" />
                   </button>
                   <button
                     type="button"
                     onClick={() => handleQuickToggle(item, 'status')}
-                    className="brutal-btn brutal-btn-outline px-3 py-1.5 text-xs font-bold cursor-pointer"
+                    className="brutal-btn brutal-btn-outline px-2.5 py-1.5 text-xs font-bold cursor-pointer"
                   >
                     {item.status === 'published' ? 'Jadikan Draft' : 'Publikasikan'}
                   </button>
@@ -549,7 +549,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     type="button"
                     onClick={() => handleQuickToggle(item, 'isVisible')}
                     aria-label={item.isVisible ? `Sembunyikan ${displayTitle}` : `Tampilkan ${displayTitle}`}
-                    className="brutal-btn brutal-btn-outline p-2 cursor-pointer"
+                    className="brutal-btn brutal-btn-outline p-1.5 cursor-pointer"
                   >
                     {item.isVisible ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
                   </button>
@@ -557,7 +557,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     type="button"
                     onClick={() => openEditModal(item)}
                     aria-label={`Edit ${displayTitle}`}
-                    className="brutal-btn brutal-btn-secondary px-3 py-1.5 text-xs font-bold inline-flex items-center gap-1 cursor-pointer"
+                    className="brutal-btn brutal-btn-secondary px-2.5 py-1.5 text-xs font-bold inline-flex items-center gap-1 cursor-pointer"
                   >
                     <Pencil className="w-3.5 h-3.5" />
                     <span>Edit</span>
@@ -566,7 +566,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     type="button"
                     onClick={() => setDeleteTarget({ id: item.id, title: displayTitle })}
                     aria-label={`Hapus ${displayTitle}`}
-                    className="brutal-btn brutal-btn-bordo p-2 cursor-pointer"
+                    className="brutal-btn brutal-btn-bordo p-1.5 cursor-pointer"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -582,9 +582,9 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
         open={modalOpen}
         onClose={closeModal}
         title={editingId ? `Edit Item — ${config.title}` : `Tambah Baru — ${config.title}`}
-        maxWidthClass="max-w-3xl"
+        maxWidthClass="max-w-2xl"
       >
-        <form onSubmit={handleSave} className="space-y-4">
+        <form onSubmit={handleSave} className="space-y-3.5">
           {config.fields.map((field) => {
             if (field.type === 'text') {
               return (
@@ -611,7 +611,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     {field.label} {field.required ? '*' : ''}
                   </label>
                   <textarea
-                    rows={4}
+                    rows={3}
                     required={field.required}
                     value={String(formState[field.key] ?? '')}
                     onChange={(e) => setField(field.key, e.target.value)}
@@ -660,7 +660,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                 <div key={field.key}>
                   <label className="block text-xs font-bold uppercase mb-1">{field.label}</label>
                   <textarea
-                    rows={4}
+                    rows={3}
                     value={arr.join('\n')}
                     onChange={(e) => setField(field.key, e.target.value.split('\n'))}
                     placeholder="Satu item per baris..."
@@ -853,13 +853,13 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
           })}
 
           {/* Common Content Display Controls */}
-          <div className="pt-4 mt-4 border-t-2 border-subtle grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="pt-3.5 mt-3.5 border-t-2 border-subtle grid grid-cols-1 sm:grid-cols-3 gap-3.5">
             <div>
               <label className="block text-xs font-bold uppercase mb-1">Status Konten</label>
               <select
                 value={String(formState.status || 'published')}
                 onChange={(e) => setField('status', e.target.value)}
-                className="w-full brutal-input px-3 py-2 text-sm font-bold"
+                className="w-full brutal-input px-3 py-1.5 text-sm font-bold"
               >
                 <option value="published">Published</option>
                 <option value="draft">Draft</option>
@@ -873,10 +873,10 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                 max={10000}
                 value={Number(formState.displayOrder ?? 1)}
                 onChange={(e) => setField('displayOrder', Number(e.target.value))}
-                className="w-full brutal-input px-3 py-2 text-sm font-mono-num"
+                className="w-full brutal-input px-3 py-1.5 text-sm font-mono-num"
               />
             </div>
-            <div className="flex items-end pb-2">
+            <div className="flex items-end pb-1.5">
               <label className="flex items-center gap-2 text-sm font-bold cursor-pointer">
                 <input
                   type="checkbox"
@@ -889,20 +889,20 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
             </div>
           </div>
 
-          <div className="pt-4 flex justify-end gap-3">
+          <div className="pt-3 flex justify-end gap-2.5">
             <button
               type="button"
               onClick={closeModal}
-              className="brutal-btn brutal-btn-outline px-4 py-2.5 text-xs font-bold cursor-pointer"
+              className="brutal-btn brutal-btn-outline px-4 py-2 text-xs font-bold cursor-pointer"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="brutal-btn brutal-btn-primary px-5 py-2.5 text-xs font-bold inline-flex items-center gap-2 cursor-pointer disabled:opacity-60"
+              className="brutal-btn brutal-btn-primary px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
             >
-              <Save className="w-4 h-4" />
+              <Save className="w-3.5 h-3.5" />
               <span>{saving ? 'Menyimpan...' : 'Simpan ke Firestore'}</span>
             </button>
           </div>

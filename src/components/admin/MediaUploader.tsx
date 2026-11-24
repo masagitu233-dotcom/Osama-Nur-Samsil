@@ -399,7 +399,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
               setDragging(false);
               if (!isBusy) handleFiles(e.dataTransfer.files);
             }}
-            className={`border-2 border-dashed p-5 text-center transition-colors ${
+            className={`border-2 border-dashed p-3.5 text-center transition-colors ${
               dragging
                 ? 'border-[#013A42] surface-highlight'
                 : 'border-brutal surface-card'
@@ -414,8 +414,8 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
               onChange={(e) => handleFiles(e.target.files)}
               className="hidden"
             />
-            <UploadCloud className="w-7 h-7 mx-auto mb-2" aria-hidden="true" />
-            <p className="text-sm font-bold">
+            <UploadCloud className="w-6 h-6 mx-auto mb-1.5" aria-hidden="true" />
+            <p className="text-xs sm:text-[13px] font-bold">
               Seret &amp; lepas file di sini, atau{' '}
               <button
                 type="button"
@@ -426,7 +426,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                 pilih dari perangkat
               </button>
             </p>
-            <p className="text-xs text-muted mt-1">
+            <p className="text-[11px] text-muted mt-1">
               {acceptMode === 'pdf'
                 ? 'Format PDF (maks. 10 MB) — tersimpan langsung ke Google Drive'
                 : acceptMode === 'image'
@@ -459,7 +459,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
 
           {/* Local Preview + Real Progress Panel BEFORE / DURING Upload */}
           {pending.length > 0 && (
-            <div className="border-2 border-brutal surface-card p-4 space-y-3">
+            <div className="border-2 border-brutal surface-card p-3 space-y-2.5">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="brutal-badge">
                   Siap Unggah ({pending.length} file) &middot; {UPLOAD_STAGE_LABELS[uploadState.stage]}
@@ -471,11 +471,11 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                 )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {pending.map((item, idx) => (
                   <div
                     key={`${item.file.name}-${idx}`}
-                    className={`flex items-center gap-3 p-2 border-2 ${
+                    className={`flex items-center gap-2.5 p-1.5 border-2 ${
                       isBusy && idx === activeFileIndex
                         ? 'border-[#013A42] bg-[#8ACCD5]/25'
                         : 'border-subtle'
@@ -485,11 +485,11 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                       <img
                         src={item.previewUrl}
                         alt={item.file.name}
-                        className="w-14 h-14 object-contain bg-[#F8F8E1] border-2 border-brutal shrink-0"
+                        className="w-12 h-12 object-contain bg-[#F8F8E1] border-2 border-brutal shrink-0"
                       />
                     ) : (
-                      <div className="w-14 h-14 bg-[#013A42] text-[#F8F8E1] border-2 border-brutal flex items-center justify-center shrink-0">
-                        <FileText className="w-6 h-6" />
+                      <div className="w-12 h-12 bg-[#013A42] text-[#F8F8E1] border-2 border-brutal flex items-center justify-center shrink-0">
+                        <FileText className="w-5 h-5" />
                       </div>
                     )}
                     <div className="min-w-0 flex-1 text-xs">
@@ -689,7 +689,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
 
       {/* Currently Attached Files */}
       {!hideAttachedList && currentUrls.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
           {currentUrls.map((url, idx) => {
             const isPdf = url.toLowerCase().includes('.pdf') || acceptMode === 'pdf';
             return (
@@ -697,11 +697,11 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                 key={`${url}-${idx}`}
                 className="border-2 border-brutal surface-card overflow-hidden relative group"
               >
-                <div className="aspect-[4/3] overflow-hidden">
+                <div className="aspect-[16/10] overflow-hidden">
                   {isPdf ? (
-                    <div className="w-full h-full flex flex-col items-center justify-center p-3 text-center surface-highlight">
-                      <FileText className="w-7 h-7 mb-1" />
-                      <span className="font-mono-num text-[11px] font-bold">PDF Terlampir</span>
+                    <div className="w-full h-full flex flex-col items-center justify-center p-2.5 text-center surface-highlight">
+                      <FileText className="w-6 h-6 mb-1" />
+                      <span className="font-mono-num text-[10px] font-bold">PDF Terlampir</span>
                     </div>
                   ) : (
                     <SafeImage src={url} alt={`Lampiran ${idx + 1}`} className="w-full h-full object-cover" />

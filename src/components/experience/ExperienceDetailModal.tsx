@@ -53,20 +53,20 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
         disableEscapeClose={lightboxIndex !== null}
         title={detail?.role || ''}
         subtitle={detail ? `${detail.categoryLabel} · ${detail.institutionName}` : undefined}
-        maxWidthClass="max-w-4xl"
+        maxWidthClass="max-w-3xl"
       >
         {detail && (
-          <div className="space-y-7">
+          <div className="space-y-5">
             {/* Metadata Strip: Category, Institution, Period, Duration & Location */}
-            <div className="border-2 border-[#013A42] bg-[#F8F8E1] p-4 space-y-2.5">
+            <div className="border-2 border-[#013A42] bg-[#F8F8E1] p-3.5 space-y-2">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="brutal-badge-bordo">{detail.categoryLabel}</span>
-                <span className="font-display font-extrabold text-base sm:text-lg text-[#013A42]">
+                <span className="font-display font-extrabold text-sm sm:text-base text-[#013A42]">
                   {detail.institutionName}
                 </span>
               </div>
 
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs sm:text-sm font-mono-num text-[#013A42]/85">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-mono-num text-[#013A42]/85">
                 {detail.period && (
                   <span className="inline-flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5 shrink-0 text-[#6C151E]" aria-hidden="true" />
@@ -91,10 +91,10 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
             {/* Full Description */}
             {detail.description && (
               <div>
-                <h3 className="font-display font-extrabold text-base sm:text-lg mb-2 text-[#013A42]">
+                <h3 className="font-display font-extrabold text-sm sm:text-base mb-1.5 text-[#013A42]">
                   Deskripsi Lengkap
                 </h3>
-                <p className="text-sm sm:text-base leading-relaxed text-muted whitespace-pre-line">
+                <p className="text-sm leading-relaxed text-muted whitespace-pre-line">
                   {detail.description}
                 </p>
               </div>
@@ -103,10 +103,10 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
             {/* Responsibilities & Programs */}
             {detail.responsibilities.length > 0 && (
               <div>
-                <h3 className="font-display font-extrabold text-base sm:text-lg mb-2.5 text-[#013A42]">
+                <h3 className="font-display font-extrabold text-sm sm:text-base mb-2 text-[#013A42]">
                   {detail.responsibilitiesHeading}
                 </h3>
-                <ul className="list-disc pl-5 space-y-1.5 text-sm sm:text-base text-muted">
+                <ul className="list-disc pl-5 space-y-1 text-sm text-muted">
                   {detail.responsibilities.map((item, idx) => (
                     <li key={idx}>{item}</li>
                   ))}
@@ -116,12 +116,12 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
 
             {/* Natural-Ratio Responsive Documentation Photo Gallery */}
             {photos.length > 0 && (
-              <section aria-labelledby="exp-gallery-heading" className="pt-4 border-t-2 border-[#013A42]">
-                <div className="flex flex-wrap items-baseline justify-between gap-2 mb-4">
+              <section aria-labelledby="exp-gallery-heading" className="pt-3.5 border-t-2 border-[#013A42]">
+                <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
                   <div>
                     <h3
                       id="exp-gallery-heading"
-                      className="font-display font-extrabold text-base sm:text-lg text-[#013A42]"
+                      className="font-display font-extrabold text-sm sm:text-base text-[#013A42]"
                     >
                       Galeri Dokumentasi ({photos.length} Foto)
                     </h3>
@@ -131,8 +131,7 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
                   </div>
                 </div>
 
-                {/* Responsive Masonry Columns: preserves EVERY photo's natural aspect ratio (portrait/landscape/square/custom) */}
-                <div className={`${galleryColumnsClass} gap-4`}>
+                <div className={`${galleryColumnsClass} gap-3.5`}>
                   {photos.map((url, idx) => {
                     const isPrimary = Boolean(primaryPhotoUrl && url === primaryPhotoUrl);
                     return (
@@ -141,7 +140,7 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
                         type="button"
                         onClick={() => setLightboxIndex(idx)}
                         aria-label={`Perbesar dokumentasi ${detail.institutionName} foto ${idx + 1} dari ${photos.length}`}
-                        className={`w-full block break-inside-avoid mb-4 border-[3px] bg-[#F8F8E1] shadow-[4px_4px_0_0_#013A42] hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_#013A42] transition-all cursor-pointer overflow-hidden text-left group ${
+                        className={`w-full block break-inside-avoid mb-3.5 border-2 bg-[#F8F8E1] shadow-[3px_3px_0_0_#013A42] hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_#013A42] transition-all cursor-pointer overflow-hidden text-left group ${
                           isPrimary ? 'border-[#6C151E]' : 'border-[#013A42]'
                         }`}
                       >
@@ -153,7 +152,7 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
                             className="w-full h-auto block object-contain"
                           />
                         </div>
-                        <div className="px-3 py-2 border-t-2 border-[#013A42] bg-[#F8F8E1] flex items-center justify-between gap-2 text-[11px] font-mono-num font-bold text-[#013A42]">
+                        <div className="px-2.5 py-1.5 border-t-2 border-[#013A42] bg-[#F8F8E1] flex items-center justify-between gap-2 text-[11px] font-mono-num font-bold text-[#013A42]">
                           <span className="inline-flex items-center gap-1.5 truncate">
                             <span>Foto {String(idx + 1).padStart(2, '0')}</span>
                             {isPrimary && (

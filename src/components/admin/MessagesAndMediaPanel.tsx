@@ -41,32 +41,32 @@ export const MessagesPanel: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="pb-4 border-b-2 border-brutal">
+    <div className="space-y-5">
+      <div className="pb-3.5 border-b-2 border-brutal">
         <span className="brutal-badge">Kotak Masuk Pengunjung</span>
-        <h1 className="font-display text-3xl font-extrabold mt-2">Pesan Kontak ({contactMessages.length})</h1>
+        <h1 className="font-display text-2xl font-extrabold mt-1.5">Pesan Kontak ({contactMessages.length})</h1>
       </div>
 
       {contactMessages.length === 0 ? (
-        <div className="brutal-card surface-card p-8 text-sm text-muted">
+        <div className="brutal-card surface-card p-6 text-sm text-muted">
           Belum ada pesan masuk dari formulir kontak publik.
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3.5">
           {contactMessages.map((msg) => {
             const isNew = msg.status === 'new';
             return (
               <article
                 key={msg.id}
-                className={`brutal-card p-6 space-y-3 ${isNew ? 'surface-highlight' : 'surface-card'}`}
+                className={`brutal-card p-4 sm:p-5 space-y-2.5 ${isNew ? 'surface-highlight' : 'surface-card'}`}
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <span className={isNew ? 'brutal-badge-bordo' : 'brutal-badge-green'}>
                       Status: {msg.status === 'new' ? 'Baru' : msg.status === 'read' ? 'Dibaca' : 'Dibalas'}
                     </span>
-                    <h2 className="font-display text-xl font-extrabold mt-2">{msg.subject}</h2>
-                    <p className="text-sm font-bold text-muted">
+                    <h2 className="font-display text-base sm:text-lg font-extrabold mt-1.5">{msg.subject}</h2>
+                    <p className="text-xs sm:text-sm font-bold text-muted">
                       {msg.senderName} &middot;{' '}
                       <a href={`mailto:${msg.senderEmail}`} className="underline">
                         {msg.senderEmail}
@@ -74,12 +74,12 @@ export const MessagesPanel: React.FC = () => {
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5">
                     <select
                       value={msg.status}
                       aria-label={`Ubah status pesan ${msg.subject}`}
                       onChange={(e) => handleStatusChange(msg, e.target.value as ContactMessageItem['status'])}
-                      className="brutal-input px-3 py-1.5 text-xs font-bold"
+                      className="brutal-input px-2.5 py-1.5 text-xs font-bold"
                     >
                       <option value="new">Baru</option>
                       <option value="read">Dibaca</option>
@@ -89,13 +89,13 @@ export const MessagesPanel: React.FC = () => {
                       type="button"
                       onClick={() => setDeleteTarget(msg)}
                       aria-label={`Hapus pesan ${msg.subject}`}
-                      className="brutal-btn brutal-btn-bordo p-2 cursor-pointer"
+                      className="brutal-btn brutal-btn-bordo p-1.5 cursor-pointer"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
-                <p className="text-sm text-muted whitespace-pre-line leading-relaxed pt-2 border-t border-subtle">
+                <p className="text-[13px] sm:text-sm text-muted whitespace-pre-line leading-relaxed pt-2 border-t border-subtle">
                   {msg.message}
                 </p>
               </article>
@@ -171,16 +171,16 @@ export const MediaLibraryPanel: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="pb-4 border-b-2 border-brutal">
+    <div className="space-y-6">
+      <div className="pb-3.5 border-b-2 border-brutal">
         <span className="brutal-badge">Google Drive Storage</span>
-        <h1 className="font-display text-3xl font-extrabold mt-2">Pustaka Media &amp; Dokumen</h1>
+        <h1 className="font-display text-2xl font-extrabold mt-1.5">Pustaka Media &amp; Dokumen</h1>
       </div>
 
       <GoogleDriveConnectionPanel compact />
 
-      <div className="brutal-card surface-card p-6 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-subtle">
+      <div className="brutal-card surface-card p-4 sm:p-5 space-y-3.5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-subtle">
           <label htmlFor="media-folder-select" className="text-xs font-bold uppercase tracking-wider">
             Folder Tujuan Google Drive (Portfolio Website)
           </label>
@@ -188,7 +188,7 @@ export const MediaLibraryPanel: React.FC = () => {
             id="media-folder-select"
             value={selectedFolder}
             onChange={(e) => setSelectedFolder(e.target.value as DriveUploadCategory)}
-            className="brutal-input px-3 py-1.5 text-xs font-bold sm:w-64"
+            className="brutal-input px-3 py-1.5 text-xs font-bold sm:w-60"
           >
             {MEDIA_LIBRARY_FOLDER_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -209,28 +209,28 @@ export const MediaLibraryPanel: React.FC = () => {
       </div>
 
       {mediaAssets.length === 0 ? (
-        <div className="brutal-card surface-card p-8 text-sm text-muted">
+        <div className="brutal-card surface-card p-6 text-sm text-muted">
           Belum ada file yang tercatat pada Pustaka Media. Hubungkan akun Google Drive Anda di atas, lalu gunakan area unggah manual atau drag-and-drop untuk menyimpan foto profil, sertifikat, dokumentasi kegiatan, atau CV PDF.
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {mediaAssets.map((asset) => {
             const isPdf = asset.mimeType === 'application/pdf';
             const downloadHref = asset.downloadUrl || getGoogleDriveDownloadUrl(asset.fileUrl);
             return (
               <article key={asset.id} className="brutal-card surface-card overflow-hidden flex flex-col">
-                <div className="aspect-[4/3] border-b-2 border-brutal overflow-hidden bg-[#8ACCD5]/25 relative">
+                <div className="aspect-[16/10] border-b-2 border-brutal overflow-hidden bg-[#8ACCD5]/25 relative">
                   {isPdf ? (
-                    <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center surface-highlight">
-                      <FileText className="w-9 h-9 mb-2" />
-                      <span className="font-mono-num text-xs font-bold">PDF Document</span>
+                    <div className="w-full h-full flex flex-col items-center justify-center p-3 text-center surface-highlight">
+                      <FileText className="w-8 h-8 mb-1.5" />
+                      <span className="font-mono-num text-[11px] font-bold">PDF Document</span>
                     </div>
                   ) : (
                     <SafeImage src={asset.fileUrl} alt={asset.fileName} className="w-full h-full object-cover" />
                   )}
                   {asset.visibility && (
                     <span
-                      className={`absolute top-2 left-2 px-2 py-0.5 font-mono-num text-[10px] font-extrabold uppercase border border-[#013A42] ${
+                      className={`absolute top-2 left-2 px-1.5 py-0.5 font-mono-num text-[10px] font-extrabold uppercase border border-[#013A42] ${
                         asset.visibility === 'private'
                           ? 'bg-[#6C151E] text-[#F8F8E1]'
                           : 'bg-[#0F3D3A] text-[#F8F8E1]'
@@ -240,27 +240,27 @@ export const MediaLibraryPanel: React.FC = () => {
                     </span>
                   )}
                 </div>
-                <div className="p-4 flex-1 flex flex-col justify-between gap-3">
+                <div className="p-3 flex-1 flex flex-col justify-between gap-2.5">
                   <div>
-                    <p className="font-bold text-sm truncate" title={asset.fileName}>
+                    <p className="font-bold text-xs sm:text-[13px] truncate" title={asset.fileName}>
                       {asset.fileName}
                     </p>
-                    <p className="font-mono-num text-xs text-muted mt-0.5">
+                    <p className="font-mono-num text-[11px] text-muted mt-0.5">
                       Folder: {asset.driveFolderName || asset.folder} &middot; {formatBytes(asset.sizeBytes)}
                     </p>
                     {asset.driveFileId && (
-                      <p className="font-mono-num text-[11px] text-muted truncate mt-0.5" title={asset.driveFileId}>
+                      <p className="font-mono-num text-[10px] text-muted truncate mt-0.5" title={asset.driveFileId}>
                         Drive ID: {asset.driveFileId}
                       </p>
                     )}
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5">
                     <button
                       type="button"
                       onClick={() => handleCopy(asset.fileUrl)}
-                      className="flex-1 brutal-btn brutal-btn-secondary py-1.5 px-2.5 text-xs font-bold inline-flex items-center justify-center gap-1 cursor-pointer"
+                      className="flex-1 brutal-btn brutal-btn-secondary py-1.5 px-2 text-[11px] font-bold inline-flex items-center justify-center gap-1 cursor-pointer"
                     >
-                      <Copy className="w-3.5 h-3.5" />
+                      <Copy className="w-3 h-3" />
                       <span>Salin URL</span>
                     </button>
                     {downloadHref && (
@@ -272,7 +272,7 @@ export const MediaLibraryPanel: React.FC = () => {
                         aria-label={`Unduh ${asset.fileName}`}
                         className="brutal-btn brutal-btn-outline p-1.5"
                       >
-                        <Download className="w-4 h-4" />
+                        <Download className="w-3.5 h-3.5" />
                       </a>
                     )}
                     <a
@@ -282,7 +282,7 @@ export const MediaLibraryPanel: React.FC = () => {
                       aria-label={`Buka ${asset.fileName}`}
                       className="brutal-btn brutal-btn-outline p-1.5"
                     >
-                      <ExternalLink className="w-4 h-4" />
+                      <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                     <button
                       type="button"
@@ -290,7 +290,7 @@ export const MediaLibraryPanel: React.FC = () => {
                       aria-label={`Hapus ${asset.fileName}`}
                       className="brutal-btn brutal-btn-bordo p-1.5 cursor-pointer"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>

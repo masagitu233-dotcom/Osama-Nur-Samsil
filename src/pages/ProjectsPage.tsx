@@ -45,24 +45,24 @@ export const ProjectsPage: React.FC = () => {
   const showArticleSection = category === 'all' || category === 'article_writing';
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-9">
       <motion.header
-        initial={{ opacity: 0, y: 12 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="border-b-2 border-brutal pb-8"
+        transition={{ duration: 0.28 }}
+        className="border-b-2 border-brutal pb-5 sm:pb-6"
       >
         <span className="brutal-badge-bordo">06. Karya &amp; Inisiatif Digital</span>
-        <h1 className="font-display text-4xl sm:text-5xl font-extrabold mt-3 text-balance">
+        <h1 className="font-display text-2xl sm:text-3xl lg:text-[34px] font-extrabold mt-2.5 text-balance leading-tight">
           Projects &amp; Works
         </h1>
-        <p className="mt-4 text-base text-muted max-w-3xl">
+        <p className="mt-2.5 text-sm sm:text-[15px] text-muted max-w-2xl leading-relaxed">
           Katalog proyek website dan inisiatif digital, termasuk platform pembelajaran keislaman Dars with Osama beserta arsip artikel dan tulisan yang terbit secara otomatis.
         </p>
       </motion.header>
 
       {/* Filters (Strictly 3 Categories) & Search */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5">
         <div role="tablist" aria-label="Filter kategori proyek" className="flex flex-wrap gap-2">
           {ACTIVE_PROJECT_TABS.map((tab) => {
             const active = category === tab.value;
@@ -73,9 +73,9 @@ export const ProjectsPage: React.FC = () => {
                 role="tab"
                 aria-selected={active}
                 onClick={() => setCategory(tab.value)}
-                className={`px-4 py-2 text-xs sm:text-sm font-bold border-2 border-brutal cursor-pointer whitespace-nowrap transition-colors ${
+                className={`px-3.5 py-1.5 text-xs font-bold border-2 border-brutal cursor-pointer whitespace-nowrap transition-colors ${
                   active
-                    ? 'card-blue shadow-[3px_3px_0_0_#013A42]'
+                    ? 'card-blue shadow-[2.5px_2.5px_0_0_#013A42]'
                     : 'card-beige hover:bg-[#8ACCD5] hover:text-[#013A42]'
                 }`}
               >
@@ -85,9 +85,9 @@ export const ProjectsPage: React.FC = () => {
           })}
         </div>
 
-        <div className="relative sm:w-72">
+        <div className="relative sm:w-64">
           <Search
-            className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-muted"
+            className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted"
             aria-hidden="true"
           />
           <input
@@ -96,18 +96,18 @@ export const ProjectsPage: React.FC = () => {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Cari proyek atau artikel..."
             aria-label="Cari proyek atau artikel"
-            className="w-full brutal-input pl-10 pr-4 py-2 text-sm"
+            className="w-full brutal-input pl-9 pr-3 py-1.5 text-sm"
           />
         </div>
       </div>
 
-      {/* SECTION A: WEBSITE & DIGITAL (Platform Projects Only — Includes Dars with Osama Card) */}
+      {/* SECTION A: WEBSITE & DIGITAL */}
       {showWebsiteSection && (
-        <section aria-labelledby="website-projects-heading" className="space-y-6">
-          <div className="flex flex-wrap items-end justify-between gap-3 pb-3 border-b-2 border-brutal">
+        <section aria-labelledby="website-projects-heading" className="space-y-5">
+          <div className="flex flex-wrap items-end justify-between gap-3 pb-2.5 border-b-2 border-brutal">
             <div>
               <span className="brutal-badge-green">Website &amp; Digital</span>
-              <h2 id="website-projects-heading" className="font-display text-2xl sm:text-3xl font-extrabold mt-2">
+              <h2 id="website-projects-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1.5">
                 Proyek Website &amp; Platform Digital
               </h2>
             </div>
@@ -117,20 +117,20 @@ export const ProjectsPage: React.FC = () => {
           </div>
 
           {filteredWebsiteProjects.length === 0 ? (
-            <div className="brutal-card card-beige p-10 text-center">
-              <p className="font-display text-lg font-bold">
+            <div className="brutal-card card-beige p-8 text-center">
+              <p className="font-display text-base font-bold">
                 Tidak ada proyek Website &amp; Digital yang cocok dengan pencarian.
               </p>
               <button
                 type="button"
                 onClick={() => setQuery('')}
-                className="mt-4 brutal-btn brutal-btn-secondary px-4 py-2 text-xs font-bold cursor-pointer"
+                className="mt-3 brutal-btn brutal-btn-secondary px-4 py-2 text-xs font-bold cursor-pointer"
               >
                 Reset Pencarian
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
               {filteredWebsiteProjects.map((proj, idx) => {
                 const isDars = isDarsPlatformProject(proj);
                 const useCustomAsset = hasCustomUploadedDarsAsset(proj);
@@ -150,16 +150,16 @@ export const ProjectsPage: React.FC = () => {
                   >
                     {isDars && !useCustomAsset ? (
                       <div
-                        className={`aspect-[16/9] border-b-[3px] ${imgBorder} bg-[#013A42] text-[#F8F8E1] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-center gap-5 shrink-0`}
+                        className={`min-h-[164px] border-b-2 ${imgBorder} bg-[#013A42] text-[#F8F8E1] p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-center gap-4 shrink-0`}
                       >
-                        <div className="p-2 bg-[#F8F8E1] border-[3px] border-[#8ACCD5] shadow-[5px_5px_0_0_#6C151E] shrink-0">
-                          <DarsLogo className="w-20 h-20 sm:w-24 sm:h-24" />
+                        <div className="p-2 bg-[#F8F8E1] border-2 border-[#8ACCD5] shadow-[4px_4px_0_0_#6C151E] shrink-0">
+                          <DarsLogo className="w-16 h-16 sm:w-20 sm:h-20" />
                         </div>
-                        <div className="text-center sm:text-left space-y-1.5 min-w-0">
-                          <p className="font-mono-num text-[11px] font-bold uppercase tracking-widest text-[#8ACCD5]">
+                        <div className="text-center sm:text-left space-y-1 min-w-0">
+                          <p className="font-mono-num text-[11px] font-bold uppercase tracking-wider text-[#8ACCD5]">
                             Platform Website Resmi
                           </p>
-                          <p className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-[#F8F8E1]">
+                          <p className="font-display text-xl sm:text-2xl font-extrabold tracking-tight text-[#F8F8E1]">
                             {proj.title}
                           </p>
                           <p className="text-xs font-mono-num text-[#F8F8E1]/80 truncate">
@@ -168,7 +168,7 @@ export const ProjectsPage: React.FC = () => {
                         </div>
                       </div>
                     ) : (
-                      <div className={`aspect-[16/9] border-b-[3px] ${imgBorder} overflow-hidden bg-[#F8F8E1] shrink-0`}>
+                      <div className={`aspect-[16/9] border-b-2 ${imgBorder} overflow-hidden bg-[#F8F8E1] shrink-0`}>
                         <SafeImage
                           src={proj.imageUrls[0]}
                           alt={proj.title}
@@ -178,7 +178,7 @@ export const ProjectsPage: React.FC = () => {
                       </div>
                     )}
 
-                    <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between">
+                    <div className="p-5 flex-1 flex flex-col justify-between">
                       <div>
                         <div className="flex items-center justify-between gap-2 text-xs font-mono-num">
                           <span className={tone.badgeClass}>
@@ -186,19 +186,19 @@ export const ProjectsPage: React.FC = () => {
                           </span>
                           <span className="font-bold">{proj.period || 'Aktif'}</span>
                         </div>
-                        <h3 className="font-display text-2xl font-extrabold mt-3">{proj.title}</h3>
-                        <p className="text-sm sm:text-base text-muted mt-3 leading-relaxed">
+                        <h3 className="font-display text-xl font-extrabold mt-2.5">{proj.title}</h3>
+                        <p className="text-sm text-muted mt-2 leading-relaxed">
                           {proj.description}
                         </p>
                       </div>
 
-                      <div className="mt-6 pt-4 border-t border-subtle flex flex-wrap items-center gap-3">
+                      <div className="mt-5 pt-3.5 border-t border-subtle flex flex-wrap items-center gap-2.5">
                         {proj.liveUrl && (
                           <a
                             href={proj.liveUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`${tone.buttonClass} px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap`}
+                            className={`${tone.buttonClass} px-3.5 py-2 text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap`}
                           >
                             <span>{isDars ? 'Kunjungi Dars with Osama' : 'Buka Tautan'}</span>
                             <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
@@ -207,7 +207,7 @@ export const ProjectsPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setSelectedProject(proj)}
-                          className={`${tone.secondaryButtonClass} px-4 py-2 text-xs font-bold cursor-pointer whitespace-nowrap`}
+                          className={`${tone.secondaryButtonClass} px-3.5 py-2 text-xs font-bold cursor-pointer whitespace-nowrap`}
                         >
                           Dokumentasi &amp; Detail
                         </button>
@@ -221,13 +221,13 @@ export const ProjectsPage: React.FC = () => {
         </section>
       )}
 
-      {/* SECTION B: ARTIKEL & TULISAN (Auto-Synced Live Published Articles from Dars with Osama) */}
+      {/* SECTION B: ARTIKEL & TULISAN */}
       {showArticleSection && (
-        <section aria-labelledby="articles-works-heading" className="space-y-6">
-          <div className="flex flex-wrap items-end justify-between gap-3 pb-3 border-b-2 border-brutal">
+        <section aria-labelledby="articles-works-heading" className="space-y-5">
+          <div className="flex flex-wrap items-end justify-between gap-3 pb-2.5 border-b-2 border-brutal">
             <div>
               <span className="brutal-badge-bordo">Artikel &amp; Tulisan</span>
-              <h2 id="articles-works-heading" className="font-display text-2xl sm:text-3xl font-extrabold mt-2">
+              <h2 id="articles-works-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1.5">
                 Artikel &amp; Karya Tulis (Dars with Osama)
               </h2>
             </div>
@@ -242,11 +242,11 @@ export const ProjectsPage: React.FC = () => {
 
           {/* Preserve any manually stored article_writing items in portfolio Firestore without deleting them */}
           {filteredManualArticles.length > 0 && (
-            <div className="pt-4 space-y-4">
-              <h3 className="font-display text-xl font-extrabold">
+            <div className="pt-3 space-y-3.5">
+              <h3 className="font-display text-lg font-extrabold">
                 Tulisan &amp; Arsip Tambahan
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
                 {filteredManualArticles.map((proj, idx) => {
                   const tone = getCardTone(idx, ['beige', 'blue', 'green']);
                   return (
@@ -255,7 +255,7 @@ export const ProjectsPage: React.FC = () => {
                       className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                     >
                       {proj.imageUrls[0] && (
-                        <div className="aspect-[16/9] border-b-[3px] border-[#013A42] overflow-hidden bg-[#F8F8E1] shrink-0">
+                        <div className="aspect-[16/9] border-b-2 border-[#013A42] overflow-hidden bg-[#F8F8E1] shrink-0">
                           <SafeImage
                             src={proj.imageUrls[0]}
                             alt={proj.title}
@@ -264,13 +264,13 @@ export const ProjectsPage: React.FC = () => {
                           />
                         </div>
                       )}
-                      <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between gap-4">
+                      <div className="p-4 flex-1 flex flex-col justify-between gap-3.5">
                         <div>
                           <span className={tone.badgeClass}>Artikel &amp; Tulisan</span>
-                          <h4 className="font-display text-lg font-extrabold mt-2.5 leading-snug">
+                          <h4 className="font-display text-base font-extrabold mt-2 leading-snug">
                             {proj.title}
                           </h4>
-                          <p className="text-sm text-muted mt-2 line-clamp-3">{proj.description}</p>
+                          <p className="text-xs sm:text-sm text-muted mt-1.5 line-clamp-3">{proj.description}</p>
                         </div>
                         <div className="mt-auto pt-3 border-t border-subtle flex flex-wrap gap-2">
                           {proj.liveUrl && (
@@ -278,7 +278,7 @@ export const ProjectsPage: React.FC = () => {
                               href={proj.liveUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className={`${tone.buttonClass} px-3.5 py-2 text-xs font-bold inline-flex items-center gap-1.5`}
+                              className={`${tone.buttonClass} px-3 py-1.5 text-xs font-bold inline-flex items-center gap-1.5`}
                             >
                               <span>Baca Tulisan</span>
                               <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
@@ -287,7 +287,7 @@ export const ProjectsPage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => setSelectedProject(proj)}
-                            className={`${tone.secondaryButtonClass} px-3.5 py-2 text-xs font-bold cursor-pointer`}
+                            className={`${tone.secondaryButtonClass} px-3 py-1.5 text-xs font-bold cursor-pointer`}
                           >
                             Detail
                           </button>
@@ -312,32 +312,32 @@ export const ProjectsPage: React.FC = () => {
             ? `${ACTIVE_PROJECT_CATEGORY_LABELS[normalizeProjectCategory(selectedProject.category)]} · ${selectedProject.period || 'Aktif'}`
             : undefined
         }
-        maxWidthClass="max-w-4xl"
+        maxWidthClass="max-w-3xl"
       >
         {selectedProject && (
-          <div className="space-y-6">
+          <div className="space-y-5">
             {isDarsPlatformProject(selectedProject) && !hasCustomUploadedDarsAsset(selectedProject) ? (
-              <div className="border-[3px] border-[#013A42] bg-[#013A42] text-[#F8F8E1] p-6 flex flex-col sm:flex-row items-center gap-5 shadow-[4px_4px_0_0_#6C151E]">
+              <div className="border-2 border-[#013A42] bg-[#013A42] text-[#F8F8E1] p-5 flex flex-col sm:flex-row items-center gap-4 shadow-[3px_3px_0_0_#6C151E]">
                 <div className="p-2 bg-[#F8F8E1] border-2 border-[#8ACCD5] shrink-0">
-                  <DarsLogo className="w-20 h-20" />
+                  <DarsLogo className="w-16 h-16" />
                 </div>
                 <div>
-                  <p className="font-mono-num text-xs font-bold uppercase text-[#8ACCD5]">
+                  <p className="font-mono-num text-[11px] font-bold uppercase text-[#8ACCD5]">
                     Platform Pembelajaran &amp; Publikasi Keislaman
                   </p>
-                  <p className="font-display text-2xl font-extrabold mt-1">{selectedProject.title}</p>
-                  <p className="text-xs font-mono-num text-[#F8F8E1]/80 mt-1">
+                  <p className="font-display text-xl font-extrabold mt-0.5">{selectedProject.title}</p>
+                  <p className="text-xs font-mono-num text-[#F8F8E1]/80 mt-0.5">
                     {selectedProject.liveUrl}
                   </p>
                 </div>
               </div>
             ) : (
               selectedProject.imageUrls.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   {selectedProject.imageUrls.map((url, idx) => (
                     <div
                       key={idx}
-                      className={`border-[3px] aspect-[4/3] overflow-hidden shadow-[4px_4px_0_0_#013A42] ${
+                      className={`border-2 aspect-[4/3] overflow-hidden shadow-[3px_3px_0_0_#013A42] ${
                         idx % 2 === 0 ? 'border-[#6C151E]' : 'border-[#0F3D3A]'
                       }`}
                     >
@@ -354,31 +354,31 @@ export const ProjectsPage: React.FC = () => {
             )}
 
             <div>
-              <h3 className="font-display font-bold text-base mb-1.5">Deskripsi Proyek</h3>
-              <p className="text-sm sm:text-base text-muted leading-relaxed whitespace-pre-line">
+              <h3 className="font-display font-bold text-sm sm:text-base mb-1">Deskripsi Proyek</h3>
+              <p className="text-sm text-muted leading-relaxed whitespace-pre-line">
                 {selectedProject.description}
               </p>
             </div>
 
             {selectedProject.documentation && (
               <div>
-                <h3 className="font-display font-bold text-base mb-1.5">Dokumentasi &amp; Catatan Pengembangan</h3>
-                <p className="text-sm sm:text-base text-muted leading-relaxed whitespace-pre-line">
+                <h3 className="font-display font-bold text-sm sm:text-base mb-1">Dokumentasi &amp; Catatan Pengembangan</h3>
+                <p className="text-sm text-muted leading-relaxed whitespace-pre-line">
                   {selectedProject.documentation}
                 </p>
               </div>
             )}
 
-            <div className="flex flex-wrap gap-3 pt-2">
+            <div className="flex flex-wrap gap-2.5 pt-1">
               {selectedProject.liveUrl && (
                 <a
                   href={selectedProject.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="brutal-btn brutal-btn-primary px-4 py-2.5 text-xs font-bold inline-flex items-center gap-2"
+                  className="brutal-btn brutal-btn-primary px-3.5 py-2 text-xs font-bold inline-flex items-center gap-1.5"
                 >
                   <span>Kunjungi Tautan Langsung</span>
-                  <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                  <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
                 </a>
               )}
               {selectedProject.repoUrl && (
@@ -386,10 +386,10 @@ export const ProjectsPage: React.FC = () => {
                   href={selectedProject.repoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="brutal-btn brutal-btn-secondary px-4 py-2.5 text-xs font-bold inline-flex items-center gap-2"
+                  className="brutal-btn brutal-btn-secondary px-3.5 py-2 text-xs font-bold inline-flex items-center gap-1.5"
                 >
                   <span>Lihat Repositori</span>
-                  <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                  <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
                 </a>
               )}
             </div>

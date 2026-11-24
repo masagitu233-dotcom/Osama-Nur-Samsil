@@ -18,6 +18,7 @@ import {
   isDarsPlatformProject,
   prepareWebsiteProjects,
 } from '../utils/projectsCatalog';
+import { resolveExperiencePrimaryPhoto } from '../utils/experienceGallery';
 
 interface HomePageProps {
   onNavigate: (route: PublicRoute) => void;
@@ -55,180 +56,149 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
   };
 
   return (
-    <div className="space-y-20 pb-8">
-      {/* HERO SECTION:
-          - Desktop & Tablet (md+): Photo on LEFT (5 cols), Identity & Actions on RIGHT (7 cols)
-          - Mobile (< md): Horizontal row at top of hero with circular 1:1 photo on FAR LEFT & identity on RIGHT */}
-      <section aria-label="Perkenalan utama" className="pt-6 sm:pt-10 lg:pt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-10 items-stretch">
-            {/* LEFT COLUMN (Desktop & Tablet): Editorial Portrait Frame */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="hidden md:flex md:col-span-5 relative"
-            >
-              <div className="w-full brutal-card card-bordo frame-midnight overflow-hidden flex flex-col">
-                <div className="relative flex-1 min-h-[380px] lg:min-h-0 bg-[#F8F8E1]">
-                  <SafeImage
-                    src={profile.photoUrl}
-                    alt={`Foto profil ${profile.fullName}`}
-                    fallbackLabel={profile.fullName}
-                    priority
-                    className="w-full h-full object-cover object-top"
-                  />
-                  {/* Controlled Geometric Neo-Brutalist Corner Blocks */}
-                  <div
-                    aria-hidden="true"
-                    className="absolute top-0 right-0 w-10 h-10 bg-[#8ACCD5] border-l-2 border-b-2 border-[#013A42]"
-                  />
-                  <div
-                    aria-hidden="true"
-                    className="absolute bottom-0 left-0 w-7 h-7 bg-[#0F3D3A] border-t-2 border-r-2 border-[#F8F8E1]"
-                  />
-                </div>
-                <div className="px-5 py-3.5 border-t-[2.5px] border-[#013A42] bg-[#6C151E] text-[#F8F8E1] flex items-center justify-between gap-3 text-xs font-mono-num">
-                  <span className="font-bold truncate">{profile.domicile}</span>
-                  <span className="text-[#8ACCD5] font-bold whitespace-nowrap shrink-0">
-                    Open for Remote &amp; Full-Time
+    <div className="space-y-12 sm:space-y-14 pb-6">
+      {/* HERO SECTION: Balanced split with circular 1:1 profile photo on the RIGHT (Desktop & Mobile) */}
+      <section aria-label="Perkenalan utama" className="pt-5 sm:pt-7">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="card-beige brutal-card frame-shadow-green p-4 sm:p-6 lg:p-8"
+          >
+            {/* Top Split: Identity & Bio on LEFT, Circular Profile Photo on RIGHT */}
+            <div className="flex flex-row items-center justify-between gap-4 sm:gap-6 lg:gap-10">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono-num font-bold mb-2">
+                  <span className="brutal-badge">{profile.domicile}</span>
+                  <span className="hidden sm:inline text-muted">
+                    {education[0]
+                      ? `${education[0].fieldOfStudy} (${education[0].graduationYear})`
+                      : 'Portofolio Profesional'}
                   </span>
                 </div>
-              </div>
-            </motion.div>
 
-            {/* RIGHT COLUMN (Desktop & Tablet) / MAIN HERO CARD (Mobile) */}
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: 0.06, ease: [0.16, 1, 0.3, 1] }}
-              className="md:col-span-7 flex flex-col justify-between card-beige brutal-card frame-shadow-green p-4 min-[360px]:p-5 sm:p-8 lg:p-10"
-            >
-              <div>
-                {/* Mobile Horizontal Row: Circular Profile Photo (Far Left) + Name & Headline (Right)
-                    Desktop/Tablet: Standard stacked identity inside right column */}
-                <div className="flex flex-row items-center gap-3.5 min-[360px]:gap-4 sm:gap-5 md:block">
-                  {/* Mobile-Only Circular 1:1 Profile Frame (88px–112px responsive) */}
-                  <div className="md:hidden shrink-0 w-[88px] h-[88px] min-[375px]:w-[96px] min-[375px]:h-[96px] min-[420px]:w-[110px] min-[420px]:h-[110px] rounded-full p-1 bg-[#6C151E] border-[2.5px] border-[#013A42] shadow-[4px_4px_0_0_#013A42]">
-                    <div className="w-full h-full rounded-full overflow-hidden border-2 border-[#F8F8E1] bg-[#F8F8E1]">
-                      <SafeImage
-                        src={profile.photoUrl}
-                        alt={`Foto profil ${profile.fullName}`}
-                        fallbackLabel={profile.fullName}
-                        priority
-                        className="w-full h-full object-cover object-[50%_18%]"
-                      />
-                    </div>
-                  </div>
+                <h1 className="font-display text-[20px] min-[375px]:text-[23px] sm:text-3xl lg:text-[36px] font-extrabold tracking-tight leading-[1.08] text-balance break-words">
+                  {profile.fullName.toUpperCase()}
+                </h1>
 
-                  {/* Identity Block (Right of photo on mobile, full width of right column on desktop) */}
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2 text-[11px] sm:text-xs font-mono-num font-bold mb-1.5 md:mb-5">
-                      <span className="brutal-badge">{profile.domicile}</span>
-                      <span className="hidden sm:inline text-muted">
-                        {education[0]
-                          ? `${education[0].fieldOfStudy} (${education[0].graduationYear})`
-                          : 'Portofolio Profesional'}
-                      </span>
-                    </div>
-
-                    <h1 className="font-display text-[20px] min-[360px]:text-[24px] min-[420px]:text-[27px] md:text-4xl lg:text-5xl xl:text-[54px] font-extrabold tracking-tight leading-[1.06] text-balance break-words">
-                      {profile.fullName.toUpperCase()}
-                    </h1>
-
-                    <p className="mt-1.5 md:mt-5 font-display text-xs min-[360px]:text-[13px] min-[420px]:text-sm md:text-xl lg:text-2xl font-bold leading-snug border-l-[3px] md:border-l-4 border-[#6C151E] pl-2.5 md:pl-4 text-balance">
-                      {profile.headline}
-                    </p>
-                  </div>
-                </div>
-
-                <p className="mt-5 text-sm sm:text-base leading-relaxed text-muted max-w-2xl">
-                  {profile.shortBio}
+                <p className="mt-2 sm:mt-3 font-display text-xs min-[375px]:text-[13px] sm:text-base lg:text-lg font-bold leading-snug border-l-[3px] border-[#6C151E] pl-2.5 sm:pl-3.5 text-balance">
+                  {profile.headline}
                 </p>
 
-                {/* Crisp Editorial Key Facts Strip */}
-                <dl className="mt-6 pt-5 border-t border-subtle grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-                  <div>
-                    <dt className="font-mono-num uppercase text-[#6C151E] font-bold">Pendidikan</dt>
-                    <dd className="font-bold text-sm mt-0.5">
-                      {education[0] ? `${education[0].fieldOfStudy}` : 'Hukum Keluarga'}
-                    </dd>
-                    <dd className="text-muted">
-                      {education[0] ? `${education[0].institution} (${education[0].graduationYear})` : 'Unismuh Makassar'}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="font-mono-num uppercase text-[#0F3D3A] font-bold">Inisiatif Digital</dt>
-                    <dd className="font-bold text-sm mt-0.5">
-                      {featuredProject ? featuredProject.title : 'Dars with Osama'}
-                    </dd>
-                    <dd className="text-muted">Pendidikan Islam &amp; Artikel Ilmiah</dd>
-                  </div>
-                  <div>
-                    <dt className="font-mono-num uppercase text-[#013A42] font-bold">Bahasa &amp; Peran</dt>
-                    <dd className="font-bold text-sm mt-0.5">
-                      {languageSkills.length > 0
-                        ? languageSkills.map((l) => `${l.name.replace('Bahasa ', '')} (${l.proficiencyLabel})`).join(' · ')
-                        : 'Arab (Menengah) · Inggris (Dasar)'}
-                    </dd>
-                    <dd className="text-muted">Remote, Freelance &amp; Full-Time</dd>
-                  </div>
-                </dl>
+                <p className="hidden md:block mt-3 text-sm leading-relaxed text-muted max-w-2xl">
+                  {profile.shortBio}
+                </p>
               </div>
 
-              {/* Action Controls */}
-              <div className="mt-7 pt-5 border-t-2 border-brutal flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => onNavigate('/projects')}
-                  className="brutal-btn brutal-btn-primary font-display font-bold text-xs sm:text-sm px-4 sm:px-5 py-2.5 sm:py-3 inline-flex items-center gap-2 cursor-pointer whitespace-nowrap"
+              {/* Circular 1:1 Profile Photo on RIGHT */}
+              <div className="shrink-0 flex flex-col items-center gap-2.5">
+                <div
+                  data-testid="hero-profile-photo-circle"
+                  className="w-[84px] h-[84px] min-[390px]:w-[96px] min-[390px]:h-[96px] sm:w-28 sm:h-28 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full p-1 sm:p-1.5 bg-[#6C151E] border-2 border-[#013A42] shadow-[4px_4px_0_0_#013A42]"
                 >
-                  <span>Explore Portfolio</span>
-                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleDownloadCv}
-                  className="brutal-btn brutal-btn-secondary font-display font-bold text-xs sm:text-sm px-4 sm:px-5 py-2.5 sm:py-3 inline-flex items-center gap-2 cursor-pointer whitespace-nowrap"
-                >
-                  <Download className="w-4 h-4" aria-hidden="true" />
-                  <span>Download CV</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigate('/contact')}
-                  className="brutal-btn brutal-btn-outline font-display font-bold text-xs sm:text-sm px-4 sm:px-5 py-2.5 sm:py-3 inline-flex items-center gap-2 cursor-pointer whitespace-nowrap"
-                >
-                  <span>Contact Me</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={onShareProfile}
-                  aria-label="Bagikan tautan profil"
-                  className="px-2.5 py-2.5 text-xs font-mono-num font-bold text-muted hover:text-[#6C151E] inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap transition-colors"
-                >
-                  <Share2 className="w-4 h-4" aria-hidden="true" />
-                  <span>Bagikan</span>
-                </button>
+                  <div className="w-full h-full rounded-full overflow-hidden border-2 border-[#F8F8E1] bg-[#F8F8E1]">
+                    <SafeImage
+                      src={profile.photoUrl}
+                      alt={`Foto profil ${profile.fullName}`}
+                      fallbackLabel={profile.fullName}
+                      priority
+                      className="w-full h-full object-cover object-[50%_18%]"
+                    />
+                  </div>
+                </div>
+                <span className="hidden md:inline-block font-mono-num text-[11px] font-bold px-2.5 py-0.5 bg-[#013A42] text-[#8ACCD5] border border-[#013A42] whitespace-nowrap">
+                  Open for Remote &amp; Full-Time
+                </span>
               </div>
-            </motion.div>
-          </div>
+            </div>
 
-          {/* Full-Width 4-Column Portfolio Index Strip (4 Distinct Planned Card Colors: Beige, Blue, Green, Bordo) */}
-          <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Mobile Short Bio */}
+            <p className="md:hidden mt-3.5 text-xs min-[390px]:text-sm leading-relaxed text-muted">
+              {profile.shortBio}
+            </p>
+
+            {/* Crisp Editorial Key Facts Strip */}
+            <dl className="mt-5 pt-4 border-t border-subtle grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-xs">
+              <div>
+                <dt className="font-mono-num text-[11px] uppercase text-[#6C151E] font-bold">Pendidikan</dt>
+                <dd className="font-bold text-[13px] mt-0.5">
+                  {education[0] ? `${education[0].fieldOfStudy}` : 'Hukum Keluarga'}
+                </dd>
+                <dd className="text-muted">
+                  {education[0] ? `${education[0].institution} (${education[0].graduationYear})` : 'Unismuh Makassar'}
+                </dd>
+              </div>
+              <div>
+                <dt className="font-mono-num text-[11px] uppercase text-[#0F3D3A] font-bold">Inisiatif Digital</dt>
+                <dd className="font-bold text-[13px] mt-0.5">
+                  {featuredProject ? featuredProject.title : 'Dars with Osama'}
+                </dd>
+                <dd className="text-muted">Pendidikan Islam &amp; Artikel Ilmiah</dd>
+              </div>
+              <div>
+                <dt className="font-mono-num text-[11px] uppercase text-[#013A42] font-bold">Bahasa &amp; Peran</dt>
+                <dd className="font-bold text-[13px] mt-0.5">
+                  {languageSkills.length > 0
+                    ? languageSkills.map((l) => `${l.name.replace('Bahasa ', '')} (${l.proficiencyLabel})`).join(' · ')
+                    : 'Arab (Menengah) · Inggris (Dasar)'}
+                </dd>
+                <dd className="text-muted">Remote, Freelance &amp; Full-Time</dd>
+              </div>
+            </dl>
+
+            {/* Action Controls */}
+            <div className="mt-5 pt-4 border-t-2 border-brutal flex flex-wrap items-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => onNavigate('/projects')}
+                className="brutal-btn brutal-btn-primary font-display font-bold text-xs sm:text-[13px] px-3.5 sm:px-4 py-2 inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+              >
+                <span>Explore Portfolio</span>
+                <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDownloadCv}
+                className="brutal-btn brutal-btn-secondary font-display font-bold text-xs sm:text-[13px] px-3.5 sm:px-4 py-2 inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+              >
+                <Download className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>Download CV</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => onNavigate('/contact')}
+                className="brutal-btn brutal-btn-outline font-display font-bold text-xs sm:text-[13px] px-3.5 sm:px-4 py-2 inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+              >
+                <span>Contact Me</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={onShareProfile}
+                aria-label="Bagikan tautan profil"
+                className="px-2 py-2 text-xs font-mono-num font-bold text-muted hover:text-[#6C151E] inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap transition-colors"
+              >
+                <Share2 className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>Bagikan</span>
+              </button>
+            </div>
+          </motion.div>
+
+          {/* Full-Width 4-Column Portfolio Index Strip */}
+          <div className="mt-5 grid grid-cols-2 lg:grid-cols-4 gap-3.5">
             <button
               type="button"
               onClick={() => onNavigate('/experience')}
-              className="text-left brutal-card brutal-card-interactive card-beige frame-midnight p-5 cursor-pointer"
+              className="text-left brutal-card brutal-card-interactive card-beige frame-midnight p-4 cursor-pointer"
             >
-              <p className="font-mono-num text-2xl sm:text-3xl font-extrabold">
+              <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none">
                 {String(experiences.length + organizations.length).padStart(2, '0')}
               </p>
-              <p className="font-display font-bold text-sm mt-1">Pengalaman &amp; Organisasi</p>
-              <p className="text-xs text-muted mt-0.5">
+              <p className="font-display font-bold text-xs sm:text-sm mt-1.5">Pengalaman &amp; Organisasi</p>
+              <p className="text-[11px] sm:text-xs text-muted mt-0.5">
                 Pembinaan, pengajaran &amp; kepanitiaan
               </p>
             </button>
@@ -236,13 +206,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             <button
               type="button"
               onClick={() => onNavigate('/projects')}
-              className="text-left brutal-card brutal-card-interactive card-blue frame-shadow-bordo p-5 cursor-pointer"
+              className="text-left brutal-card brutal-card-interactive card-blue frame-shadow-bordo p-4 cursor-pointer"
             >
-              <p className="font-mono-num text-2xl sm:text-3xl font-extrabold">
+              <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none">
                 {String(Math.max(projects.length, websiteProjects.length)).padStart(2, '0')}
               </p>
-              <p className="font-display font-bold text-sm mt-1">Proyek &amp; Karya Digital</p>
-              <p className="text-xs text-muted mt-0.5">
+              <p className="font-display font-bold text-xs sm:text-sm mt-1.5">Proyek &amp; Karya Digital</p>
+              <p className="text-[11px] sm:text-xs text-muted mt-0.5">
                 Termasuk Dars with Osama
               </p>
             </button>
@@ -250,13 +220,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             <button
               type="button"
               onClick={() => onNavigate('/skills')}
-              className="text-left brutal-card brutal-card-interactive card-green frame-midnight p-5 cursor-pointer"
+              className="text-left brutal-card brutal-card-interactive card-green frame-midnight p-4 cursor-pointer"
             >
-              <p className="font-mono-num text-2xl sm:text-3xl font-extrabold text-[#8ACCD5]">
+              <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none text-[#8ACCD5]">
                 {String(skills.length).padStart(2, '0')}
               </p>
-              <p className="font-display font-bold text-sm mt-1">Keahlian &amp; Perangkat</p>
-              <p className="text-xs text-muted mt-0.5">
+              <p className="font-display font-bold text-xs sm:text-sm mt-1.5">Keahlian &amp; Perangkat</p>
+              <p className="text-[11px] sm:text-xs text-muted mt-0.5">
                 Bahasa, AI tools, web &amp; akademik
               </p>
             </button>
@@ -264,13 +234,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             <button
               type="button"
               onClick={() => onNavigate('/certificates')}
-              className="text-left brutal-card brutal-card-interactive card-bordo frame-midnight p-5 cursor-pointer"
+              className="text-left brutal-card brutal-card-interactive card-bordo frame-midnight p-4 cursor-pointer"
             >
-              <p className="font-mono-num text-2xl sm:text-3xl font-extrabold text-[#8ACCD5]">
+              <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none text-[#8ACCD5]">
                 {String(certificates.length).padStart(2, '0')}
               </p>
-              <p className="font-display font-bold text-sm mt-1">Sertifikat &amp; Pelatihan</p>
-              <p className="text-xs text-muted mt-0.5">
+              <p className="font-display font-bold text-xs sm:text-sm mt-1.5">Sertifikat &amp; Pelatihan</p>
+              <p className="text-[11px] sm:text-xs text-muted mt-0.5">
                 Galeri dalam &amp; luar negeri
               </p>
             </button>
@@ -278,76 +248,73 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
         </div>
       </section>
 
-      {/* SECTION 01: RINGKASAN BIDANG KEAHLIAN (Beige + Green + Midnight Card Trio) */}
-      <section aria-labelledby="home-skills-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 pb-4 border-b-2 border-brutal">
+      {/* SECTION 01: RINGKASAN BIDANG KEAHLIAN */}
+      <section aria-labelledby="home-skills-heading" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5 pb-3 border-b-2 border-brutal">
           <div>
             <span className="brutal-badge-bordo">01. Bidang Keahlian</span>
-            <h2 id="home-skills-heading" className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-balance">
+            <h2 id="home-skills-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1.5 text-balance">
               Kompetensi Lintas Keilmuan &amp; Digital
             </h2>
           </div>
           <button
             type="button"
             onClick={() => onNavigate('/skills')}
-            className="text-sm font-bold inline-flex items-center gap-1.5 hover:bg-[#8ACCD5] hover:text-[#013A42] px-2.5 py-1.5 border-2 border-transparent hover:border-[#013A42] cursor-pointer whitespace-nowrap shrink-0 transition-colors"
+            className="text-xs sm:text-sm font-bold inline-flex items-center gap-1.5 hover:bg-[#8ACCD5] hover:text-[#013A42] px-2.5 py-1 border-2 border-transparent hover:border-[#013A42] cursor-pointer whitespace-nowrap shrink-0 transition-colors"
           >
             <span>Lihat Semua Keahlian, Minat &amp; Bakat</span>
-            <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Card 1: Beige with Bordo Hard Shadow */}
-          <div className="brutal-card card-beige frame-shadow-bordo p-6 flex flex-col justify-between">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="brutal-card card-beige frame-shadow-bordo p-5 flex flex-col justify-between">
             <div>
-              <p className="font-mono-num text-xs font-bold text-[#6C151E] uppercase">
+              <p className="font-mono-num text-[11px] font-bold text-[#6C151E] uppercase">
                 Akademik &amp; Pembinaan
               </p>
-              <h3 className="font-display text-xl font-extrabold mt-2">
+              <h3 className="font-display text-lg font-extrabold mt-1.5">
                 Hukum Keluarga &amp; Pengajaran
               </h3>
-              <p className="text-sm text-muted mt-3 leading-relaxed">
+              <p className="text-sm text-muted mt-2 leading-relaxed">
                 S1 Hukum Keluarga (Ahwal Syakhsiyah) Unismuh Makassar, berpengalaman membina kedisiplinan, administrasi, dan tradisi keilmuan mahasiswa serta mengajar di rumah tahfidz.
               </p>
             </div>
-            <div className="mt-6 pt-4 border-t border-subtle text-xs font-semibold text-muted">
+            <div className="mt-4 pt-3 border-t border-subtle text-xs font-semibold text-muted">
               Fikih &middot; Akidah &middot; Tafsir &middot; Tajwid &middot; Pendidikan Islam
             </div>
           </div>
 
-          {/* Card 2: Deep Green Card with Beige Text */}
-          <div className="brutal-card card-green frame-midnight p-6 flex flex-col justify-between">
+          <div className="brutal-card card-green frame-midnight p-5 flex flex-col justify-between">
             <div>
-              <p className="font-mono-num text-xs font-bold text-[#8ACCD5] uppercase">
+              <p className="font-mono-num text-[11px] font-bold text-[#8ACCD5] uppercase">
                 Teknologi &amp; Perangkat Digital
               </p>
-              <h3 className="font-display text-xl font-extrabold mt-2 text-[#F8F8E1]">
+              <h3 className="font-display text-lg font-extrabold mt-1.5 text-[#F8F8E1]">
                 AI Tools, Web &amp; Media IT
               </h3>
-              <p className="text-sm text-muted mt-3 leading-relaxed">
+              <p className="text-sm text-muted mt-2 leading-relaxed">
                 Terbiasa mengelola publikasi web, dokumentasi digital, desain edukatif, dan pemanfaatan perangkat AI modern untuk riset serta pembelajaran.
               </p>
             </div>
-            <div className="mt-6 pt-4 border-t border-subtle text-xs font-semibold text-[#8ACCD5]">
+            <div className="mt-4 pt-3 border-t border-subtle text-xs font-semibold text-[#8ACCD5]">
               {toolSkills.slice(0, 6).map((s) => s.name).join(' · ') || 'ChatGPT · Google AI Studio · Netlify · Firebase'}
             </div>
           </div>
 
-          {/* Card 3: Midnight Green Identity Emphasis Card */}
-          <div className="brutal-card card-midnight frame-shadow-bordo p-6 flex flex-col justify-between">
+          <div className="brutal-card card-midnight frame-shadow-bordo p-5 flex flex-col justify-between">
             <div>
-              <p className="font-mono-num text-xs font-bold text-[#8ACCD5] uppercase">
+              <p className="font-mono-num text-[11px] font-bold text-[#8ACCD5] uppercase">
                 Bahasa &amp; Komunikasi
               </p>
-              <h3 className="font-display text-xl font-extrabold mt-2 text-[#F8F8E1]">
+              <h3 className="font-display text-lg font-extrabold mt-1.5 text-[#F8F8E1]">
                 Penguasaan Bahasa &amp; Kolaborasi
               </h3>
-              <div className="mt-4 space-y-3">
+              <div className="mt-3 space-y-2.5">
                 {languageSkills.map((lang) => (
                   <div
                     key={lang.id}
-                    className="flex items-baseline justify-between gap-3 pb-2.5 border-b border-[#8ACCD5]/30 last:border-b-0"
+                    className="flex items-baseline justify-between gap-3 pb-2 border-b border-[#8ACCD5]/30 last:border-b-0"
                   >
                     <span className="font-bold text-sm text-[#F8F8E1]">{lang.name}</span>
                     <span className="font-mono-num text-xs font-bold text-[#8ACCD5]">
@@ -360,7 +327,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             <button
               type="button"
               onClick={() => onNavigate('/about')}
-              className="mt-6 inline-flex items-center gap-1.5 text-xs font-bold text-[#8ACCD5] hover:text-[#F8F8E1] hover:underline cursor-pointer transition-colors"
+              className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[#8ACCD5] hover:text-[#F8F8E1] hover:underline cursor-pointer transition-colors"
             >
               <span>Baca profil lengkap &amp; visi misi</span>
               <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
@@ -369,132 +336,147 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
         </div>
       </section>
 
-      {/* SECTION 02: PROYEK & PENGALAMAN UNGGULAN */}
-      <section aria-labelledby="home-featured-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 pb-4 border-b-2 border-brutal">
+      {/* SECTION 02: PROYEK & PENGALAMAN UNGGULAN (Beserta Foto Masing-Masing) */}
+      <section aria-labelledby="home-featured-heading" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5 pb-3 border-b-2 border-brutal">
           <div>
             <span className="brutal-badge-green">02. Sorotan Utama</span>
-            <h2 id="home-featured-heading" className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-balance">
+            <h2 id="home-featured-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1.5 text-balance">
               Proyek &amp; Pengalaman Pilihan
             </h2>
           </div>
-          <div className="flex items-center gap-3 text-sm font-bold">
+          <div className="flex items-center gap-2 text-xs sm:text-sm font-bold">
             <button
               type="button"
               onClick={() => onNavigate('/projects')}
-              className="hover:bg-[#8ACCD5] hover:text-[#013A42] px-2.5 py-1.5 border-2 border-transparent hover:border-[#013A42] cursor-pointer whitespace-nowrap transition-colors"
+              className="hover:bg-[#8ACCD5] hover:text-[#013A42] px-2.5 py-1 border-2 border-transparent hover:border-[#013A42] cursor-pointer whitespace-nowrap transition-colors"
             >
               Semua Proyek
             </button>
             <button
               type="button"
               onClick={() => onNavigate('/experience')}
-              className="hover:bg-[#8ACCD5] hover:text-[#013A42] px-2.5 py-1.5 border-2 border-transparent hover:border-[#013A42] cursor-pointer whitespace-nowrap transition-colors"
+              className="hover:bg-[#8ACCD5] hover:text-[#013A42] px-2.5 py-1 border-2 border-transparent hover:border-[#013A42] cursor-pointer whitespace-nowrap transition-colors"
             >
               Semua Pengalaman
             </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          {/* Featured Project Spotlight (Beige Card + Bordo Frame Accent) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+          {/* Featured Project Spotlight */}
           {featuredProject && (
-            <article className="lg:col-span-7 brutal-card card-beige frame-shadow-bordo overflow-hidden flex flex-col">
-              <div className="aspect-[16/10] w-full border-b-[3px] border-[#6C151E] overflow-hidden">
+            <article className="lg:col-span-6 brutal-card card-beige frame-shadow-bordo overflow-hidden flex flex-col">
+              <div className="border-b-2 border-[#6C151E] overflow-hidden">
                 {isDarsPlatformProject(featuredProject) && !hasCustomUploadedDarsAsset(featuredProject) ? (
-                  <div className="w-full h-full bg-[#0F3D3A] flex flex-col items-center justify-center p-6 sm:p-8 relative">
-                    <div className="bg-[#F8F8E1] border-[3px] border-[#013A42] shadow-[6px_6px_0_0_#013A42] p-4 sm:p-5">
-                      <DarsLogo className="w-24 h-24" />
+                  <div className="w-full min-h-[180px] sm:min-h-[200px] bg-[#0F3D3A] flex flex-col items-center justify-center p-5 sm:p-6">
+                    <div className="bg-[#F8F8E1] border-2 border-[#013A42] shadow-[4px_4px_0_0_#013A42] p-3">
+                      <DarsLogo className="w-16 h-16 sm:w-20 sm:h-20" />
                     </div>
-                    <p className="mt-4 font-display text-sm font-extrabold uppercase tracking-wider text-[#8ACCD5]">
+                    <p className="mt-3 font-display text-xs font-extrabold uppercase tracking-wider text-[#8ACCD5]">
                       Platform Digital · darswithosama.netlify.app
                     </p>
                   </div>
                 ) : (
-                  <SafeImage
-                    src={featuredProject.imageUrls[0]}
-                    alt={featuredProject.title}
-                    fallbackLabel={featuredProject.title}
-                    className="w-full h-full object-cover"
-                  />
+                  <div className="aspect-[16/9] w-full bg-[#F8F8E1]">
+                    <SafeImage
+                      src={featuredProject.imageUrls[0]}
+                      alt={featuredProject.title}
+                      fallbackLabel={featuredProject.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 )}
               </div>
-              <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between">
+              <div className="p-5 flex-1 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center gap-2.5 text-xs font-mono-num font-bold">
+                  <div className="flex items-center gap-2 text-xs font-mono-num font-bold">
                     <span className="brutal-badge-bordo">Proyek Unggulan</span>
                     <span className="text-muted">{featuredProject.period || 'Aktif'}</span>
                   </div>
-                  <h3 className="font-display text-2xl sm:text-3xl font-extrabold mt-3">
+                  <h3 className="font-display text-xl sm:text-2xl font-extrabold mt-2.5">
                     {featuredProject.title}
                   </h3>
-                  <p className="text-sm sm:text-base text-muted mt-3 leading-relaxed">
+                  <p className="text-sm text-muted mt-2 leading-relaxed">
                     {featuredProject.description}
                   </p>
                 </div>
 
-                <div className="mt-6 pt-5 border-t border-subtle flex flex-wrap items-center gap-3">
+                <div className="mt-5 pt-4 border-t border-subtle flex flex-wrap items-center gap-2.5">
                   {featuredProject.liveUrl && (
                     <a
                       href={featuredProject.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="brutal-btn brutal-btn-primary px-4 py-2.5 text-sm font-bold inline-flex items-center gap-2 whitespace-nowrap"
+                      className="brutal-btn brutal-btn-primary px-3.5 py-2 text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap"
                     >
                       <span>Kunjungi Website</span>
-                      <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                      <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
                     </a>
                   )}
                   <button
                     type="button"
                     onClick={() => onNavigate('/projects')}
-                    className="brutal-btn brutal-btn-secondary px-4 py-2.5 text-sm font-bold inline-flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                    className="brutal-btn brutal-btn-secondary px-3.5 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
                   >
                     <span>Detail &amp; Karya Lain</span>
-                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                    <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
                   </button>
                 </div>
               </div>
             </article>
           )}
 
-          {/* Featured Experiences Stack (Planned Alternation: Blue -> Green -> Bordo) */}
-          <div className="lg:col-span-5 flex flex-col gap-5">
+          {/* Featured Experiences Stack (With Individual Primary Photos) */}
+          <div className="lg:col-span-6 flex flex-col gap-3.5">
             {shownExperiences.map((exp, idx) => {
               const tone = getCardTone(idx, ['blue', 'green', 'bordo']);
+              const primaryPhoto = resolveExperiencePrimaryPhoto(exp.imageUrls, exp.primaryImageUrl);
               return (
                 <article
                   key={exp.id}
-                  className={`brutal-card brutal-card-interactive p-5 flex-1 flex flex-col justify-between ${tone.cardClass} ${tone.frameClass}`}
+                  data-testid={`home-featured-exp-${idx}`}
+                  className={`brutal-card brutal-card-interactive p-4 flex-1 flex flex-col justify-between gap-3 ${tone.cardClass} ${tone.frameClass}`}
                 >
-                  <div>
-                    <div className="flex items-center justify-between gap-2 text-xs font-mono-num">
-                      <span className="font-bold">
-                        0{idx + 1}. {exp.category === 'mentoring' ? 'Pembinaan' : exp.category === 'teaching' ? 'Pengajaran' : exp.category === 'committee' ? 'Kepanitiaan' : 'Pekerjaan'}
-                      </span>
-                      <span className={tone.badgeClass}>
-                        {exp.period}
-                      </span>
+                  <div className="flex items-start gap-3.5">
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 border-2 border-[#013A42] bg-[#F8F8E1] overflow-hidden">
+                      <SafeImage
+                        src={primaryPhoto}
+                        alt={`Foto ${exp.institution}`}
+                        fallbackLabel={exp.institution}
+                        className="w-full h-full object-cover object-[50%_22%]"
+                      />
                     </div>
-                    <h3 className="font-display text-lg font-extrabold mt-2 leading-snug">
-                      {exp.role}
-                    </h3>
-                    <p className="text-sm font-bold mt-0.5 text-muted">
-                      {exp.institution}
-                    </p>
-                    <p className="text-sm text-muted mt-2 line-clamp-2">
-                      {exp.description}
-                    </p>
+
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center justify-between gap-1.5 text-[11px] font-mono-num">
+                        <span className="font-bold">
+                          0{idx + 1}. {exp.category === 'mentoring' ? 'Pembinaan' : exp.category === 'teaching' ? 'Pengajaran' : exp.category === 'committee' ? 'Kepanitiaan' : 'Pekerjaan'}
+                        </span>
+                        <span className={tone.badgeClass}>
+                          {exp.period}
+                        </span>
+                      </div>
+                      <h3 className="font-display text-base font-extrabold mt-1.5 leading-snug">
+                        {exp.role}
+                      </h3>
+                      <p className="text-xs font-bold mt-0.5 text-muted truncate">
+                        {exp.institution}
+                      </p>
+                      <p className="text-xs text-muted mt-1.5 line-clamp-2 leading-relaxed">
+                        {exp.description}
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-subtle flex items-center justify-between text-xs">
-                    <span className="font-mono-num text-muted">
+                  <div className="pt-2.5 border-t border-subtle flex items-center justify-between text-xs">
+                    <span className="font-mono-num text-[11px] text-muted truncate">
                       {exp.duration || exp.location}
                     </span>
                     <button
                       type="button"
                       onClick={() => onNavigate('/experience')}
-                      className={`font-bold inline-flex items-center gap-1 hover:underline cursor-pointer ${
+                      className={`font-bold inline-flex items-center gap-1 hover:underline cursor-pointer shrink-0 ${
                         tone.isDark ? 'text-[#8ACCD5]' : 'text-[#013A42]'
                       }`}
                     >

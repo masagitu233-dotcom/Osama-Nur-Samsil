@@ -10,44 +10,44 @@ export const EducationPage: React.FC = () => {
   const { education } = publicData;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10">
       <motion.header
-        initial={{ opacity: 0, y: 12 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="border-b-2 border-brutal pb-8"
+        transition={{ duration: 0.28 }}
+        className="border-b-2 border-brutal pb-5 sm:pb-6"
       >
         <span className="brutal-badge">03. Pendidikan &amp; Publikasi</span>
-        <h1 className="font-display text-4xl sm:text-5xl font-extrabold mt-3 text-balance">
+        <h1 className="font-display text-2xl sm:text-3xl lg:text-[34px] font-extrabold mt-2.5 text-balance leading-tight">
           Riwayat Pendidikan &amp; Publikasi Karya Tulis
         </h1>
-        <p className="mt-4 text-base text-muted max-w-3xl">
+        <p className="mt-2.5 text-sm sm:text-[15px] text-muted max-w-2xl leading-relaxed">
           Riwayat pendidikan formal serta katalog publikasi dan karya tulis yang tersinkronisasi langsung dari platform Dars with Osama.
         </p>
       </motion.header>
 
       {/* Formal Education */}
       <section aria-labelledby="formal-edu-heading">
-        <h2 id="formal-edu-heading" className="font-display text-2xl sm:text-3xl font-extrabold mb-6">
+        <h2 id="formal-edu-heading" className="font-display text-xl sm:text-2xl font-extrabold mb-4">
           01. Riwayat Pendidikan Formal
         </h2>
 
         {education.length === 0 ? (
-          <div className="brutal-card card-beige p-8 text-sm text-muted">
+          <div className="brutal-card card-beige p-6 text-sm text-muted">
             Belum ada riwayat pendidikan yang dipublikasikan.
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {education.map((edu, idx) => {
               const tone = getCardTone(idx, ['beige', 'green', 'blue']);
               return (
                 <article
                   key={edu.id}
-                  className={`brutal-card p-6 sm:p-8 ${tone.cardClass} ${
+                  className={`brutal-card p-5 sm:p-6 ${tone.cardClass} ${
                     idx === 0 ? 'frame-shadow-bordo' : tone.frameClass
                   }`}
                 >
-                  <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono-num">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono-num">
                     <span className="font-bold text-muted uppercase">
                       {edu.category} &middot; {edu.location}
                     </span>
@@ -55,19 +55,19 @@ export const EducationPage: React.FC = () => {
                       Kelulusan {edu.graduationYear}
                     </span>
                   </div>
-                  <h3 className="font-display text-2xl sm:text-3xl font-extrabold mt-3">
+                  <h3 className="font-display text-xl sm:text-2xl font-extrabold mt-2">
                     {edu.institution}
                   </h3>
-                  <p className="text-base sm:text-lg font-bold mt-1">
+                  <p className="text-sm sm:text-base font-bold mt-1">
                     {edu.degree} &mdash; {edu.fieldOfStudy}
                   </p>
                   {edu.description && (
-                    <p className="text-sm sm:text-base text-muted mt-4 leading-relaxed max-w-4xl">
+                    <p className="text-sm text-muted mt-3 leading-relaxed max-w-3xl">
                       {edu.description}
                     </p>
                   )}
                   {edu.imageUrls && edu.imageUrls.length > 0 && (
-                    <div className="mt-5 pt-4 border-t border-subtle grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <div className="mt-4 pt-3.5 border-t border-subtle grid grid-cols-2 sm:grid-cols-4 gap-3">
                       {edu.imageUrls.map((imgUrl, imgIdx) => (
                         <div
                           key={`${edu.id}-img-${imgIdx}`}
@@ -91,7 +91,7 @@ export const EducationPage: React.FC = () => {
 
       {/* Live Publications & Writings Synced from Dars with Osama */}
       <section aria-labelledby="publications-heading">
-        <h2 id="publications-heading" className="font-display text-2xl sm:text-3xl font-extrabold mb-4">
+        <h2 id="publications-heading" className="font-display text-xl sm:text-2xl font-extrabold mb-3">
           02. Publikasi &amp; Karya Tulis
         </h2>
         <DarsPublicationsCatalog />

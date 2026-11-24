@@ -80,30 +80,30 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
   };
 
   return (
-    <form onSubmit={handleSave} className="space-y-8">
-      <div className="flex flex-wrap items-end justify-between gap-4 pb-4 border-b-2 border-brutal">
+    <form onSubmit={handleSave} className="space-y-6">
+      <div className="flex flex-wrap items-end justify-between gap-3 pb-3.5 border-b-2 border-brutal">
         <div>
           <span className="brutal-badge">Identitas &amp; CV</span>
-          <h1 className="font-display text-3xl font-extrabold mt-2">Profil, Biografi &amp; CV</h1>
+          <h1 className="font-display text-2xl font-extrabold mt-1.5">Profil, Biografi &amp; CV</h1>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           {dirty && (
             <span className="brutal-badge">Ada perubahan belum disimpan</span>
           )}
           <button
             type="submit"
             disabled={saving}
-            className="brutal-btn brutal-btn-primary px-5 py-2.5 text-xs font-bold inline-flex items-center gap-2 cursor-pointer disabled:opacity-60"
+            className="brutal-btn brutal-btn-primary px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
           >
-            <Save className="w-4 h-4" />
+            <Save className="w-3.5 h-3.5" />
             <span>{saving ? 'Menyimpan...' : 'Simpan Profil'}</span>
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-8 space-y-5 brutal-card surface-card p-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div className="lg:col-span-8 space-y-3.5 brutal-card surface-card p-4 sm:p-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
               <label htmlFor="prof-name" className="block text-xs font-bold uppercase mb-1.5">Nama Lengkap *</label>
               <input
@@ -149,32 +149,32 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
           </div>
 
           <div>
-            <label htmlFor="prof-bio" className="block text-xs font-bold uppercase mb-1.5">Biografi Lengkap (About Me)</label>
+            <label htmlFor="prof-bio" className="block text-xs font-bold uppercase mb-1">Biografi Lengkap (About Me)</label>
             <textarea
               id="prof-bio"
-              rows={6}
+              rows={5}
               value={form.biography}
               onChange={(e) => updateField('biography', e.target.value)}
               className="w-full brutal-input px-3 py-2 text-sm"
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
-              <label htmlFor="prof-vision" className="block text-xs font-bold uppercase mb-1.5">Visi</label>
+              <label htmlFor="prof-vision" className="block text-xs font-bold uppercase mb-1">Visi</label>
               <textarea
                 id="prof-vision"
-                rows={4}
+                rows={3}
                 value={form.vision}
                 onChange={(e) => updateField('vision', e.target.value)}
                 className="w-full brutal-input px-3 py-2 text-sm"
               />
             </div>
             <div>
-              <label htmlFor="prof-mission" className="block text-xs font-bold uppercase mb-1.5">Misi</label>
+              <label htmlFor="prof-mission" className="block text-xs font-bold uppercase mb-1">Misi</label>
               <textarea
                 id="prof-mission"
-                rows={4}
+                rows={3}
                 value={form.mission}
                 onChange={(e) => updateField('mission', e.target.value)}
                 className="w-full brutal-input px-3 py-2 text-sm"
@@ -195,8 +195,8 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
         </div>
 
         {/* Media & Visibility */}
-        <div className="lg:col-span-4 space-y-6">
-          <div className="brutal-card surface-card p-5 space-y-4">
+        <div className="lg:col-span-4 space-y-4">
+          <div className="brutal-card surface-card p-4 space-y-3">
             <MediaUploader
               folder="profile"
               acceptMode="image"
@@ -214,7 +214,7 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
                 value={form.photoUrl}
                 onChange={(e) => updateField('photoUrl', e.target.value)}
                 placeholder="https://... atau tautan Google Drive"
-                className="w-full brutal-input px-3 py-2 text-xs"
+                className="w-full brutal-input px-3 py-1.5 text-xs"
               />
               {(() => {
                 const driveInfo = extractGoogleDriveInfo(form.photoUrl);
@@ -228,7 +228,7 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
             </div>
           </div>
 
-          <div className="brutal-card surface-card p-5 space-y-4">
+          <div className="brutal-card surface-card p-4 space-y-3">
             <MediaUploader
               folder="cv"
               acceptMode="pdf"
@@ -253,12 +253,12 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
                 value={form.cvUrl}
                 onChange={(e) => updateField('cvUrl', e.target.value)}
                 placeholder="https://... atau tautan Google Drive PDF"
-                className="w-full brutal-input px-3 py-2 text-xs"
+                className="w-full brutal-input px-3 py-1.5 text-xs"
               />
             </div>
           </div>
 
-          <div className="brutal-card surface-card p-5 space-y-3">
+          <div className="brutal-card surface-card p-4 space-y-2.5">
             <p className="font-display font-bold text-sm">Kontrol Publikasi</p>
             <select
               value={form.status}
@@ -352,25 +352,25 @@ export const ContactAndSeoEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => 
   };
 
   return (
-    <form onSubmit={handleSaveAll} className="space-y-8">
-      <div className="flex flex-wrap items-end justify-between gap-4 pb-4 border-b-2 border-brutal">
+    <form onSubmit={handleSaveAll} className="space-y-6">
+      <div className="flex flex-wrap items-end justify-between gap-3 pb-3.5 border-b-2 border-brutal">
         <div>
           <span className="brutal-badge">Kontak &amp; Metadata</span>
-          <h1 className="font-display text-3xl font-extrabold mt-2">Kontak Publik &amp; SEO Website</h1>
+          <h1 className="font-display text-2xl font-extrabold mt-1.5">Kontak Publik &amp; SEO Website</h1>
         </div>
         <button
           type="submit"
           disabled={saving}
-          className="brutal-btn brutal-btn-primary px-5 py-2.5 text-xs font-bold inline-flex items-center gap-2 cursor-pointer"
+          className="brutal-btn brutal-btn-primary px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer"
         >
-          <Save className="w-4 h-4" />
+          <Save className="w-3.5 h-3.5" />
           <span>{saving ? 'Menyimpan...' : 'Simpan Kontak & SEO'}</span>
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="brutal-card surface-card p-6 space-y-4">
-          <h2 className="font-display text-xl font-extrabold">Saluran Kontak</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="brutal-card surface-card p-4 sm:p-5 space-y-3.5">
+          <h2 className="font-display text-lg font-extrabold">Saluran Kontak</h2>
           <div>
             <label htmlFor="c-email" className="block text-xs font-bold uppercase mb-1">Email Profesional</label>
             <input
@@ -461,8 +461,8 @@ export const ContactAndSeoEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => 
           </div>
         </div>
 
-        <div className="brutal-card surface-card p-6 space-y-4">
-          <h2 className="font-display text-xl font-extrabold">SEO &amp; Open Graph</h2>
+        <div className="brutal-card surface-card p-4 sm:p-5 space-y-3.5">
+          <h2 className="font-display text-lg font-extrabold">SEO &amp; Open Graph</h2>
           <div>
             <label htmlFor="seo-title" className="block text-xs font-bold uppercase mb-1">Judul Website (&lt;title&gt;)</label>
             <input

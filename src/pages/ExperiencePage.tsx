@@ -78,24 +78,24 @@ export const ExperiencePage: React.FC = () => {
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-14">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10">
       <motion.header
-        initial={{ opacity: 0, y: 12 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="border-b-2 border-brutal pb-8"
+        transition={{ duration: 0.28 }}
+        className="border-b-2 border-brutal pb-5 sm:pb-6"
       >
         <span className="brutal-badge-green">02. Rekam Jejak &amp; Dedikasi</span>
-        <h1 className="font-display text-4xl sm:text-5xl font-extrabold mt-3 text-balance">
+        <h1 className="font-display text-2xl sm:text-3xl lg:text-[34px] font-extrabold mt-2.5 text-balance leading-tight">
           Pengalaman Pembinaan, Mengajar, Organisasi &amp; Kepanitiaan
         </h1>
-        <p className="mt-4 text-base text-muted max-w-3xl">
+        <p className="mt-2.5 text-sm sm:text-[15px] text-muted max-w-2xl leading-relaxed">
           Pilih kartu pengalaman untuk membuka rincian peran, tanggung jawab, dan galeri foto dokumentasi lengkap.
         </p>
       </motion.header>
 
       {/* Filter & View Controls */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5">
         <div role="tablist" aria-label="Filter kategori pengalaman" className="flex flex-wrap gap-2">
           {CATEGORY_TABS.map((tab) => {
             const active = category === tab.value;
@@ -106,9 +106,9 @@ export const ExperiencePage: React.FC = () => {
                 role="tab"
                 aria-selected={active}
                 onClick={() => setCategory(tab.value)}
-                className={`px-4 py-2 text-xs sm:text-sm font-bold border-2 border-brutal cursor-pointer whitespace-nowrap transition-colors ${
+                className={`px-3.5 py-1.5 text-xs font-bold border-2 border-brutal cursor-pointer whitespace-nowrap transition-colors ${
                   active
-                    ? 'card-blue shadow-[3px_3px_0_0_#013A42]'
+                    ? 'card-blue shadow-[2.5px_2.5px_0_0_#013A42]'
                     : 'card-beige hover:bg-[#8ACCD5] hover:text-[#013A42]'
                 }`}
               >
@@ -118,10 +118,10 @@ export const ExperiencePage: React.FC = () => {
           })}
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="relative flex-1 sm:w-64">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <div className="relative flex-1 sm:w-60">
             <Search
-              className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-muted"
+              className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted"
               aria-hidden="true"
             />
             <input
@@ -130,7 +130,7 @@ export const ExperiencePage: React.FC = () => {
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Cari lembaga atau peran..."
               aria-label="Cari pengalaman"
-              className="w-full brutal-input pl-10 pr-4 py-2 text-sm"
+              className="w-full brutal-input pl-9 pr-3 py-1.5 text-sm"
             />
           </div>
 
@@ -140,11 +140,11 @@ export const ExperiencePage: React.FC = () => {
               onClick={() => setViewMode('cards')}
               aria-label="Tampilan kartu"
               aria-pressed={viewMode === 'cards'}
-              className={`px-3 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
+              className={`px-2.5 py-1.5 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
                 viewMode === 'cards' ? 'card-midnight' : 'hover:bg-[#8ACCD5] hover:text-[#013A42]'
               }`}
             >
-              <LayoutGrid className="w-4 h-4" aria-hidden="true" />
+              <LayoutGrid className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Kartu</span>
             </button>
             <button
@@ -152,11 +152,11 @@ export const ExperiencePage: React.FC = () => {
               onClick={() => setViewMode('timeline')}
               aria-label="Tampilan timeline"
               aria-pressed={viewMode === 'timeline'}
-              className={`px-3 py-2 text-xs font-bold inline-flex items-center gap-1.5 border-l-2 border-brutal cursor-pointer transition-colors ${
+              className={`px-2.5 py-1.5 text-xs font-bold inline-flex items-center gap-1.5 border-l-2 border-brutal cursor-pointer transition-colors ${
                 viewMode === 'timeline' ? 'card-midnight' : 'hover:bg-[#8ACCD5] hover:text-[#013A42]'
               }`}
             >
-              <List className="w-4 h-4" aria-hidden="true" />
+              <List className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Timeline</span>
             </button>
           </div>
@@ -165,21 +165,21 @@ export const ExperiencePage: React.FC = () => {
 
       {/* Experience List — Concise Uniform-Height Neo-Brutalist Cards with 16:9 Primary Photo */}
       {filteredExperiences.length === 0 ? (
-        <div className="brutal-card card-beige p-10 text-center">
-          <p className="font-display text-lg font-bold">Tidak ada pengalaman yang cocok dengan filter saat ini.</p>
+        <div className="brutal-card card-beige p-8 text-center">
+          <p className="font-display text-base font-bold">Tidak ada pengalaman yang cocok dengan filter saat ini.</p>
           <button
             type="button"
             onClick={() => {
               setCategory('all');
               setQuery('');
             }}
-            className="mt-4 brutal-btn brutal-btn-secondary px-4 py-2 text-xs font-bold cursor-pointer"
+            className="mt-3 brutal-btn brutal-btn-secondary px-4 py-2 text-xs font-bold cursor-pointer"
           >
             Reset Filter
           </button>
         </div>
       ) : viewMode === 'cards' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
           {filteredExperiences.map((exp, idx) => {
             const tone = getCardTone(idx, ['beige', 'blue', 'green', 'bordo', 'midnight']);
             const primaryPhoto = resolveExperiencePrimaryPhoto(exp.imageUrls, exp.primaryImageUrl);
@@ -195,7 +195,7 @@ export const ExperiencePage: React.FC = () => {
                 key={exp.id}
                 className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
               >
-                <div className={`aspect-[16/9] w-full overflow-hidden border-b-[3px] ${photoFrameBorder} bg-[#F8F8E1] shrink-0`}>
+                <div className={`aspect-[16/9] w-full overflow-hidden border-b-2 ${photoFrameBorder} bg-[#F8F8E1] shrink-0`}>
                   <SafeImage
                     src={primaryPhoto}
                     alt={`Foto utama ${exp.institution}`}
@@ -204,21 +204,21 @@ export const ExperiencePage: React.FC = () => {
                   />
                 </div>
 
-                <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between gap-5">
-                  <div className="flex-1 flex flex-col items-start gap-2.5">
+                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
+                  <div className="flex-1 flex flex-col items-start gap-2">
                     <span className={tone.badgeClass}>
                       {categoryLabel(exp.category)}
                     </span>
-                    <h2 className="font-display text-lg sm:text-[19px] font-extrabold leading-snug min-h-[3.5rem]">
+                    <h2 className="font-display text-base sm:text-[17px] font-extrabold leading-snug min-h-[2.75rem]">
                       {exp.institution}
                     </h2>
                   </div>
 
-                  <div className="mt-auto pt-4 border-t border-subtle">
+                  <div className="mt-auto pt-3 border-t border-subtle">
                     <button
                       type="button"
                       onClick={() => setSelectedDetail(toExperienceDetail(exp))}
-                      className={`${tone.buttonClass} w-full py-2.5 px-4 text-xs font-bold cursor-pointer`}
+                      className={`${tone.buttonClass} w-full py-2 px-3.5 text-xs font-bold cursor-pointer`}
                     >
                       Lihat Detail &amp; Tanggung Jawab
                     </button>
@@ -229,16 +229,16 @@ export const ExperiencePage: React.FC = () => {
           })}
         </div>
       ) : (
-        <ol className="space-y-5">
+        <ol className="space-y-4">
           {filteredExperiences.map((exp, idx) => {
             const tone = getCardTone(idx, ['beige', 'blue', 'green', 'bordo', 'midnight']);
             const primaryPhoto = resolveExperiencePrimaryPhoto(exp.imageUrls, exp.primaryImageUrl);
             return (
               <li
                 key={exp.id}
-                className={`brutal-card p-5 sm:p-6 grid grid-cols-1 md:grid-cols-12 gap-5 items-center ${tone.cardClass} ${tone.frameClass}`}
+                className={`brutal-card p-4 sm:p-5 grid grid-cols-1 md:grid-cols-12 gap-4 items-center ${tone.cardClass} ${tone.frameClass}`}
               >
-                <div className="md:col-span-4 aspect-[16/9] w-full border-[2.5px] border-[#013A42] bg-[#F8F8E1] overflow-hidden">
+                <div className="md:col-span-4 aspect-[16/9] w-full border-2 border-[#013A42] bg-[#F8F8E1] overflow-hidden">
                   <SafeImage
                     src={primaryPhoto}
                     alt={`Foto utama ${exp.institution}`}
@@ -246,16 +246,16 @@ export const ExperiencePage: React.FC = () => {
                     className="w-full h-full block object-cover object-[50%_22%]"
                   />
                 </div>
-                <div className="md:col-span-8 flex flex-col items-start gap-3">
+                <div className="md:col-span-8 flex flex-col items-start gap-2.5">
                   <span className={tone.badgeClass}>{categoryLabel(exp.category)}</span>
-                  <h2 className="font-display text-xl sm:text-2xl font-extrabold leading-snug">
+                  <h2 className="font-display text-lg sm:text-xl font-extrabold leading-snug">
                     {exp.institution}
                   </h2>
-                  <div className="pt-1">
+                  <div className="pt-0.5">
                     <button
                       type="button"
                       onClick={() => setSelectedDetail(toExperienceDetail(exp))}
-                      className={`${tone.buttonClass} px-4 py-2.5 text-xs font-bold cursor-pointer`}
+                      className={`${tone.buttonClass} px-3.5 py-2 text-xs font-bold cursor-pointer`}
                     >
                       Lihat Detail &amp; Tanggung Jawab
                     </button>
@@ -267,11 +267,11 @@ export const ExperiencePage: React.FC = () => {
         </ol>
       )}
 
-      {/* Organizations Section — Concise Uniform-Height 16:9 Cards Matching Experience Cards */}
-      <section aria-labelledby="org-heading" className="pt-6">
-        <div className="mb-6 pb-3 border-b-2 border-brutal">
+      {/* Organizations Section */}
+      <section aria-labelledby="org-heading" className="pt-4">
+        <div className="mb-5 pb-3 border-b-2 border-brutal">
           <span className="brutal-badge-bordo">Kepemimpinan Organisasi</span>
-          <h2 id="org-heading" className="font-display text-3xl font-extrabold mt-2">
+          <h2 id="org-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1.5">
             Pengalaman Organisasi
           </h2>
         </div>
@@ -281,7 +281,7 @@ export const ExperiencePage: React.FC = () => {
             Belum ada data organisasi yang dipublikasikan.
           </p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
             {publicData.organizations.map((org, idx) => {
               const tone = getCardTone(idx, ['bordo', 'beige', 'green', 'blue']);
               const primaryPhoto = resolveExperiencePrimaryPhoto(org.imageUrls, org.primaryImageUrl);
@@ -297,7 +297,7 @@ export const ExperiencePage: React.FC = () => {
                   key={org.id}
                   className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                 >
-                  <div className={`aspect-[16/9] w-full overflow-hidden border-b-[3px] ${photoFrameBorder} bg-[#F8F8E1] shrink-0`}>
+                  <div className={`aspect-[16/9] w-full overflow-hidden border-b-2 ${photoFrameBorder} bg-[#F8F8E1] shrink-0`}>
                     <SafeImage
                       src={primaryPhoto}
                       alt={`Foto utama ${org.organizationName}`}
@@ -306,21 +306,21 @@ export const ExperiencePage: React.FC = () => {
                     />
                   </div>
 
-                  <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between gap-5">
-                    <div className="flex-1 flex flex-col items-start gap-2.5">
+                  <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
+                    <div className="flex-1 flex flex-col items-start gap-2">
                       <span className={tone.badgeClass}>
                         {org.category || 'Organisasi'}
                       </span>
-                      <h3 className="font-display text-lg sm:text-[19px] font-extrabold leading-snug min-h-[3.5rem]">
+                      <h3 className="font-display text-base sm:text-[17px] font-extrabold leading-snug min-h-[2.75rem]">
                         {org.organizationName}
                       </h3>
                     </div>
 
-                    <div className="mt-auto pt-4 border-t border-subtle">
+                    <div className="mt-auto pt-3 border-t border-subtle">
                       <button
                         type="button"
                         onClick={() => setSelectedDetail(toOrganizationDetail(org))}
-                        className={`${tone.buttonClass} w-full py-2.5 px-4 text-xs font-bold cursor-pointer`}
+                        className={`${tone.buttonClass} w-full py-2 px-3.5 text-xs font-bold cursor-pointer`}
                       >
                         Lihat Detail &amp; Tanggung Jawab
                       </button>
