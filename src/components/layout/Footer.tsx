@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, Lock, Moon, Share2, Sun } from 'lucide-react';
+import { ArrowUpRight, Lock, Share2 } from 'lucide-react';
 import type { PublicRoute } from '../../types/portfolio';
 import { usePortfolio } from '../../context/PortfolioContext';
 
@@ -20,7 +20,7 @@ const FOOTER_LINKS: Array<{ label: string; route: PublicRoute }> = [
 ];
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate, onShareProfile }) => {
-  const { publicData, theme, toggleTheme } = usePortfolio();
+  const { publicData } = usePortfolio();
   const { profile, contacts } = publicData;
 
   const handleNav = (e: React.MouseEvent, route: PublicRoute) => {
@@ -48,23 +48,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onShareProfile }) =>
               >
                 <Share2 className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>Bagikan Tautan Profil</span>
-              </button>
-              <button
-                type="button"
-                onClick={toggleTheme}
-                className="brutal-btn-on-dark-outline px-4 py-2 text-xs font-bold inline-flex items-center gap-2 cursor-pointer whitespace-nowrap"
-              >
-                {theme === 'light' ? (
-                  <>
-                    <Moon className="w-3.5 h-3.5" aria-hidden="true" />
-                    <span>Mode Gelap</span>
-                  </>
-                ) : (
-                  <>
-                    <Sun className="w-3.5 h-3.5" aria-hidden="true" />
-                    <span>Mode Terang</span>
-                  </>
-                )}
               </button>
             </div>
           </div>

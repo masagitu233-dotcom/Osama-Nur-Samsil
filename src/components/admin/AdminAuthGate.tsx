@@ -24,15 +24,15 @@ export const AdminAuthGate: React.FC<AdminAuthGateProps> = ({ onNavigate }) => {
           <span>Kembali ke Halaman Publik</span>
         </button>
 
-        <div className="brutal-card surface-card p-6 sm:p-8 space-y-6">
+        <div className="brutal-card card-beige frame-shadow-bordo p-6 sm:p-8 space-y-6">
           <div className="flex items-start justify-between gap-4 pb-5 border-b-2 border-brutal">
             <div>
-              <span className="brutal-badge">Akses Terbatas &middot; CMS Admin</span>
+              <span className="brutal-badge-bordo">Akses Terbatas &middot; CMS Admin</span>
               <h1 className="font-display text-2xl sm:text-3xl font-extrabold mt-2">
                 Dashboard Admin Portofolio
               </h1>
             </div>
-            <div className="w-11 h-11 bg-[#8ACCD5] text-[#013A42] border-2 border-[#013A42] flex items-center justify-center shrink-0">
+            <div className="w-11 h-11 bg-[#6C151E] text-[#F8F8E1] border-2 border-[#013A42] shadow-[3px_3px_0_0_#013A42] flex items-center justify-center shrink-0">
               <ShieldCheck className="w-6 h-6" aria-hidden="true" />
             </div>
           </div>
@@ -50,7 +50,7 @@ export const AdminAuthGate: React.FC<AdminAuthGateProps> = ({ onNavigate }) => {
               {authError && (
                 <div
                   role="alert"
-                  className="p-4 border-2 border-[#8ACCD5] surface-dark text-sm font-semibold space-y-2"
+                  className="p-4 border-2 border-[#013A42] card-bordo text-sm font-semibold space-y-2"
                 >
                   <p>{authError}</p>
                   {user && (
@@ -91,7 +91,7 @@ export const AdminAuthGate: React.FC<AdminAuthGateProps> = ({ onNavigate }) => {
               type="button"
               onClick={() => setShowGuide((prev) => !prev)}
               aria-expanded={showGuide}
-              className="w-full flex items-center justify-between text-xs font-mono-num font-bold text-muted hover:text-[#013A42] dark:hover:text-[#8ACCD5] cursor-pointer transition-colors"
+              className="w-full flex items-center justify-between text-xs font-mono-num font-bold text-muted hover:text-[#6C151E] cursor-pointer transition-colors"
             >
               <span>Petunjuk Konfigurasi Admin Awal melalui Firebase Console</span>
               {showGuide ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}

@@ -2,15 +2,58 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { usePortfolio } from '../context/PortfolioContext';
 import type { InterestCategory, SkillCategory } from '../types/portfolio';
+import { getCardTone, type CardTone } from '../utils/cardVariants';
 
 type FilterGroup = 'all' | 'skills' | 'languages' | 'interests';
 
-const SKILL_GROUPS: Array<{ key: SkillCategory; index: string; title: string; subtitle: string }> = [
-  { key: 'technical', index: '01.', title: 'Technical Skills', subtitle: 'Pengembangan web, deployment, database, dan sistem digital' },
-  { key: 'tool', index: '02.', title: 'Perangkat & AI Tools', subtitle: 'Aplikasi produktivitas, desain, dokumentasi, dan kecerdasan buatan' },
-  { key: 'soft', index: '03.', title: 'Soft Skills', subtitle: 'Kepemimpinan, pembinaan, komunikasi, dan manajemen tim' },
-  { key: 'academic', index: '04.', title: 'Academic Skills', subtitle: 'Kajian hukum keluarga, keilmuan Islam, dan penulisan ilmiah' },
-  { key: 'language', index: '05.', title: 'Language Skills', subtitle: 'Penguasaan bahasa dengan tingkat deskriptif mandiri' },
+const SKILL_GROUPS: Array<{
+  key: SkillCategory;
+  index: string;
+  title: string;
+  subtitle: string;
+  sequence: CardTone[];
+  sectionBadge: string;
+}> = [
+  {
+    key: 'technical',
+    index: '01.',
+    title: 'Technical Skills',
+    subtitle: 'Pengembangan web, deployment, database, dan sistem digital',
+    sequence: ['beige', 'blue', 'green', 'bordo'],
+    sectionBadge: 'brutal-badge',
+  },
+  {
+    key: 'tool',
+    index: '02.',
+    title: 'Perangkat & AI Tools',
+    subtitle: 'Aplikasi produktivitas, desain, dokumentasi, dan kecerdasan buatan',
+    sequence: ['blue', 'beige', 'midnight', 'green'],
+    sectionBadge: 'brutal-badge-green',
+  },
+  {
+    key: 'soft',
+    index: '03.',
+    title: 'Soft Skills',
+    subtitle: 'Kepemimpinan, pembinaan, komunikasi, dan manajemen tim',
+    sequence: ['green', 'beige', 'bordo', 'blue'],
+    sectionBadge: 'brutal-badge-bordo',
+  },
+  {
+    key: 'academic',
+    index: '04.',
+    title: 'Academic Skills',
+    subtitle: 'Kajian hukum keluarga, keilmuan Islam, dan penulisan ilmiah',
+    sequence: ['beige', 'bordo', 'blue', 'midnight'],
+    sectionBadge: 'brutal-badge',
+  },
+  {
+    key: 'language',
+    index: '05.',
+    title: 'Language Skills',
+    subtitle: 'Penguasaan bahasa dengan tingkat deskriptif mandiri',
+    sequence: ['bordo', 'midnight', 'green'],
+    sectionBadge: 'brutal-badge-bordo',
+  },
 ];
 
 const INTEREST_GROUPS: Array<{ key: InterestCategory; index: string; title: string }> = [
@@ -43,7 +86,7 @@ export const SkillsPage: React.FC = () => {
         transition={{ duration: 0.3 }}
         className="border-b-2 border-brutal pb-8"
       >
-        <span className="brutal-badge">05. Kapabilitas &amp; Potensi</span>
+        <span className="brutal-badge-green">05. Kapabilitas &amp; Potensi</span>
         <h1 className="font-display text-4xl sm:text-5xl font-extrabold mt-3 text-balance">
           Skills, Interests &amp; Talents
         </h1>
@@ -70,8 +113,8 @@ export const SkillsPage: React.FC = () => {
               onClick={() => setGroup(tab.value)}
               className={`px-4 py-2 text-xs sm:text-sm font-bold border-2 border-brutal cursor-pointer whitespace-nowrap transition-colors ${
                 active
-                  ? 'surface-highlight shadow-[3px_3px_0_0_var(--shadow)]'
-                  : 'surface-card hover:bg-[#8ACCD5] hover:text-[#013A42]'
+                  ? 'card-blue shadow-[3px_3px_0_0_#013A42]'
+                  : 'card-beige hover:bg-[#8ACCD5] hover:text-[#013A42]'
               }`}
             >
               {tab.label}
@@ -80,16 +123,15 @@ export const SkillsPage: React.FC = () => {
         })}
       </div>
 
-      {/* Skills Groups */}
+      {/* Skills Groups (Planned Multi-Color Card Rhythm) */}
       {visibleSkillGroups.length > 0 && (
         <div className="space-y-10">
           {visibleSkillGroups.map((sec) => {
             const items = skills.filter((s) => s.category === sec.key);
-            const isLanguageGroup = sec.key === 'language';
             return (
               <section key={sec.key} aria-labelledby={`skill-sec-${sec.key}`}>
                 <div className="mb-5">
-                  <span className="brutal-badge">{sec.index}</span>
+                  <span className={sec.sectionBadge}>{sec.index}</span>
                   <h2 id={`skill-sec-${sec.key}`} className="font-display text-2xl sm:text-3xl font-extrabold mt-2">
                     {sec.title}
                   </h2>
@@ -97,39 +139,36 @@ export const SkillsPage: React.FC = () => {
                 </div>
 
                 {items.length === 0 ? (
-                  <div className="brutal-card surface-card p-6 text-sm text-muted">
+                  <div className="brutal-card card-beige p-6 text-sm text-muted">
                     Belum ada item pada kategori {sec.title}. Tambahkan melalui Dashboard Admin.
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {items.map((item) => (
-                      <article
-                        key={item.id}
-                        className={`brutal-card p-5 flex flex-col justify-between ${
-                          isLanguageGroup ? 'surface-highlight' : 'surface-card'
-                        }`}
-                      >
-                        <div>
-                          <div className="flex items-baseline justify-between gap-3">
-                            <h3 className="font-display text-lg font-extrabold">{item.name}</h3>
-                            {item.proficiencyLabel && (
-                              <span
-                                className={`shrink-0 ${
-                                  isLanguageGroup ? 'brutal-badge-inverse' : 'brutal-badge'
-                                }`}
-                              >
-                                {item.proficiencyLabel}
-                              </span>
+                    {items.map((item, idx) => {
+                      const tone = getCardTone(idx, sec.sequence);
+                      return (
+                        <article
+                          key={item.id}
+                          className={`brutal-card p-5 flex flex-col justify-between ${tone.cardClass} ${tone.frameClass}`}
+                        >
+                          <div>
+                            <div className="flex items-baseline justify-between gap-3">
+                              <h3 className="font-display text-lg font-extrabold">{item.name}</h3>
+                              {item.proficiencyLabel && (
+                                <span className={`shrink-0 ${tone.badgeClass}`}>
+                                  {item.proficiencyLabel}
+                                </span>
+                              )}
+                            </div>
+                            {item.description && (
+                              <p className="text-sm text-muted mt-2.5 leading-relaxed">
+                                {item.description}
+                              </p>
                             )}
                           </div>
-                          {item.description && (
-                            <p className="text-sm text-muted mt-2.5 leading-relaxed">
-                              {item.description}
-                            </p>
-                          )}
-                        </div>
-                      </article>
-                    ))}
+                        </article>
+                      );
+                    })}
                   </div>
                 )}
               </section>
@@ -138,25 +177,25 @@ export const SkillsPage: React.FC = () => {
         </div>
       )}
 
-      {/* Interests & Talents Groups */}
+      {/* Interests & Talents Groups (All 5 Card Variants Across 5 Groups) */}
       {showInterests && (
         <div className="pt-8 border-t-2 border-brutal grid grid-cols-1 md:grid-cols-2 gap-6">
           {INTEREST_GROUPS.map((sec, idx) => {
             const items = interests.filter((i) => i.category === sec.key);
-            const isHighlighted = idx === 3;
+            const tone = getCardTone(idx, ['beige', 'blue', 'green', 'bordo', 'midnight']);
             return (
               <section
                 key={sec.key}
-                className={`brutal-card p-6 ${isHighlighted ? 'surface-highlight' : 'surface-card'}`}
+                className={`brutal-card p-6 ${tone.cardClass} ${tone.frameClass}`}
               >
-                <span className={isHighlighted ? 'brutal-badge-inverse' : 'brutal-badge'}>
+                <span className={tone.badgeClass}>
                   {sec.index}
                 </span>
                 <h2 className="font-display text-xl font-extrabold mt-2 mb-4">{sec.title}</h2>
                 {items.length === 0 ? (
                   <p className="text-sm text-muted">Belum ada item ditambahkan.</p>
                 ) : (
-                  <ul className="divide-y divide-[var(--border-subtle)]">
+                  <ul className="divide-y divide-[var(--card-border-subtle)]">
                     {items.map((item) => (
                       <li key={item.id} className="py-3 first:pt-0 last:pb-0">
                         <p className="font-bold text-sm sm:text-base">{item.title}</p>

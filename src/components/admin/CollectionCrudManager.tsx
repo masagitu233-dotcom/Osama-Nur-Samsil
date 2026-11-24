@@ -565,7 +565,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     type="button"
                     onClick={() => setDeleteTarget({ id: item.id, title: displayTitle })}
                     aria-label={`Hapus ${displayTitle}`}
-                    className="brutal-btn brutal-btn-primary p-2 cursor-pointer"
+                    className="brutal-btn brutal-btn-bordo p-2 cursor-pointer"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -646,7 +646,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     type="checkbox"
                     checked={Boolean(formState[field.key])}
                     onChange={(e) => setField(field.key, e.target.checked)}
-                    className="w-4 h-4 accent-[#013A42] dark:accent-[#8ACCD5]"
+                    className="w-4 h-4 accent-[#013A42]"
                   />
                   <span>{field.label}</span>
                 </label>
@@ -755,7 +755,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                   type="checkbox"
                   checked={Boolean(formState.isVisible)}
                   onChange={(e) => setField('isVisible', e.target.checked)}
-                  className="w-4 h-4 accent-[#013A42] dark:accent-[#8ACCD5]"
+                  className="w-4 h-4 accent-[#013A42]"
                 />
                 <span>Tampilkan ke Publik</span>
               </label>
@@ -803,7 +803,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
           <button
             type="button"
             onClick={confirmDelete}
-            className="brutal-btn brutal-btn-primary px-4 py-2 text-xs font-bold cursor-pointer"
+            className="brutal-btn brutal-btn-bordo px-4 py-2 text-xs font-bold cursor-pointer"
           >
             Ya, Hapus
           </button>

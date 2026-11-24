@@ -1,68 +1,47 @@
 @import "tailwindcss";
-@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* Official 3-Color Identity Palette */
+  /* Official 5-Color Identity Palette */
   --color-beige: #F8F8E1;
-  --color-non-photo-blue: #8ACCD5;
-  --color-midnight-green: #013A42;
+  --color-blue: #8ACCD5;
+  --color-midnight: #013A42;
+  --color-bordo: #6C151E;
+  --color-green: #0F3D3A;
 }
 
 :root {
-  /* Core Palette Variables */
+  /* Core 5-Color Identity Variables */
   --color-beige: #F8F8E1;
-  --color-non-photo-blue: #8ACCD5;
-  --color-midnight-green: #013A42;
+  --color-blue: #8ACCD5;
+  --color-midnight: #013A42;
+  --color-bordo: #6C151E;
+  --color-green: #0F3D3A;
 
-  /* Semantic Design Tokens — Light Mode (60% Beige, 25% Midnight Green, 15% Non Photo Blue) */
+  /* Single Cohesive Editorial Theme Tokens */
   --bg-page: var(--color-beige);
   --surface: var(--color-beige);
-  --surface-highlight: var(--color-non-photo-blue);
-  --surface-inverse: var(--color-midnight-green);
+  --surface-highlight: var(--color-blue);
+  --surface-inverse: var(--color-midnight);
 
-  --primary: var(--color-midnight-green);
+  --primary: var(--color-midnight);
   --primary-text: var(--color-beige);
-  --secondary: var(--color-non-photo-blue);
-  --secondary-text: var(--color-midnight-green);
+  --secondary: var(--color-blue);
+  --secondary-text: var(--color-midnight);
 
-  --text-primary: var(--color-midnight-green);
-  --text-muted: color-mix(in srgb, var(--color-midnight-green) 78%, transparent);
+  --text-primary: var(--color-midnight);
+  --text-muted: color-mix(in srgb, var(--color-midnight) 78%, transparent);
   --text-inverse: var(--color-beige);
-  --text-inverse-muted: color-mix(in srgb, var(--color-beige) 82%, transparent);
+  --text-inverse-muted: color-mix(in srgb, var(--color-beige) 84%, transparent);
 
-  --border: var(--color-midnight-green);
-  --border-subtle: color-mix(in srgb, var(--color-midnight-green) 24%, transparent);
-  --shadow: var(--color-midnight-green);
-  --interactive-hover: var(--color-non-photo-blue);
-  --focus-ring: var(--color-non-photo-blue);
-}
-
-.dark {
-  /* Strict 3-Color Inverted Dark Mode */
-  --bg-page: var(--color-midnight-green);
-  --surface: var(--color-midnight-green);
-  --surface-highlight: var(--color-non-photo-blue);
-  --surface-inverse: var(--color-beige);
-
-  --primary: var(--color-non-photo-blue);
-  --primary-text: var(--color-midnight-green);
-  --secondary: var(--color-beige);
-  --secondary-text: var(--color-midnight-green);
-
-  --text-primary: var(--color-beige);
-  --text-muted: color-mix(in srgb, var(--color-beige) 82%, transparent);
-  --text-inverse: var(--color-midnight-green);
-  --text-inverse-muted: color-mix(in srgb, var(--color-midnight-green) 78%, transparent);
-
-  --border: var(--color-non-photo-blue);
-  --border-subtle: color-mix(in srgb, var(--color-non-photo-blue) 30%, transparent);
-  --shadow: var(--color-non-photo-blue);
-  --interactive-hover: var(--color-non-photo-blue);
-  --focus-ring: var(--color-beige);
+  --border: var(--color-midnight);
+  --border-subtle: color-mix(in srgb, var(--color-midnight) 24%, transparent);
+  --shadow: var(--color-midnight);
+  --interactive-hover: var(--color-blue);
+  --focus-ring: var(--color-bordo);
 }
 
 @layer base {
@@ -93,49 +72,67 @@
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible {
-    outline: 2px solid var(--focus-ring);
+    outline: 2.5px solid var(--focus-ring);
     outline-offset: 2px;
   }
 }
 
-/* Semantic Surface & Text Helpers */
+/* ==================================================
+   5 PLANNED CARD SURFACE VARIANTS
+   Each variant sets local muted-text & divider tokens
+   for guaranteed WCAG readability on every surface.
+   ================================================== */
+
 .surface-page {
-  background-color: var(--bg-page);
-  color: var(--text-primary);
-}
-
-.surface-card {
-  background-color: var(--surface);
-  color: var(--text-primary);
-}
-
-/* Text on Non Photo Blue ALWAYS remains Midnight Green for WCAG AA contrast */
-.surface-highlight {
-  background-color: var(--color-non-photo-blue);
-  color: var(--color-midnight-green);
-}
-
-.surface-highlight .text-muted {
-  color: color-mix(in srgb, var(--color-midnight-green) 80%, transparent);
-}
-
-/* Text on Midnight Green ALWAYS remains Beige */
-.surface-dark {
-  background-color: var(--color-midnight-green);
-  color: var(--color-beige);
-}
-
-.surface-dark .text-muted {
-  color: color-mix(in srgb, var(--color-beige) 82%, transparent);
-}
-
-.surface-beige {
   background-color: var(--color-beige);
-  color: var(--color-midnight-green);
+  color: var(--color-midnight);
+}
+
+/* 1. Card Beige: Beige bg + Midnight Green text & border */
+.surface-card,
+.card-beige {
+  background-color: var(--color-beige);
+  color: var(--color-midnight);
+  --card-muted: color-mix(in srgb, var(--color-midnight) 78%, transparent);
+  --card-border-subtle: color-mix(in srgb, var(--color-midnight) 22%, transparent);
+}
+
+/* 2. Card Blue: Non Photo Blue bg + Midnight Green text & border */
+.surface-highlight,
+.card-blue {
+  background-color: var(--color-blue);
+  color: var(--color-midnight);
+  --card-muted: color-mix(in srgb, var(--color-midnight) 82%, transparent);
+  --card-border-subtle: color-mix(in srgb, var(--color-midnight) 28%, transparent);
+}
+
+/* 3. Card Bordo: Bordo bg + Beige text + Midnight Green border */
+.card-bordo {
+  background-color: var(--color-bordo);
+  color: var(--color-beige);
+  --card-muted: color-mix(in srgb, var(--color-beige) 86%, transparent);
+  --card-border-subtle: color-mix(in srgb, var(--color-beige) 28%, transparent);
+}
+
+/* 4. Card Green: Deep Green bg + Beige text + Midnight Green border */
+.card-green {
+  background-color: var(--color-green);
+  color: var(--color-beige);
+  --card-muted: color-mix(in srgb, var(--color-beige) 86%, transparent);
+  --card-border-subtle: color-mix(in srgb, var(--color-blue) 32%, transparent);
+}
+
+/* 5. Card Midnight: Midnight Green bg + Beige text + Non Photo Blue accents */
+.surface-dark,
+.card-midnight {
+  background-color: var(--color-midnight);
+  color: var(--color-beige);
+  --card-muted: color-mix(in srgb, var(--color-beige) 84%, transparent);
+  --card-border-subtle: color-mix(in srgb, var(--color-blue) 32%, transparent);
 }
 
 .text-muted {
-  color: var(--text-muted);
+  color: var(--card-muted, var(--text-muted));
 }
 
 .text-inverse-muted {
@@ -147,41 +144,89 @@
 }
 
 .border-subtle {
-  border-color: var(--border-subtle);
+  border-color: var(--card-border-subtle, var(--border-subtle));
 }
 
-/* Neo-Brutalist Cards & Hard Offset Shadows */
+/* ==================================================
+   NEO-BRUTALIST CARDS, FRAMES & HARD OFFSET SHADOWS
+   ================================================== */
+
 .brutal-card {
-  border: 2px solid var(--border);
-  box-shadow: 5px 5px 0 0 var(--shadow);
+  border: 2.5px solid var(--color-midnight);
+  box-shadow: 5px 5px 0 0 var(--color-midnight);
   transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 160ms cubic-bezier(0.16, 1, 0.3, 1), background-color 160ms ease;
 }
 
 .brutal-card-interactive:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 7px 7px 0 0 var(--shadow);
+  box-shadow: 7px 7px 0 0 var(--color-midnight);
+}
+
+/* Planned Frame & Hard-Shadow Variations (Midnight Green, Bordo, Green) */
+.frame-bordo {
+  border: 2.5px solid var(--color-bordo);
+  box-shadow: 5px 5px 0 0 var(--color-bordo);
+}
+
+.frame-bordo.brutal-card-interactive:hover {
+  box-shadow: 7px 7px 0 0 var(--color-bordo);
+}
+
+.frame-green {
+  border: 2.5px solid var(--color-green);
+  box-shadow: 5px 5px 0 0 var(--color-green);
+}
+
+.frame-green.brutal-card-interactive:hover {
+  box-shadow: 7px 7px 0 0 var(--color-green);
+}
+
+.frame-midnight {
+  border: 2.5px solid var(--color-midnight);
+  box-shadow: 5px 5px 0 0 var(--color-midnight);
+}
+
+.frame-shadow-bordo {
+  border: 2.5px solid var(--color-midnight);
+  box-shadow: 5px 5px 0 0 var(--color-bordo);
+}
+
+.frame-shadow-bordo.brutal-card-interactive:hover {
+  box-shadow: 7px 7px 0 0 var(--color-bordo);
+}
+
+.frame-shadow-green {
+  border: 2.5px solid var(--color-midnight);
+  box-shadow: 5px 5px 0 0 var(--color-green);
+}
+
+.frame-shadow-green.brutal-card-interactive:hover {
+  box-shadow: 7px 7px 0 0 var(--color-green);
 }
 
 .brutal-card-on-dark {
-  border: 2px solid var(--color-beige);
-  box-shadow: 5px 5px 0 0 var(--color-non-photo-blue);
+  border: 2.5px solid var(--color-beige);
+  box-shadow: 6px 6px 0 0 var(--color-bordo);
 }
 
-/* Neo-Brutalist Buttons */
+/* ==================================================
+   NEO-BRUTALIST BUTTONS
+   ================================================== */
+
 .brutal-btn {
-  border: 2px solid var(--border);
-  box-shadow: 3px 3px 0 0 var(--shadow);
+  border: 2px solid var(--color-midnight);
+  box-shadow: 3px 3px 0 0 var(--color-midnight);
   transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms ease, color 140ms ease;
 }
 
 .brutal-btn:hover:not(:disabled) {
   transform: translate(-1.5px, -1.5px);
-  box-shadow: 5px 5px 0 0 var(--shadow);
+  box-shadow: 5px 5px 0 0 var(--color-midnight);
 }
 
 .brutal-btn:active:not(:disabled) {
   transform: translate(1.5px, 1.5px);
-  box-shadow: 1px 1px 0 0 var(--shadow);
+  box-shadow: 1px 1px 0 0 var(--color-midnight);
 }
 
 .brutal-btn:disabled {
@@ -189,52 +234,70 @@
   cursor: not-allowed;
 }
 
-/* Primary Button: Midnight Green bg + Beige text; hover uses Non Photo Blue accent */
+/* Primary Button: Midnight Green bg + Beige text */
 .brutal-btn-primary {
-  background-color: var(--primary);
-  color: var(--primary-text);
-  border-color: var(--border);
+  background-color: var(--color-midnight);
+  color: var(--color-beige);
+  border-color: var(--color-midnight);
 }
 
 .brutal-btn-primary:hover:not(:disabled) {
-  background-color: var(--color-non-photo-blue);
-  color: var(--color-midnight-green);
+  background-color: var(--color-blue);
+  color: var(--color-midnight);
 }
 
-.dark .brutal-btn-primary:hover:not(:disabled) {
-  background-color: var(--color-beige);
-  color: var(--color-midnight-green);
-}
-
-/* Secondary Button: Non Photo Blue bg + Midnight Green text + Midnight Green border */
+/* Secondary Button: Non Photo Blue bg + Midnight Green text */
 .brutal-btn-secondary {
-  background-color: var(--color-non-photo-blue);
-  color: var(--color-midnight-green);
-  border-color: var(--color-midnight-green);
-  box-shadow: 3px 3px 0 0 var(--shadow);
+  background-color: var(--color-blue);
+  color: var(--color-midnight);
+  border-color: var(--color-midnight);
 }
 
 .brutal-btn-secondary:hover:not(:disabled) {
   background-color: var(--color-beige);
-  color: var(--color-midnight-green);
+  color: var(--color-midnight);
 }
 
-/* Outline Button: Transparent/Beige bg + Midnight Green text + border */
+/* Bordo Emphasis / Destructive Button */
+.brutal-btn-bordo {
+  background-color: var(--color-bordo);
+  color: var(--color-beige);
+  border-color: var(--color-midnight);
+}
+
+.brutal-btn-bordo:hover:not(:disabled) {
+  background-color: var(--color-beige);
+  color: var(--color-bordo);
+}
+
+/* Green Emphasis Button */
+.brutal-btn-green {
+  background-color: var(--color-green);
+  color: var(--color-beige);
+  border-color: var(--color-midnight);
+}
+
+.brutal-btn-green:hover:not(:disabled) {
+  background-color: var(--color-blue);
+  color: var(--color-midnight);
+}
+
+/* Outline Button: Beige bg + Midnight Green text */
 .brutal-btn-outline {
-  background-color: var(--surface);
-  color: var(--text-primary);
-  border-color: var(--border);
+  background-color: var(--color-beige);
+  color: var(--color-midnight);
+  border-color: var(--color-midnight);
 }
 
 .brutal-btn-outline:hover:not(:disabled) {
-  background-color: var(--color-non-photo-blue);
-  color: var(--color-midnight-green);
+  background-color: var(--color-blue);
+  color: var(--color-midnight);
 }
 
-/* Button placed on Midnight Green surfaces (Navbar, Footer, Admin Sidebar, Lightbox) */
+/* Button placed on dark cards (Midnight Green, Bordo, Green, Navbar, Footer, Lightbox) */
 .brutal-btn-on-dark {
-  background-color: var(--color-non-photo-blue);
-  color: var(--color-midnight-green);
+  background-color: var(--color-blue);
+  color: var(--color-midnight);
   border: 2px solid var(--color-beige);
   box-shadow: 3px 3px 0 0 var(--color-beige);
   transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms ease;
@@ -242,51 +305,90 @@
 
 .brutal-btn-on-dark:hover:not(:disabled) {
   background-color: var(--color-beige);
-  color: var(--color-midnight-green);
+  color: var(--color-midnight);
   transform: translate(-1.5px, -1.5px);
-  box-shadow: 5px 5px 0 0 var(--color-non-photo-blue);
+  box-shadow: 5px 5px 0 0 var(--color-blue);
 }
 
 .brutal-btn-on-dark-outline {
-  background-color: var(--color-midnight-green);
+  background-color: transparent;
   color: var(--color-beige);
-  border: 2px solid var(--color-non-photo-blue);
-  box-shadow: 3px 3px 0 0 var(--color-non-photo-blue);
+  border: 2px solid var(--color-beige);
+  box-shadow: 3px 3px 0 0 var(--color-blue);
   transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms ease, color 140ms ease;
 }
 
 .brutal-btn-on-dark-outline:hover:not(:disabled) {
-  background-color: var(--color-non-photo-blue);
-  color: var(--color-midnight-green);
+  background-color: var(--color-blue);
+  color: var(--color-midnight);
   transform: translate(-1.5px, -1.5px);
   box-shadow: 5px 5px 0 0 var(--color-beige);
 }
 
 /* Form Controls */
 .brutal-input {
-  border: 2px solid var(--border);
-  background-color: var(--surface);
-  color: var(--text-primary);
+  border: 2px solid var(--color-midnight);
+  background-color: var(--color-beige);
+  color: var(--color-midnight);
   transition: box-shadow 140ms ease, border-color 140ms ease;
 }
 
 .brutal-input::placeholder {
   color: var(--text-muted);
-  opacity: 0.7;
+  opacity: 0.72;
 }
 
 .brutal-input:focus {
   outline: none;
-  box-shadow: 3px 3px 0 0 var(--focus-ring);
-  border-color: var(--border);
+  box-shadow: 3px 3px 0 0 var(--color-bordo);
+  border-color: var(--color-midnight);
 }
 
-/* Crisp Neo-Brutalist Category Accent Label (Non Photo Blue) */
+/* ==================================================
+   CRISP NEO-BRUTALIST BADGES & LABELS
+   ================================================== */
+
 .brutal-badge {
   display: inline-block;
-  background-color: var(--color-non-photo-blue);
-  color: var(--color-midnight-green);
-  border: 1.5px solid var(--color-midnight-green);
+  background-color: var(--color-blue);
+  color: var(--color-midnight);
+  border: 1.5px solid var(--color-midnight);
+  padding: 0.15rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.brutal-badge-bordo {
+  display: inline-block;
+  background-color: var(--color-bordo);
+  color: var(--color-beige);
+  border: 1.5px solid var(--color-midnight);
+  padding: 0.15rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.brutal-badge-green {
+  display: inline-block;
+  background-color: var(--color-green);
+  color: var(--color-beige);
+  border: 1.5px solid var(--color-midnight);
+  padding: 0.15rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.brutal-badge-beige {
+  display: inline-block;
+  background-color: var(--color-beige);
+  color: var(--color-midnight);
+  border: 1.5px solid var(--color-midnight);
   padding: 0.15rem 0.5rem;
   font-family: var(--font-mono);
   font-size: 0.7rem;
@@ -296,9 +398,9 @@
 
 .brutal-badge-inverse {
   display: inline-block;
-  background-color: var(--color-midnight-green);
+  background-color: var(--color-midnight);
   color: var(--color-beige);
-  border: 1.5px solid var(--color-midnight-green);
+  border: 1.5px solid var(--color-midnight);
   padding: 0.15rem 0.5rem;
   font-family: var(--font-mono);
   font-size: 0.7rem;
@@ -306,9 +408,9 @@
   line-height: 1.3;
 }
 
-/* Skeleton Loader strictly within 3-color system */
+/* Skeleton Loader strictly within 5-color system */
 .brutal-skeleton {
-  background-color: color-mix(in srgb, var(--color-non-photo-blue) 35%, var(--bg-page));
+  background-color: color-mix(in srgb, var(--color-blue) 35%, var(--color-beige));
   border: 2px solid var(--border-subtle);
 }
 

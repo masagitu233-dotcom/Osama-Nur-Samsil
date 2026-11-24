@@ -59,7 +59,7 @@ export const MessagesPanel: React.FC = () => {
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
-                    <span className={isNew ? 'brutal-badge-inverse' : 'brutal-badge'}>
+                    <span className={isNew ? 'brutal-badge-bordo' : 'brutal-badge-green'}>
                       Status: {msg.status === 'new' ? 'Baru' : msg.status === 'read' ? 'Dibaca' : 'Dibalas'}
                     </span>
                     <h2 className="font-display text-xl font-extrabold mt-2">{msg.subject}</h2>
@@ -86,7 +86,7 @@ export const MessagesPanel: React.FC = () => {
                       type="button"
                       onClick={() => setDeleteTarget(msg)}
                       aria-label={`Hapus pesan ${msg.subject}`}
-                      className="brutal-btn brutal-btn-primary p-2 cursor-pointer"
+                      className="brutal-btn brutal-btn-bordo p-2 cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -121,7 +121,7 @@ export const MessagesPanel: React.FC = () => {
           <button
             type="button"
             onClick={confirmDelete}
-            className="brutal-btn brutal-btn-primary px-4 py-2 text-xs font-bold cursor-pointer"
+            className="brutal-btn brutal-btn-bordo px-4 py-2 text-xs font-bold cursor-pointer"
           >
             Hapus Permanen
           </button>
@@ -225,7 +225,7 @@ export const MediaLibraryPanel: React.FC = () => {
                       type="button"
                       onClick={() => setDeleteTarget(asset)}
                       aria-label={`Hapus ${asset.fileName}`}
-                      className="brutal-btn brutal-btn-primary p-1.5 cursor-pointer"
+                      className="brutal-btn brutal-btn-bordo p-1.5 cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -257,7 +257,7 @@ export const MediaLibraryPanel: React.FC = () => {
           <button
             type="button"
             onClick={confirmDelete}
-            className="brutal-btn brutal-btn-primary px-4 py-2 text-xs font-bold cursor-pointer"
+            className="brutal-btn brutal-btn-bordo px-4 py-2 text-xs font-bold cursor-pointer"
           >
             Hapus File
           </button>

@@ -48,10 +48,6 @@ interface PortfolioContextValue {
   loginWithGoogle: () => Promise<void>;
   logoutAdmin: () => Promise<void>;
 
-  // Theme
-  theme: 'light' | 'dark';
-  toggleTheme: () => void;
-
   // Toast notifications
   toast: { type: 'success' | 'error' | 'info'; message: string } | null;
   showToast: (type: 'success' | 'error' | 'info', message: string) => void;
@@ -89,13 +85,6 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [activityLogs, setActivityLogs] = useState<ActivityLogItem[]>([]);
   const [mediaAssets, setMediaAssets] = useState<MediaAssetItem[]>([]);
 
-  // Theme
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    if (typeof window === 'undefined') return 'light';
-    const stored = window.localStorage.getItem('osama-portfolio-theme');
-    return stored === 'dark' ? 'dark' : 'light';
-  });
-
   // Toast
   const [toast, setToast] = useState<{ type: 'success' | 'error' | 'info'; message: string } | null>(null);
 
@@ -108,13 +97,6 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const timer = window.setTimeout(() => setToast(null), 4200);
     return () => window.clearTimeout(timer);
   }, [toast]);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-    window.localStorage.setItem('osama-portfolio-theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
 
   // Auth listener + Admin UID/Email RBAC verification
   useEffect(() => {
@@ -347,8 +329,6 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         authError,
         loginWithGoogle,
         logoutAdmin,
-        theme,
-        toggleTheme,
         toast,
         showToast,
         clearToast: () => setToast(null),

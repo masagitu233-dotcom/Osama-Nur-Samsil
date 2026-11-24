@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, Moon, Share2, Sun, X } from 'lucide-react';
+import { Menu, Share2, X } from 'lucide-react';
 import type { PublicRoute } from '../../types/portfolio';
 import { usePortfolio } from '../../context/PortfolioContext';
 
@@ -30,7 +30,7 @@ const MOBILE_ALL_NAV: Array<{ label: string; route: PublicRoute }> = [
 
 export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onShareProfile }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { publicData, theme, toggleTheme } = usePortfolio();
+  const { publicData } = usePortfolio();
 
   const handleLinkClick = (e: React.MouseEvent, route: PublicRoute) => {
     e.preventDefault();
@@ -116,22 +116,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onShar
                 </a>
               );
             })}
-            <div className="pt-3 mt-2 border-t-2 border-[#8ACCD5]/40 flex items-center gap-3">
-              <button
-                type="button"
-                onClick={toggleTheme}
-                className="flex-1 brutal-btn-on-dark-outline px-3 py-2.5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
-              >
-                {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-                <span>{theme === 'light' ? 'Mode Gelap' : 'Mode Terang'}</span>
-              </button>
+            <div className="pt-3 mt-2 border-t-2 border-[#8ACCD5]/40">
               <button
                 type="button"
                 onClick={() => {
                   setMobileOpen(false);
                   onShareProfile();
                 }}
-                className="flex-1 brutal-btn-on-dark px-3 py-2.5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full brutal-btn-on-dark px-3 py-2.5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Share2 className="w-4 h-4" />
                 <span>Bagikan Profil</span>

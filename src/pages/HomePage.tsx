@@ -10,6 +10,7 @@ import {
 import { usePortfolio } from '../context/PortfolioContext';
 import type { PublicRoute } from '../types/portfolio';
 import { SafeImage } from '../components/ui/SafeImage';
+import { getCardTone } from '../utils/cardVariants';
 
 interface HomePageProps {
   onNavigate: (route: PublicRoute) => void;
@@ -47,118 +48,21 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
 
   return (
     <div className="space-y-20 pb-8">
-      {/* HERO SECTION: Asymmetric 2-Column Split (items-stretch) */}
-      <section aria-label="Perkenalan utama" className="pt-8 sm:pt-12">
+      {/* HERO SECTION:
+          - Desktop & Tablet (md+): Photo on LEFT (5 cols), Identity & Actions on RIGHT (7 cols)
+          - Mobile (< md): Horizontal row at top of hero with circular 1:1 photo on FAR LEFT & identity on RIGHT */}
+      <section aria-label="Perkenalan utama" className="pt-6 sm:pt-10 lg:pt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
-            {/* Left Column: Editorial Typography & Actions */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-10 items-stretch">
+            {/* LEFT COLUMN (Desktop & Tablet): Editorial Portrait Frame */}
             <motion.div
-              initial={{ opacity: 0, y: 14 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-7 flex flex-col justify-between surface-card brutal-card p-6 sm:p-10"
+              className="hidden md:flex md:col-span-5 relative"
             >
-              <div>
-                <div className="flex flex-wrap items-center gap-2.5 text-xs font-mono-num font-bold mb-5">
-                  <span className="brutal-badge">{profile.domicile}</span>
-                  <span className="text-muted">
-                    {education[0]
-                      ? `${education[0].fieldOfStudy} (${education[0].graduationYear})`
-                      : 'Portofolio Profesional'}
-                  </span>
-                </div>
-
-                <h1 className="font-display text-4xl sm:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.04] text-balance">
-                  {profile.fullName.toUpperCase()}
-                </h1>
-
-                <p className="mt-5 font-display text-xl sm:text-2xl font-bold leading-snug border-l-4 border-[#8ACCD5] pl-4 text-balance">
-                  {profile.headline}
-                </p>
-
-                <p className="mt-5 text-base leading-relaxed text-muted max-w-2xl">
-                  {profile.shortBio}
-                </p>
-
-                {/* Crisp Editorial Key Facts Strip (fills vertical balance cleanly, zero pills) */}
-                <dl className="mt-7 pt-5 border-t border-subtle grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-                  <div>
-                    <dt className="font-mono-num uppercase text-muted font-bold">Pendidikan</dt>
-                    <dd className="font-bold text-sm mt-0.5">
-                      {education[0] ? `${education[0].fieldOfStudy}` : 'Hukum Keluarga'}
-                    </dd>
-                    <dd className="text-muted">
-                      {education[0] ? `${education[0].institution} (${education[0].graduationYear})` : 'Unismuh Makassar'}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="font-mono-num uppercase text-muted font-bold">Inisiatif Digital</dt>
-                    <dd className="font-bold text-sm mt-0.5">
-                      {featuredProject ? featuredProject.title : 'Dars with Osama'}
-                    </dd>
-                    <dd className="text-muted">Pendidikan Islam &amp; Artikel Ilmiah</dd>
-                  </div>
-                  <div>
-                    <dt className="font-mono-num uppercase text-muted font-bold">Bahasa &amp; Peran</dt>
-                    <dd className="font-bold text-sm mt-0.5">
-                      {languageSkills.length > 0
-                        ? languageSkills.map((l) => `${l.name.replace('Bahasa ', '')} (${l.proficiencyLabel})`).join(' · ')
-                        : 'Arab (Menengah) · Inggris (Dasar)'}
-                    </dd>
-                    <dd className="text-muted">Remote, Freelance &amp; Full-Time</dd>
-                  </div>
-                </dl>
-              </div>
-
-              {/* Action Controls */}
-              <div className="mt-8 pt-6 border-t-2 border-brutal flex flex-wrap items-center gap-3.5">
-                <button
-                  type="button"
-                  onClick={() => onNavigate('/projects')}
-                  className="brutal-btn brutal-btn-primary font-display font-bold text-sm px-5 py-3 inline-flex items-center gap-2 cursor-pointer whitespace-nowrap"
-                >
-                  <span>Explore Portfolio</span>
-                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleDownloadCv}
-                  className="brutal-btn brutal-btn-secondary font-display font-bold text-sm px-5 py-3 inline-flex items-center gap-2 cursor-pointer whitespace-nowrap"
-                >
-                  <Download className="w-4 h-4" aria-hidden="true" />
-                  <span>Download CV</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigate('/contact')}
-                  className="brutal-btn brutal-btn-outline font-display font-bold text-sm px-5 py-3 inline-flex items-center gap-2 cursor-pointer whitespace-nowrap"
-                >
-                  <span>Contact Me</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={onShareProfile}
-                  aria-label="Bagikan tautan profil"
-                  className="px-3 py-3 text-xs font-mono-num font-bold text-muted hover:text-[#013A42] dark:hover:text-[#8ACCD5] inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap transition-colors"
-                >
-                  <Share2 className="w-4 h-4" aria-hidden="true" />
-                  <span>Bagikan</span>
-                </button>
-              </div>
-            </motion.div>
-
-            {/* Right Column: Editorial Portrait Frame */}
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-5 relative flex"
-            >
-              <div className="w-full brutal-card surface-highlight overflow-hidden flex flex-col">
-                <div className="relative flex-1 min-h-[340px] sm:min-h-[400px] lg:min-h-0">
+              <div className="w-full brutal-card card-bordo frame-midnight overflow-hidden flex flex-col">
+                <div className="relative flex-1 min-h-[380px] lg:min-h-0 bg-[#F8F8E1]">
                   <SafeImage
                     src={profile.photoUrl}
                     alt={`Foto profil ${profile.fullName}`}
@@ -173,25 +77,144 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                   />
                   <div
                     aria-hidden="true"
-                    className="absolute bottom-0 left-0 w-6 h-6 bg-[#013A42] border-t-2 border-r-2 border-[#F8F8E1]"
+                    className="absolute bottom-0 left-0 w-7 h-7 bg-[#0F3D3A] border-t-2 border-r-2 border-[#F8F8E1]"
                   />
                 </div>
-                <div className="px-5 py-3.5 border-t-2 border-brutal surface-card flex items-center justify-between gap-3 text-xs font-mono-num">
+                <div className="px-5 py-3.5 border-t-[2.5px] border-[#013A42] bg-[#6C151E] text-[#F8F8E1] flex items-center justify-between gap-3 text-xs font-mono-num">
                   <span className="font-bold truncate">{profile.domicile}</span>
-                  <span className="text-muted whitespace-nowrap shrink-0">
+                  <span className="text-[#8ACCD5] font-bold whitespace-nowrap shrink-0">
                     Open for Remote &amp; Full-Time
                   </span>
                 </div>
               </div>
             </motion.div>
+
+            {/* RIGHT COLUMN (Desktop & Tablet) / MAIN HERO CARD (Mobile) */}
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: 0.06, ease: [0.16, 1, 0.3, 1] }}
+              className="md:col-span-7 flex flex-col justify-between card-beige brutal-card frame-shadow-green p-4 min-[360px]:p-5 sm:p-8 lg:p-10"
+            >
+              <div>
+                {/* Mobile Horizontal Row: Circular Profile Photo (Far Left) + Name & Headline (Right)
+                    Desktop/Tablet: Standard stacked identity inside right column */}
+                <div className="flex flex-row items-center gap-3.5 min-[360px]:gap-4 sm:gap-5 md:block">
+                  {/* Mobile-Only Circular 1:1 Profile Frame (88px–112px responsive) */}
+                  <div className="md:hidden shrink-0 w-[88px] h-[88px] min-[375px]:w-[96px] min-[375px]:h-[96px] min-[420px]:w-[110px] min-[420px]:h-[110px] rounded-full p-1 bg-[#6C151E] border-[2.5px] border-[#013A42] shadow-[4px_4px_0_0_#013A42]">
+                    <div className="w-full h-full rounded-full overflow-hidden border-2 border-[#F8F8E1] bg-[#F8F8E1]">
+                      <SafeImage
+                        src={profile.photoUrl}
+                        alt={`Foto profil ${profile.fullName}`}
+                        fallbackLabel={profile.fullName}
+                        priority
+                        className="w-full h-full object-cover object-[50%_18%]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Identity Block (Right of photo on mobile, full width of right column on desktop) */}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2 text-[11px] sm:text-xs font-mono-num font-bold mb-1.5 md:mb-5">
+                      <span className="brutal-badge">{profile.domicile}</span>
+                      <span className="hidden sm:inline text-muted">
+                        {education[0]
+                          ? `${education[0].fieldOfStudy} (${education[0].graduationYear})`
+                          : 'Portofolio Profesional'}
+                      </span>
+                    </div>
+
+                    <h1 className="font-display text-[20px] min-[360px]:text-[24px] min-[420px]:text-[27px] md:text-4xl lg:text-5xl xl:text-[54px] font-extrabold tracking-tight leading-[1.06] text-balance break-words">
+                      {profile.fullName.toUpperCase()}
+                    </h1>
+
+                    <p className="mt-1.5 md:mt-5 font-display text-xs min-[360px]:text-[13px] min-[420px]:text-sm md:text-xl lg:text-2xl font-bold leading-snug border-l-[3px] md:border-l-4 border-[#6C151E] pl-2.5 md:pl-4 text-balance">
+                      {profile.headline}
+                    </p>
+                  </div>
+                </div>
+
+                <p className="mt-5 text-sm sm:text-base leading-relaxed text-muted max-w-2xl">
+                  {profile.shortBio}
+                </p>
+
+                {/* Crisp Editorial Key Facts Strip */}
+                <dl className="mt-6 pt-5 border-t border-subtle grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                  <div>
+                    <dt className="font-mono-num uppercase text-[#6C151E] font-bold">Pendidikan</dt>
+                    <dd className="font-bold text-sm mt-0.5">
+                      {education[0] ? `${education[0].fieldOfStudy}` : 'Hukum Keluarga'}
+                    </dd>
+                    <dd className="text-muted">
+                      {education[0] ? `${education[0].institution} (${education[0].graduationYear})` : 'Unismuh Makassar'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-mono-num uppercase text-[#0F3D3A] font-bold">Inisiatif Digital</dt>
+                    <dd className="font-bold text-sm mt-0.5">
+                      {featuredProject ? featuredProject.title : 'Dars with Osama'}
+                    </dd>
+                    <dd className="text-muted">Pendidikan Islam &amp; Artikel Ilmiah</dd>
+                  </div>
+                  <div>
+                    <dt className="font-mono-num uppercase text-[#013A42] font-bold">Bahasa &amp; Peran</dt>
+                    <dd className="font-bold text-sm mt-0.5">
+                      {languageSkills.length > 0
+                        ? languageSkills.map((l) => `${l.name.replace('Bahasa ', '')} (${l.proficiencyLabel})`).join(' · ')
+                        : 'Arab (Menengah) · Inggris (Dasar)'}
+                    </dd>
+                    <dd className="text-muted">Remote, Freelance &amp; Full-Time</dd>
+                  </div>
+                </dl>
+              </div>
+
+              {/* Action Controls */}
+              <div className="mt-7 pt-5 border-t-2 border-brutal flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => onNavigate('/projects')}
+                  className="brutal-btn brutal-btn-primary font-display font-bold text-xs sm:text-sm px-4 sm:px-5 py-2.5 sm:py-3 inline-flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                >
+                  <span>Explore Portfolio</span>
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleDownloadCv}
+                  className="brutal-btn brutal-btn-secondary font-display font-bold text-xs sm:text-sm px-4 sm:px-5 py-2.5 sm:py-3 inline-flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                >
+                  <Download className="w-4 h-4" aria-hidden="true" />
+                  <span>Download CV</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => onNavigate('/contact')}
+                  className="brutal-btn brutal-btn-outline font-display font-bold text-xs sm:text-sm px-4 sm:px-5 py-2.5 sm:py-3 inline-flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                >
+                  <span>Contact Me</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={onShareProfile}
+                  aria-label="Bagikan tautan profil"
+                  className="px-2.5 py-2.5 text-xs font-mono-num font-bold text-muted hover:text-[#6C151E] inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap transition-colors"
+                >
+                  <Share2 className="w-4 h-4" aria-hidden="true" />
+                  <span>Bagikan</span>
+                </button>
+              </div>
+            </motion.div>
           </div>
 
-          {/* Full-Width 4-Column Portfolio Index Strip below Hero Split */}
+          {/* Full-Width 4-Column Portfolio Index Strip (4 Distinct Planned Card Colors: Beige, Blue, Green, Bordo) */}
           <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-4">
             <button
               type="button"
               onClick={() => onNavigate('/experience')}
-              className="text-left brutal-card brutal-card-interactive surface-card p-5 cursor-pointer"
+              className="text-left brutal-card brutal-card-interactive card-beige frame-midnight p-5 cursor-pointer"
             >
               <p className="font-mono-num text-2xl sm:text-3xl font-extrabold">
                 {String(experiences.length + organizations.length).padStart(2, '0')}
@@ -205,7 +228,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             <button
               type="button"
               onClick={() => onNavigate('/projects')}
-              className="text-left brutal-card brutal-card-interactive surface-card p-5 cursor-pointer"
+              className="text-left brutal-card brutal-card-interactive card-blue frame-shadow-bordo p-5 cursor-pointer"
             >
               <p className="font-mono-num text-2xl sm:text-3xl font-extrabold">
                 {String(projects.length).padStart(2, '0')}
@@ -219,9 +242,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             <button
               type="button"
               onClick={() => onNavigate('/skills')}
-              className="text-left brutal-card brutal-card-interactive surface-card p-5 cursor-pointer"
+              className="text-left brutal-card brutal-card-interactive card-green frame-midnight p-5 cursor-pointer"
             >
-              <p className="font-mono-num text-2xl sm:text-3xl font-extrabold">
+              <p className="font-mono-num text-2xl sm:text-3xl font-extrabold text-[#8ACCD5]">
                 {String(skills.length).padStart(2, '0')}
               </p>
               <p className="font-display font-bold text-sm mt-1">Keahlian &amp; Perangkat</p>
@@ -233,9 +256,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             <button
               type="button"
               onClick={() => onNavigate('/certificates')}
-              className="text-left brutal-card brutal-card-interactive surface-highlight p-5 cursor-pointer"
+              className="text-left brutal-card brutal-card-interactive card-bordo frame-midnight p-5 cursor-pointer"
             >
-              <p className="font-mono-num text-2xl sm:text-3xl font-extrabold">
+              <p className="font-mono-num text-2xl sm:text-3xl font-extrabold text-[#8ACCD5]">
                 {String(certificates.length).padStart(2, '0')}
               </p>
               <p className="font-display font-bold text-sm mt-1">Sertifikat &amp; Pelatihan</p>
@@ -247,11 +270,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
         </div>
       </section>
 
-      {/* SECTION 01: RINGKASAN BIDANG KEAHLIAN */}
+      {/* SECTION 01: RINGKASAN BIDANG KEAHLIAN (Beige + Green + Midnight Card Trio) */}
       <section aria-labelledby="home-skills-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 pb-4 border-b-2 border-brutal">
           <div>
-            <span className="brutal-badge">01. Bidang Keahlian</span>
+            <span className="brutal-badge-bordo">01. Bidang Keahlian</span>
             <h2 id="home-skills-heading" className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-balance">
               Kompetensi Lintas Keilmuan &amp; Digital
             </h2>
@@ -267,10 +290,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Card 1 */}
-          <div className="brutal-card surface-card p-6 flex flex-col justify-between">
+          {/* Card 1: Beige with Bordo Hard Shadow */}
+          <div className="brutal-card card-beige frame-shadow-bordo p-6 flex flex-col justify-between">
             <div>
-              <p className="font-mono-num text-xs font-bold text-muted uppercase">
+              <p className="font-mono-num text-xs font-bold text-[#6C151E] uppercase">
                 Akademik &amp; Pembinaan
               </p>
               <h3 className="font-display text-xl font-extrabold mt-2">
@@ -285,26 +308,26 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             </div>
           </div>
 
-          {/* Card 2 */}
-          <div className="brutal-card surface-card p-6 flex flex-col justify-between">
+          {/* Card 2: Deep Green Card with Beige Text */}
+          <div className="brutal-card card-green frame-midnight p-6 flex flex-col justify-between">
             <div>
-              <p className="font-mono-num text-xs font-bold text-muted uppercase">
+              <p className="font-mono-num text-xs font-bold text-[#8ACCD5] uppercase">
                 Teknologi &amp; Perangkat Digital
               </p>
-              <h3 className="font-display text-xl font-extrabold mt-2">
+              <h3 className="font-display text-xl font-extrabold mt-2 text-[#F8F8E1]">
                 AI Tools, Web &amp; Media IT
               </h3>
               <p className="text-sm text-muted mt-3 leading-relaxed">
                 Terbiasa mengelola publikasi web, dokumentasi digital, desain edukatif, dan pemanfaatan perangkat AI modern untuk riset serta pembelajaran.
               </p>
             </div>
-            <div className="mt-6 pt-4 border-t border-subtle text-xs font-semibold text-muted">
+            <div className="mt-6 pt-4 border-t border-subtle text-xs font-semibold text-[#8ACCD5]">
               {toolSkills.slice(0, 6).map((s) => s.name).join(' · ') || 'ChatGPT · Google AI Studio · Netlify · Firebase'}
             </div>
           </div>
 
           {/* Card 3: Midnight Green Identity Emphasis Card */}
-          <div className="brutal-card surface-dark p-6 flex flex-col justify-between">
+          <div className="brutal-card card-midnight frame-shadow-bordo p-6 flex flex-col justify-between">
             <div>
               <p className="font-mono-num text-xs font-bold text-[#8ACCD5] uppercase">
                 Bahasa &amp; Komunikasi
@@ -342,7 +365,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
       <section aria-labelledby="home-featured-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 pb-4 border-b-2 border-brutal">
           <div>
-            <span className="brutal-badge">02. Sorotan Utama</span>
+            <span className="brutal-badge-green">02. Sorotan Utama</span>
             <h2 id="home-featured-heading" className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-balance">
               Proyek &amp; Pengalaman Pilihan
             </h2>
@@ -366,10 +389,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          {/* Featured Project Spotlight */}
+          {/* Featured Project Spotlight (Beige Card + Bordo Frame Accent) */}
           {featuredProject && (
-            <article className="lg:col-span-7 brutal-card surface-card overflow-hidden flex flex-col">
-              <div className="aspect-[16/10] w-full border-b-2 border-brutal overflow-hidden">
+            <article className="lg:col-span-7 brutal-card card-beige frame-shadow-bordo overflow-hidden flex flex-col">
+              <div className="aspect-[16/10] w-full border-b-[3px] border-[#6C151E] overflow-hidden">
                 <SafeImage
                   src={featuredProject.imageUrls[0]}
                   alt={featuredProject.title}
@@ -380,7 +403,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-2.5 text-xs font-mono-num font-bold">
-                    <span className="brutal-badge">Proyek Unggulan</span>
+                    <span className="brutal-badge-bordo">Proyek Unggulan</span>
                     <span className="text-muted">{featuredProject.period || 'Aktif'}</span>
                   </div>
                   <h3 className="font-display text-2xl sm:text-3xl font-extrabold mt-3">
@@ -416,23 +439,21 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             </article>
           )}
 
-          {/* Featured Experiences Stack */}
+          {/* Featured Experiences Stack (Planned Alternation: Blue -> Green -> Bordo) */}
           <div className="lg:col-span-5 flex flex-col gap-5">
             {shownExperiences.map((exp, idx) => {
-              const isHighlighted = idx === 1;
+              const tone = getCardTone(idx, ['blue', 'green', 'bordo']);
               return (
                 <article
                   key={exp.id}
-                  className={`brutal-card brutal-card-interactive p-5 flex-1 flex flex-col justify-between ${
-                    isHighlighted ? 'surface-highlight' : 'surface-card'
-                  }`}
+                  className={`brutal-card brutal-card-interactive p-5 flex-1 flex flex-col justify-between ${tone.cardClass} ${tone.frameClass}`}
                 >
                   <div>
                     <div className="flex items-center justify-between gap-2 text-xs font-mono-num">
                       <span className="font-bold">
                         0{idx + 1}. {exp.category === 'mentoring' ? 'Pembinaan' : exp.category === 'teaching' ? 'Pengajaran' : exp.category === 'committee' ? 'Kepanitiaan' : 'Pekerjaan'}
                       </span>
-                      <span className={isHighlighted ? 'brutal-badge-inverse' : 'brutal-badge'}>
+                      <span className={tone.badgeClass}>
                         {exp.period}
                       </span>
                     </div>
@@ -454,7 +475,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                     <button
                       type="button"
                       onClick={() => onNavigate('/experience')}
-                      className="font-bold inline-flex items-center gap-1 hover:underline cursor-pointer"
+                      className={`font-bold inline-flex items-center gap-1 hover:underline cursor-pointer ${
+                        tone.isDark ? 'text-[#8ACCD5]' : 'text-[#013A42]'
+                      }`}
                     >
                       <span>Selengkapnya</span>
                       <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />

@@ -261,7 +261,7 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
                 type="checkbox"
                 checked={form.isVisible}
                 onChange={(e) => updateField('isVisible', e.target.checked)}
-                className="w-4 h-4 accent-[#013A42] dark:accent-[#8ACCD5]"
+                className="w-4 h-4 accent-[#013A42]"
               />
               <span>Tampilkan di halaman publik</span>
             </label>

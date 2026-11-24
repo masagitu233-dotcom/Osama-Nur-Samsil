@@ -69,14 +69,14 @@ export const ContactPage: React.FC = () => {
       </motion.header>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left: Editable Contact Channels */}
+        {/* Left: Editable Contact Channels (Beige + Deep Green Cards) */}
         <aside className="lg:col-span-5 space-y-5">
-          <div className="brutal-card surface-card p-6 space-y-5">
+          <div className="brutal-card card-beige frame-shadow-green p-6 space-y-5">
             <h2 className="font-display text-2xl font-extrabold">Saluran Kontak Resmi</h2>
 
-            <div className="divide-y divide-[var(--border-subtle)] text-sm">
+            <div className="divide-y divide-[var(--card-border-subtle)] text-sm">
               <div className="py-3.5 first:pt-0">
-                <p className="font-mono-num text-xs font-bold text-muted uppercase">Email</p>
+                <p className="font-mono-num text-xs font-bold text-[#6C151E] uppercase">Email</p>
                 {contacts.email ? (
                   <a
                     href={`mailto:${contacts.email}`}
@@ -91,7 +91,7 @@ export const ContactPage: React.FC = () => {
               </div>
 
               <div className="py-3.5">
-                <p className="font-mono-num text-xs font-bold text-muted uppercase">WhatsApp</p>
+                <p className="font-mono-num text-xs font-bold text-[#0F3D3A] uppercase">WhatsApp</p>
                 {waUrl ? (
                   <a
                     href={waUrl}
@@ -117,19 +117,20 @@ export const ContactPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Professional Links */}
-          <div className="brutal-card surface-highlight p-6 space-y-4">
-            <h2 className="font-display text-xl font-extrabold">Media Sosial &amp; Tautan Profesional</h2>
+          {/* Professional Links: Deep Green Card with Beige Text & Non Photo Blue Accents */}
+          <div className="brutal-card card-green frame-midnight p-6 space-y-4">
+            <span className="brutal-badge">Jejaring Digital</span>
+            <h2 className="font-display text-xl font-extrabold text-[#F8F8E1]">Media Sosial &amp; Tautan Profesional</h2>
             <div className="flex flex-col gap-2.5 text-sm font-bold">
               {contacts.websiteUrl && (
                 <a
                   href={contacts.websiteUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between py-2 border-b border-[#013A42]/25 hover:underline"
+                  className="flex items-center justify-between py-2 border-b border-[#8ACCD5]/30 text-[#F8F8E1] hover:text-[#8ACCD5] transition-colors"
                 >
                   <span>Dars with Osama (Website)</span>
-                  <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                  <ArrowUpRight className="w-4 h-4 text-[#8ACCD5]" aria-hidden="true" />
                 </a>
               )}
               {contacts.linkedinUrl ? (
@@ -137,10 +138,10 @@ export const ContactPage: React.FC = () => {
                   href={contacts.linkedinUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between py-2 border-b border-[#013A42]/25 hover:underline"
+                  className="flex items-center justify-between py-2 border-b border-[#8ACCD5]/30 text-[#F8F8E1] hover:text-[#8ACCD5] transition-colors"
                 >
                   <span>LinkedIn</span>
-                  <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                  <ArrowUpRight className="w-4 h-4 text-[#8ACCD5]" aria-hidden="true" />
                 </a>
               ) : (
                 <p className="text-xs font-semibold text-muted py-1">
@@ -152,10 +153,10 @@ export const ContactPage: React.FC = () => {
                   href={contacts.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between py-2 border-b border-[#013A42]/25 hover:underline"
+                  className="flex items-center justify-between py-2 border-b border-[#8ACCD5]/30 text-[#F8F8E1] hover:text-[#8ACCD5] transition-colors"
                 >
                   <span>GitHub</span>
-                  <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                  <ArrowUpRight className="w-4 h-4 text-[#8ACCD5]" aria-hidden="true" />
                 </a>
               ) : (
                 <p className="text-xs font-semibold text-muted py-1">
@@ -167,18 +168,18 @@ export const ContactPage: React.FC = () => {
                   href={contacts.instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between py-2 hover:underline"
+                  className="flex items-center justify-between py-2 text-[#F8F8E1] hover:text-[#8ACCD5] transition-colors"
                 >
                   <span>Instagram</span>
-                  <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                  <ArrowUpRight className="w-4 h-4 text-[#8ACCD5]" aria-hidden="true" />
                 </a>
               )}
             </div>
           </div>
         </aside>
 
-        {/* Right: Validated Contact Form */}
-        <section aria-labelledby="contact-form-heading" className="lg:col-span-7 brutal-card surface-card p-6 sm:p-8">
+        {/* Right: Validated Contact Form (Beige Card + Bordo Hard Shadow & Bordo Validation Alerts) */}
+        <section aria-labelledby="contact-form-heading" className="lg:col-span-7 brutal-card card-beige frame-shadow-bordo p-6 sm:p-8">
           <h2 id="contact-form-heading" className="font-display text-2xl font-extrabold mb-2">
             Kirim Pesan Langsung
           </h2>
@@ -189,7 +190,7 @@ export const ContactPage: React.FC = () => {
           {submitted && (
             <div
               role="status"
-              className="mb-6 p-4 border-2 border-[#013A42] surface-highlight flex items-start gap-3"
+              className="mb-6 p-4 border-2 border-[#013A42] card-blue flex items-start gap-3"
             >
               <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" aria-hidden="true" />
               <div className="text-sm">
@@ -218,7 +219,7 @@ export const ContactPage: React.FC = () => {
                   className="w-full brutal-input px-3.5 py-2.5 text-sm"
                 />
                 {errors.senderName && (
-                  <p role="alert" className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-bold bg-[#013A42] text-[#F8F8E1] dark:bg-[#8ACCD5] dark:text-[#013A42]">
+                  <p role="alert" className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-bold bg-[#6C151E] text-[#F8F8E1] border border-[#013A42]">
                     <AlertCircle className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                     <span>{errors.senderName}</span>
                   </p>
@@ -240,7 +241,7 @@ export const ContactPage: React.FC = () => {
                   className="w-full brutal-input px-3.5 py-2.5 text-sm"
                 />
                 {errors.senderEmail && (
-                  <p role="alert" className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-bold bg-[#013A42] text-[#F8F8E1] dark:bg-[#8ACCD5] dark:text-[#013A42]">
+                  <p role="alert" className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-bold bg-[#6C151E] text-[#F8F8E1] border border-[#013A42]">
                     <AlertCircle className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                     <span>{errors.senderEmail}</span>
                   </p>
@@ -263,7 +264,7 @@ export const ContactPage: React.FC = () => {
                 className="w-full brutal-input px-3.5 py-2.5 text-sm"
               />
               {errors.subject && (
-                <p role="alert" className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-bold bg-[#013A42] text-[#F8F8E1] dark:bg-[#8ACCD5] dark:text-[#013A42]">
+                <p role="alert" className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-bold bg-[#6C151E] text-[#F8F8E1] border border-[#013A42]">
                   <AlertCircle className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                   <span>{errors.subject}</span>
                 </p>
@@ -285,7 +286,7 @@ export const ContactPage: React.FC = () => {
                 className="w-full brutal-input px-3.5 py-2.5 text-sm resize-y"
               />
               {errors.message && (
-                <p role="alert" className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-bold bg-[#013A42] text-[#F8F8E1] dark:bg-[#8ACCD5] dark:text-[#013A42]">
+                <p role="alert" className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-bold bg-[#6C151E] text-[#F8F8E1] border border-[#013A42]">
                   <AlertCircle className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                   <span>{errors.message}</span>
                 </p>

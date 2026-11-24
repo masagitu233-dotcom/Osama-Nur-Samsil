@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { ExternalLink } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import type { PublicationCategory } from '../types/portfolio';
+import { getCardTone } from '../utils/cardVariants';
 
 const PUB_LABELS: Record<PublicationCategory, string> = {
   study_field: 'Bidang Keilmuan & Kajian',
@@ -42,60 +43,66 @@ export const EducationPage: React.FC = () => {
         </h2>
 
         {education.length === 0 ? (
-          <div className="brutal-card surface-card p-8 text-sm text-muted">
+          <div className="brutal-card card-beige p-8 text-sm text-muted">
             Belum ada riwayat pendidikan yang dipublikasikan.
           </div>
         ) : (
           <div className="space-y-6">
-            {education.map((edu) => (
-              <article key={edu.id} className="brutal-card surface-card p-6 sm:p-8">
-                <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono-num">
-                  <span className="font-bold text-muted uppercase">
-                    {edu.category} &middot; {edu.location}
-                  </span>
-                  <span className="brutal-badge">
-                    Kelulusan {edu.graduationYear}
-                  </span>
-                </div>
-                <h3 className="font-display text-2xl sm:text-3xl font-extrabold mt-3">
-                  {edu.institution}
-                </h3>
-                <p className="text-base sm:text-lg font-bold mt-1">
-                  {edu.degree} &mdash; {edu.fieldOfStudy}
-                </p>
-                {edu.description && (
-                  <p className="text-sm sm:text-base text-muted mt-4 leading-relaxed max-w-4xl">
-                    {edu.description}
+            {education.map((edu, idx) => {
+              const tone = getCardTone(idx, ['beige', 'green', 'blue']);
+              return (
+                <article
+                  key={edu.id}
+                  className={`brutal-card p-6 sm:p-8 ${tone.cardClass} ${
+                    idx === 0 ? 'frame-shadow-bordo' : tone.frameClass
+                  }`}
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono-num">
+                    <span className="font-bold text-muted uppercase">
+                      {edu.category} &middot; {edu.location}
+                    </span>
+                    <span className={idx === 0 ? 'brutal-badge-bordo' : tone.badgeClass}>
+                      Kelulusan {edu.graduationYear}
+                    </span>
+                  </div>
+                  <h3 className="font-display text-2xl sm:text-3xl font-extrabold mt-3">
+                    {edu.institution}
+                  </h3>
+                  <p className="text-base sm:text-lg font-bold mt-1">
+                    {edu.degree} &mdash; {edu.fieldOfStudy}
                   </p>
-                )}
-              </article>
-            ))}
+                  {edu.description && (
+                    <p className="text-sm sm:text-base text-muted mt-4 leading-relaxed max-w-4xl">
+                      {edu.description}
+                    </p>
+                  )}
+                </article>
+              );
+            })}
           </div>
         )}
       </section>
 
-      {/* Academic Fields & Research Interests */}
+      {/* Academic Fields & Research Interests (Blue, Green, Beige, Bordo) */}
       <section aria-labelledby="research-fields-heading">
         <h2 id="research-fields-heading" className="font-display text-2xl sm:text-3xl font-extrabold mb-6">
           02. Bidang Akademik, Kajian &amp; Minat Penelitian
         </h2>
         {studyFields.length === 0 ? (
-          <div className="brutal-card surface-card p-8 text-sm text-muted">
+          <div className="brutal-card card-beige p-8 text-sm text-muted">
             Belum ada bidang kajian yang dipublikasikan. Tambahkan melalui Dashboard Admin.
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {studyFields.map((item, idx) => {
-              const isHighlighted = idx % 2 === 1;
+              const tone = getCardTone(idx, ['blue', 'green', 'beige', 'bordo']);
               return (
                 <article
                   key={item.id}
-                  className={`brutal-card p-6 flex flex-col justify-between ${
-                    isHighlighted ? 'surface-highlight' : 'surface-card'
-                  }`}
+                  className={`brutal-card p-6 flex flex-col justify-between ${tone.cardClass} ${tone.frameClass}`}
                 >
                   <div>
-                    <span className={isHighlighted ? 'brutal-badge-inverse' : 'brutal-badge'}>
+                    <span className={tone.badgeClass}>
                       {PUB_LABELS[item.category]} {item.year ? `· ${item.year}` : ''}
                     </span>
                     <h3 className="font-display text-xl font-extrabold mt-3">{item.title}</h3>
@@ -114,7 +121,9 @@ export const EducationPage: React.FC = () => {
                         href={item.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs font-bold inline-flex items-center gap-1.5 hover:underline"
+                        className={`text-xs font-bold inline-flex items-center gap-1.5 hover:underline ${
+                          tone.isDark ? 'text-[#8ACCD5]' : 'text-[#013A42]'
+                        }`}
                       >
                         <span>Buka Referensi / Platform</span>
                         <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
@@ -128,15 +137,16 @@ export const EducationPage: React.FC = () => {
         )}
       </section>
 
-      {/* Publications & Articles */}
+      {/* Publications & Articles (Bordo, Beige, Midnight, Blue) */}
       <section aria-labelledby="publications-heading">
         <h2 id="publications-heading" className="font-display text-2xl sm:text-3xl font-extrabold mb-6">
           03. Publikasi &amp; Karya Tulis
         </h2>
         {writings.length === 0 ? (
-          <div className="brutal-card surface-highlight p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="brutal-card card-green frame-midnight p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <p className="font-display font-bold text-lg">Arsip Publikasi Siap Diisi</p>
+              <span className="brutal-badge mb-2">Arsip Ilmiah</span>
+              <p className="font-display font-bold text-lg text-[#F8F8E1]">Arsip Publikasi Siap Diisi</p>
               <p className="text-sm text-muted mt-1">
                 Karya tulis, artikel jurnal, atau makalah ilmiah dapat ditambahkan satu per satu melalui menu Publikasi &amp; Kajian di Dashboard Admin.
               </p>
@@ -144,30 +154,36 @@ export const EducationPage: React.FC = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            {writings.map((pub) => (
-              <article key={pub.id} className="brutal-card surface-card p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <span className="brutal-badge">
-                    {PUB_LABELS[pub.category]} {pub.venue ? `· ${pub.venue}` : ''} {pub.year ? `· ${pub.year}` : ''}
-                  </span>
-                  <h3 className="font-display text-xl font-extrabold mt-2">{pub.title}</h3>
-                  {pub.summary && (
-                    <p className="text-sm text-muted mt-2 max-w-3xl">{pub.summary}</p>
+            {writings.map((pub, idx) => {
+              const tone = getCardTone(idx, ['bordo', 'beige', 'midnight', 'blue']);
+              return (
+                <article
+                  key={pub.id}
+                  className={`brutal-card p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${tone.cardClass} ${tone.frameClass}`}
+                >
+                  <div>
+                    <span className={tone.badgeClass}>
+                      {PUB_LABELS[pub.category]} {pub.venue ? `· ${pub.venue}` : ''} {pub.year ? `· ${pub.year}` : ''}
+                    </span>
+                    <h3 className="font-display text-xl font-extrabold mt-2">{pub.title}</h3>
+                    {pub.summary && (
+                      <p className="text-sm text-muted mt-2 max-w-3xl">{pub.summary}</p>
+                    )}
+                  </div>
+                  {pub.url && (
+                    <a
+                      href={pub.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`${tone.buttonClass} px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap shrink-0`}
+                    >
+                      <span>Baca Karya</span>
+                      <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+                    </a>
                   )}
-                </div>
-                {pub.url && (
-                  <a
-                    href={pub.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="brutal-btn brutal-btn-primary px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap shrink-0"
-                  >
-                    <span>Baca Karya</span>
-                    <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
-                  </a>
-                )}
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         )}
       </section>

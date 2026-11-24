@@ -6,6 +6,7 @@ import type { CertificateItem } from '../types/portfolio';
 import { filterCertificates } from '../utils/portfolioLogic';
 import { SafeImage } from '../components/ui/SafeImage';
 import { Modal } from '../components/ui/Modal';
+import { getCardTone } from '../utils/cardVariants';
 
 export const CertificatesPage: React.FC = () => {
   const { publicData } = usePortfolio();
@@ -46,7 +47,7 @@ export const CertificatesPage: React.FC = () => {
         transition={{ duration: 0.3 }}
         className="border-b-2 border-brutal pb-8"
       >
-        <span className="brutal-badge">04. Pengembangan Kompetensi</span>
+        <span className="brutal-badge-bordo">04. Pengembangan Kompetensi</span>
         <h1 className="font-display text-4xl sm:text-5xl font-extrabold mt-3 text-balance">
           Sertifikat &amp; Riwayat Pelatihan
         </h1>
@@ -55,7 +56,7 @@ export const CertificatesPage: React.FC = () => {
         </p>
       </motion.header>
 
-      {/* SECTION 01: TRAINING DOMAINS (Domestic & International) */}
+      {/* SECTION 01: TRAINING DOMAINS (Green Card for Domestic + Bordo Card for International) */}
       <section aria-labelledby="training-domains-heading" className="space-y-6">
         <div>
           <h2 id="training-domains-heading" className="font-display text-2xl sm:text-3xl font-extrabold">
@@ -67,10 +68,10 @@ export const CertificatesPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Domestic */}
-          <div className="brutal-card surface-card p-6 sm:p-7 space-y-5">
-            <div className="flex items-center justify-between gap-2 pb-3 border-b-2 border-brutal">
-              <h3 className="font-display text-xl font-extrabold">Pelatihan Dalam Negeri</h3>
+          {/* Domestic: Deep Green Card with Beige Text */}
+          <div className="brutal-card card-green frame-midnight p-6 sm:p-7 space-y-5">
+            <div className="flex items-center justify-between gap-2 pb-3 border-b-2 border-[#8ACCD5]/50">
+              <h3 className="font-display text-xl font-extrabold text-[#F8F8E1]">Pelatihan Dalam Negeri</h3>
               <span className="brutal-badge">Nasional</span>
             </div>
             {domesticTrainings.length === 0 ? (
@@ -79,15 +80,15 @@ export const CertificatesPage: React.FC = () => {
               <div className="space-y-5">
                 {domesticTrainings.map((t) => (
                   <article key={t.id} className="space-y-2">
-                    <p className="font-bold text-base">{t.title}</p>
+                    <p className="font-bold text-base text-[#F8F8E1]">{t.title}</p>
                     {t.organizer && (
-                      <p className="text-xs font-mono-num text-muted">
+                      <p className="text-xs font-mono-num text-[#8ACCD5] font-semibold">
                         {t.organizer} {t.year ? `· ${t.year}` : ''}
                       </p>
                     )}
                     <p className="text-sm text-muted leading-relaxed">{t.description}</p>
                     {t.topics.length > 0 && (
-                      <p className="text-xs font-bold pt-1">
+                      <p className="text-xs font-bold pt-1 text-[#8ACCD5]">
                         Bidang: {t.topics.join(' · ')}
                       </p>
                     )}
@@ -97,11 +98,11 @@ export const CertificatesPage: React.FC = () => {
             )}
           </div>
 
-          {/* International */}
-          <div className="brutal-card surface-highlight p-6 sm:p-7 space-y-5">
-            <div className="flex items-center justify-between gap-2 pb-3 border-b-2 border-[#013A42]">
-              <h3 className="font-display text-xl font-extrabold">Pelatihan Internasional / Luar Negeri</h3>
-              <span className="brutal-badge-inverse">Internasional</span>
+          {/* International: Bordo Card with Beige Text */}
+          <div className="brutal-card card-bordo frame-midnight p-6 sm:p-7 space-y-5">
+            <div className="flex items-center justify-between gap-2 pb-3 border-b-2 border-[#F8F8E1]/35">
+              <h3 className="font-display text-xl font-extrabold text-[#F8F8E1]">Pelatihan Internasional / Luar Negeri</h3>
+              <span className="brutal-badge-beige">Internasional</span>
             </div>
             {internationalTrainings.length === 0 ? (
               <p className="text-sm text-muted">Belum ada data pelatihan internasional.</p>
@@ -109,15 +110,15 @@ export const CertificatesPage: React.FC = () => {
               <div className="space-y-5">
                 {internationalTrainings.map((t) => (
                   <article key={t.id} className="space-y-2">
-                    <p className="font-bold text-base">{t.title}</p>
+                    <p className="font-bold text-base text-[#F8F8E1]">{t.title}</p>
                     {t.organizer && (
-                      <p className="text-xs font-mono-num text-muted">
+                      <p className="text-xs font-mono-num text-[#8ACCD5] font-semibold">
                         {t.organizer} {t.year ? `· ${t.year}` : ''}
                       </p>
                     )}
                     <p className="text-sm text-muted leading-relaxed">{t.description}</p>
                     {t.topics.length > 0 && (
-                      <p className="text-xs font-bold pt-1">
+                      <p className="text-xs font-bold pt-1 text-[#8ACCD5]">
                         Bidang: {t.topics.join(' · ')}
                       </p>
                     )}
@@ -143,7 +144,7 @@ export const CertificatesPage: React.FC = () => {
         </div>
 
         {/* Search & Filter Toolbar */}
-        <div className="brutal-card surface-card p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
+        <div className="brutal-card card-beige frame-shadow-green p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
           <div className="lg:col-span-5 relative">
             <Search
               className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-muted"
@@ -210,9 +211,9 @@ export const CertificatesPage: React.FC = () => {
 
         {/* Empty State or Grid */}
         {certificates.length === 0 ? (
-          <div className="brutal-card surface-card p-8 sm:p-12 text-center space-y-3 border-t-4 border-t-[#8ACCD5]">
+          <div className="brutal-card card-blue frame-shadow-bordo p-8 sm:p-12 text-center space-y-3">
             <div>
-              <span className="brutal-badge">Arsip Sertifikat Autentik</span>
+              <span className="brutal-badge-bordo">Arsip Sertifikat Autentik</span>
             </div>
             <h3 className="font-display text-2xl font-extrabold">
               Belum Ada Dokumen Sertifikat yang Diunggah
@@ -222,7 +223,7 @@ export const CertificatesPage: React.FC = () => {
             </p>
           </div>
         ) : filteredCertificates.length === 0 ? (
-          <div className="brutal-card surface-card p-10 text-center">
+          <div className="brutal-card card-beige p-10 text-center">
             <p className="font-display text-lg font-bold">Sertifikat tidak ditemukan dengan kriteria filter saat ini.</p>
             <button
               type="button"
@@ -239,79 +240,89 @@ export const CertificatesPage: React.FC = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCertificates.map((cert) => (
-              <article
-                key={cert.id}
-                className="brutal-card brutal-card-interactive surface-card overflow-hidden flex flex-col"
-              >
-                <div className="aspect-[4/3] border-b-2 border-brutal bg-[#8ACCD5]/30 overflow-hidden relative">
-                  {cert.fileType === 'pdf' && !cert.thumbnailUrl ? (
-                    <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center surface-highlight">
-                      <div className="w-14 h-14 border-2 border-[#013A42] bg-[#013A42] text-[#F8F8E1] flex items-center justify-center mb-3">
-                        <FileText className="w-7 h-7" aria-hidden="true" />
+            {filteredCertificates.map((cert, idx) => {
+              const tone = getCardTone(idx, ['beige', 'blue', 'green', 'bordo']);
+              const certFrameBorder =
+                idx % 3 === 0
+                  ? 'border-[#6C151E]'
+                  : idx % 3 === 1
+                  ? 'border-[#013A42]'
+                  : 'border-[#0F3D3A]';
+              return (
+                <article
+                  key={cert.id}
+                  className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col ${tone.cardClass} ${tone.frameClass}`}
+                >
+                  {/* Certificate original document frame (ZERO color filters on document!) */}
+                  <div className={`aspect-[4/3] border-b-[3px] ${certFrameBorder} bg-[#F8F8E1] overflow-hidden relative`}>
+                    {cert.fileType === 'pdf' && !cert.thumbnailUrl ? (
+                      <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center card-blue">
+                        <div className="w-14 h-14 border-2 border-[#013A42] bg-[#6C151E] text-[#F8F8E1] flex items-center justify-center mb-3">
+                          <FileText className="w-7 h-7" aria-hidden="true" />
+                        </div>
+                        <p className="font-mono-num text-xs font-bold uppercase text-[#013A42]">Dokumen PDF</p>
+                        <p className="text-xs text-[#013A42]/80 mt-1 truncate max-w-full">
+                          {cert.fileName || cert.title}
+                        </p>
                       </div>
-                      <p className="font-mono-num text-xs font-bold uppercase">Dokumen PDF</p>
-                      <p className="text-xs text-muted mt-1 truncate max-w-full">
-                        {cert.fileName || cert.title}
-                      </p>
-                    </div>
-                  ) : (
-                    <SafeImage
-                      src={cert.thumbnailUrl || cert.fileUrl}
-                      alt={cert.title}
-                      fallbackLabel={cert.title}
-                      className="w-full h-full object-cover"
-                    />
-                  )}
-                </div>
-
-                <div className="p-5 flex-1 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center justify-between gap-2 text-xs font-mono-num">
-                      <span className="truncate text-muted font-semibold">
-                        {cert.category} &middot; {cert.field}
-                      </span>
-                      <span className="brutal-badge shrink-0">{cert.year}</span>
-                    </div>
-                    <h3 className="font-display text-lg font-extrabold mt-2.5 leading-snug">{cert.title}</h3>
-                    <p className="text-sm font-bold text-muted mt-0.5">{cert.issuer}</p>
-                    {cert.description && (
-                      <p className="text-sm text-muted mt-2 line-clamp-2">
-                        {cert.description}
-                      </p>
+                    ) : (
+                      <SafeImage
+                        src={cert.thumbnailUrl || cert.fileUrl}
+                        alt={cert.title}
+                        fallbackLabel={cert.title}
+                        className="w-full h-full object-cover"
+                      />
                     )}
                   </div>
 
-                  <div className="mt-5 pt-4 border-t border-subtle flex items-center gap-2.5">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedCert(cert)}
-                      className="flex-1 brutal-btn brutal-btn-primary py-2 px-3 text-xs font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer"
-                    >
-                      <ZoomIn className="w-3.5 h-3.5" aria-hidden="true" />
-                      <span>Lihat Detail</span>
-                    </button>
-                    {cert.fileUrl && (
-                      <a
-                        href={cert.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        download={cert.fileName || undefined}
-                        aria-label={`Unduh dokumen ${cert.title}`}
-                        className="brutal-btn brutal-btn-secondary p-2"
+                  <div className="p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between gap-2 text-xs font-mono-num">
+                        <span className="truncate text-muted font-semibold">
+                          {cert.category} &middot; {cert.field}
+                        </span>
+                        <span className={`${tone.badgeClass} shrink-0`}>{cert.year}</span>
+                      </div>
+                      <h3 className="font-display text-lg font-extrabold mt-2.5 leading-snug">{cert.title}</h3>
+                      <p className="text-sm font-bold text-muted mt-0.5">{cert.issuer}</p>
+                      {cert.description && (
+                        <p className="text-sm text-muted mt-2 line-clamp-2">
+                          {cert.description}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="mt-5 pt-4 border-t border-subtle flex items-center gap-2.5">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedCert(cert)}
+                        className={`flex-1 ${tone.buttonClass} py-2 px-3 text-xs font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer`}
                       >
-                        <Download className="w-4 h-4" />
-                      </a>
-                    )}
+                        <ZoomIn className="w-3.5 h-3.5" aria-hidden="true" />
+                        <span>Lihat Detail</span>
+                      </button>
+                      {cert.fileUrl && (
+                        <a
+                          href={cert.fileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          download={cert.fileName || undefined}
+                          aria-label={`Unduh dokumen ${cert.title}`}
+                          className={`${tone.secondaryButtonClass} p-2`}
+                        >
+                          <Download className="w-4 h-4" />
+                        </a>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         )}
       </section>
 
-      {/* Lightbox / Detail Modal (Midnight Green frame + Beige controls) */}
+      {/* Lightbox / Detail Modal (Midnight Green frame + Bordo/Blue document border) */}
       <Modal
         open={Boolean(selectedCert)}
         onClose={() => setSelectedCert(null)}
@@ -329,7 +340,7 @@ export const CertificatesPage: React.FC = () => {
             {selectedCert.fileUrl ? (
               selectedCert.fileType === 'pdf' ? (
                 <div className="space-y-4">
-                  <div className="border-2 border-[#8ACCD5] bg-[#F8F8E1] h-[460px] overflow-hidden">
+                  <div className="border-[3px] border-[#6C151E] bg-[#F8F8E1] h-[460px] overflow-hidden shadow-[4px_4px_0_0_#8ACCD5]">
                     <iframe
                       src={selectedCert.fileUrl}
                       title={selectedCert.title}
@@ -358,7 +369,7 @@ export const CertificatesPage: React.FC = () => {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <div className="border-2 border-[#8ACCD5] bg-[#F8F8E1] overflow-hidden">
+                  <div className="border-[3px] border-[#6C151E] bg-[#F8F8E1] overflow-hidden shadow-[4px_4px_0_0_#8ACCD5]">
                     <SafeImage
                       src={selectedCert.fileUrl}
                       alt={selectedCert.title}

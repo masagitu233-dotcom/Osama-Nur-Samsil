@@ -12,10 +12,8 @@ import {
   LogOut,
   Mail,
   Menu,
-  Moon,
   Settings,
   Sparkles,
-  Sun,
   User,
   Users,
   X,
@@ -60,7 +58,7 @@ const SIDEBAR_ITEMS: Array<{ id: AdminTab; label: string; icon: React.ComponentT
 ];
 
 export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
-  const { isAdmin, user, logoutAdmin, theme, toggleTheme, contactMessages } = usePortfolio();
+  const { isAdmin, user, logoutAdmin, contactMessages } = usePortfolio();
   const [activeTab, setActiveTab] = useState<AdminTab>('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -158,11 +156,11 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
                   </span>
                   {item.id === 'messages' && unreadCount > 0 && (
                     <span
-                      className={`font-mono-num text-[11px] font-extrabold ${
-                        active ? 'text-[#013A42]' : 'text-[#8ACCD5]'
+                      className={`font-mono-num text-[11px] font-extrabold px-1.5 py-0.5 ${
+                        active ? 'bg-[#6C151E] text-[#F8F8E1]' : 'bg-[#6C151E] text-[#F8F8E1]'
                       }`}
                     >
-                      ({unreadCount})
+                      {unreadCount}
                     </span>
                   )}
                 </button>
@@ -180,24 +178,14 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
             <ExternalLink className="w-3.5 h-3.5" />
             <span>Lihat Website Publik</span>
           </button>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={toggleTheme}
-              aria-label="Ubah tema"
-              className="brutal-btn-on-dark-outline px-3 py-2 text-xs font-bold inline-flex items-center justify-center cursor-pointer"
-            >
-              {theme === 'light' ? <Moon className="w-3.5 h-3.5" /> : <Sun className="w-3.5 h-3.5" />}
-            </button>
-            <button
-              type="button"
-              onClick={logoutAdmin}
-              className="flex-1 brutal-btn-on-dark-outline px-3 py-2 text-xs font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-              <span>Logout</span>
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={logoutAdmin}
+            className="w-full brutal-btn-on-dark-outline px-3 py-2 text-xs font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Logout</span>
+          </button>
         </div>
       </aside>
 

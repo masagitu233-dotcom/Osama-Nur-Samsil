@@ -51,15 +51,15 @@ export const Modal: React.FC<ModalProps> = ({
       <div
         className={`w-full ${maxWidthClass} max-h-[90vh] flex flex-col overflow-hidden ${
           isLightbox
-            ? 'surface-dark brutal-card-on-dark'
-            : 'surface-card brutal-card'
+            ? 'card-midnight brutal-card-on-dark'
+            : 'card-beige brutal-card frame-shadow-bordo'
         }`}
       >
         <div
           className={`flex items-start justify-between gap-4 px-6 py-4 border-b-2 ${
             isLightbox
               ? 'border-[#8ACCD5] bg-[#013A42] text-[#F8F8E1]'
-              : 'border-brutal surface-highlight text-[#013A42]'
+              : 'border-[#013A42] card-blue text-[#013A42]'
           }`}
         >
           <div className="min-w-0">

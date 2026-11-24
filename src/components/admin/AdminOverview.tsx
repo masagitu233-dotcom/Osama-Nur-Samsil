@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Database, RefreshCw } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { seedInitialPortfolioToFirestore } from '../../services/portfolioService';
+import { getCardTone } from '../../utils/cardVariants';
 
 interface AdminOverviewProps {
   onSelectTab: (tab: string) => void;
@@ -72,27 +73,28 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({ onSelectTab }) => 
         </div>
       )}
 
-      {/* Metrics Grid */}
+      {/* Metrics Grid (Planned 4-Color Card Alternation: Beige, Blue, Green, Bordo) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((s, idx) => (
-          <button
-            key={s.label}
-            type="button"
-            onClick={() => onSelectTab(s.tab)}
-            className={`text-left brutal-card brutal-card-interactive p-5 cursor-pointer ${
-              idx === 6 || idx === 3 ? 'surface-highlight' : 'surface-card'
-            }`}
-          >
-            <p className="font-mono-num text-3xl font-extrabold">
-              {String(s.count).padStart(2, '0')}
-            </p>
-            <p className="font-display font-bold text-sm mt-1.5">{s.label}</p>
-          </button>
-        ))}
+        {stats.map((s, idx) => {
+          const tone = getCardTone(idx, ['beige', 'blue', 'green', 'bordo']);
+          return (
+            <button
+              key={s.label}
+              type="button"
+              onClick={() => onSelectTab(s.tab)}
+              className={`text-left brutal-card brutal-card-interactive p-5 cursor-pointer ${tone.cardClass} ${tone.frameClass}`}
+            >
+              <p className={`font-mono-num text-3xl font-extrabold ${tone.isDark ? 'text-[#8ACCD5]' : ''}`}>
+                {String(s.count).padStart(2, '0')}
+              </p>
+              <p className="font-display font-bold text-sm mt-1.5">{s.label}</p>
+            </button>
+          );
+        })}
       </div>
 
       {/* Recent Activity Log */}
-      <section className="brutal-card surface-card p-6">
+      <section className="brutal-card card-beige frame-shadow-green p-6">
         <h2 className="font-display text-xl font-extrabold mb-4">Aktivitas Pengelolaan Konten Terbaru</h2>
         {activityLogs.length === 0 ? (
           <p className="text-sm text-muted">

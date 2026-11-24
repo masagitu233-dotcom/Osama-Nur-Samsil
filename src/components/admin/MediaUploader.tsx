@@ -162,7 +162,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
       </div>
 
       {error && (
-        <p role="alert" className="inline-block px-2.5 py-1 text-xs font-bold bg-[#013A42] text-[#F8F8E1] dark:bg-[#8ACCD5] dark:text-[#013A42]">
+        <p role="alert" className="inline-block px-2.5 py-1 text-xs font-bold bg-[#6C151E] text-[#F8F8E1] border border-[#013A42]">
           {error}
         </p>
       )}
@@ -253,7 +253,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                     type="button"
                     onClick={() => onRemoveUrl(url)}
                     aria-label={`Hapus lampiran ${idx + 1}`}
-                    className="absolute top-1.5 right-1.5 bg-[#013A42] text-[#F8F8E1] border-2 border-[#8ACCD5] p-1.5 cursor-pointer hover:bg-[#8ACCD5] hover:text-[#013A42] transition-colors"
+                    className="absolute top-1.5 right-1.5 bg-[#6C151E] text-[#F8F8E1] border-2 border-[#013A42] p-1.5 cursor-pointer hover:bg-[#8ACCD5] hover:text-[#013A42] transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>

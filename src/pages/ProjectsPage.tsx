@@ -6,6 +6,7 @@ import type { ProjectCategory, ProjectItem } from '../types/portfolio';
 import { filterProjects } from '../utils/portfolioLogic';
 import { SafeImage } from '../components/ui/SafeImage';
 import { Modal } from '../components/ui/Modal';
+import { getCardTone } from '../utils/cardVariants';
 
 const PROJECT_TABS: Array<{ value: ProjectCategory | 'all'; label: string }> = [
   { value: 'all', label: 'Semua Karya' },
@@ -45,7 +46,7 @@ export const ProjectsPage: React.FC = () => {
         transition={{ duration: 0.3 }}
         className="border-b-2 border-brutal pb-8"
       >
-        <span className="brutal-badge">06. Karya &amp; Inisiatif Digital</span>
+        <span className="brutal-badge-bordo">06. Karya &amp; Inisiatif Digital</span>
         <h1 className="font-display text-4xl sm:text-5xl font-extrabold mt-3 text-balance">
           Projects &amp; Works
         </h1>
@@ -68,8 +69,8 @@ export const ProjectsPage: React.FC = () => {
                 onClick={() => setCategory(tab.value)}
                 className={`px-3.5 py-2 text-xs font-bold border-2 border-brutal cursor-pointer whitespace-nowrap transition-colors ${
                   active
-                    ? 'surface-highlight shadow-[3px_3px_0_0_var(--shadow)]'
-                    : 'surface-card hover:bg-[#8ACCD5] hover:text-[#013A42]'
+                    ? 'card-blue shadow-[3px_3px_0_0_#013A42]'
+                    : 'card-beige hover:bg-[#8ACCD5] hover:text-[#013A42]'
                 }`}
               >
                 {tab.label}
@@ -94,9 +95,9 @@ export const ProjectsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Projects Grid */}
+      {/* Projects Grid (Planned 5-Color Variation Cycle) */}
       {filtered.length === 0 ? (
-        <div className="brutal-card surface-card p-10 text-center">
+        <div className="brutal-card card-beige p-10 text-center">
           <p className="font-display text-lg font-bold">Belum ada proyek pada kategori ini.</p>
           <button
             type="button"
@@ -112,15 +113,19 @@ export const ProjectsPage: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {filtered.map((proj, idx) => {
-            const isHighlighted = idx % 2 === 1;
+            const tone = getCardTone(idx, ['beige', 'green', 'bordo', 'blue', 'midnight']);
+            const imgBorder =
+              tone.tone === 'beige'
+                ? 'border-[#6C151E]'
+                : tone.tone === 'blue'
+                ? 'border-[#013A42]'
+                : 'border-[#8ACCD5]';
             return (
               <article
                 key={proj.id}
-                className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col ${
-                  isHighlighted ? 'surface-highlight' : 'surface-card'
-                }`}
+                className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col ${tone.cardClass} ${tone.frameClass}`}
               >
-                <div className="aspect-[16/10] border-b-2 border-brutal overflow-hidden">
+                <div className={`aspect-[16/10] border-b-[3px] ${imgBorder} overflow-hidden bg-[#F8F8E1]`}>
                   <SafeImage
                     src={proj.imageUrls[0]}
                     alt={proj.title}
@@ -132,7 +137,7 @@ export const ProjectsPage: React.FC = () => {
                 <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between gap-2 text-xs font-mono-num">
-                      <span className={isHighlighted ? 'brutal-badge-inverse' : 'brutal-badge'}>
+                      <span className={tone.badgeClass}>
                         {String(idx + 1).padStart(2, '0')}. {PROJECT_CAT_LABELS[proj.category]}
                       </span>
                       <span className="font-bold">{proj.period || 'Aktif'}</span>
@@ -149,7 +154,7 @@ export const ProjectsPage: React.FC = () => {
                         href={proj.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="brutal-btn brutal-btn-primary px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap"
+                        className={`${tone.buttonClass} px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap`}
                       >
                         <span>Buka Tautan</span>
                         <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
@@ -158,9 +163,7 @@ export const ProjectsPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setSelectedProject(proj)}
-                      className={`brutal-btn px-4 py-2 text-xs font-bold cursor-pointer whitespace-nowrap ${
-                        isHighlighted ? 'brutal-btn-outline' : 'brutal-btn-secondary'
-                      }`}
+                      className={`${tone.secondaryButtonClass} px-4 py-2 text-xs font-bold cursor-pointer whitespace-nowrap`}
                     >
                       Dokumentasi &amp; Detail
                     </button>
@@ -189,7 +192,12 @@ export const ProjectsPage: React.FC = () => {
             {selectedProject.imageUrls.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {selectedProject.imageUrls.map((url, idx) => (
-                  <div key={idx} className="border-2 border-brutal aspect-[4/3] overflow-hidden">
+                  <div
+                    key={idx}
+                    className={`border-[3px] aspect-[4/3] overflow-hidden shadow-[4px_4px_0_0_#013A42] ${
+                      idx % 2 === 0 ? 'border-[#6C151E]' : 'border-[#0F3D3A]'
+                    }`}
+                  >
                     <SafeImage
                       src={url}
                       alt={`${selectedProject.title} gambar ${idx + 1}`}
