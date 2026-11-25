@@ -354,10 +354,10 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
               setInputMode('upload');
               setError(null);
             }}
-            className={`px-3 py-1.5 text-xs font-bold border-2 border-[#013A42] inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
+            className={`px-3 py-1.5 text-xs font-bold border-2 inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
               inputMode === 'upload'
-                ? 'bg-[#013A42] text-[#F8F8E1]'
-                : 'bg-[#F8F8E1] text-[#013A42] hover:bg-[#8ACCD5]'
+                ? 'bg-[#D9B44A] text-[#001F24] border-[#001F24]'
+                : 'bg-[#F8F8E1] text-[#1B2A3D] border-[#001F24] hover:bg-[#D9B44A] hover:text-[#001F24]'
             }`}
           >
             <UploadCloud className="w-3.5 h-3.5" aria-hidden="true" />
@@ -372,10 +372,10 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
               setInputMode('drive_link');
               setError(null);
             }}
-            className={`px-3 py-1.5 text-xs font-bold border-2 border-[#013A42] inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
+            className={`px-3 py-1.5 text-xs font-bold border-2 inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
               inputMode === 'drive_link'
-                ? 'bg-[#013A42] text-[#F8F8E1]'
-                : 'bg-[#F8F8E1] text-[#013A42] hover:bg-[#8ACCD5]'
+                ? 'bg-[#D9B44A] text-[#001F24] border-[#001F24]'
+                : 'bg-[#F8F8E1] text-[#1B2A3D] border-[#001F24] hover:bg-[#D9B44A] hover:text-[#001F24]'
             }`}
           >
             <Link2 className="w-3.5 h-3.5" aria-hidden="true" />
@@ -401,8 +401,8 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
             }}
             className={`border-2 border-dashed p-3.5 text-center transition-colors ${
               dragging
-                ? 'border-[#013A42] surface-highlight'
-                : 'border-brutal surface-card'
+                ? 'border-[#001F24] surface-highlight'
+                : 'border-[#001F24] bg-[#F8F8E1] text-[#1B2A3D]'
             } ${isBusy ? 'opacity-60 pointer-events-none' : ''}`}
           >
             <input
@@ -426,7 +426,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                 pilih dari perangkat
               </button>
             </p>
-            <p className="text-[11px] text-muted mt-1">
+            <p className="text-[11px] text-[#1B2A3D]/80 mt-1">
               {acceptMode === 'pdf'
                 ? 'Format PDF (maks. 10 MB) — tersimpan langsung ke Google Drive'
                 : acceptMode === 'image'
@@ -436,7 +436,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
           </div>
 
           {/* Visibility Access Selector (Public vs Private) */}
-          <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 border-2 border-subtle bg-[#F8F8E1] text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 border-2 border-[#001F24] bg-[#F8F8E1] text-[#1B2A3D] text-xs">
             <span className="font-bold flex items-center gap-1.5">
               {visibility === 'public' ? (
                 <Globe className="w-3.5 h-3.5 text-[#0F3D3A]" aria-hidden="true" />
@@ -459,7 +459,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
 
           {/* Local Preview + Real Progress Panel BEFORE / DURING Upload */}
           {pending.length > 0 && (
-            <div className="border-2 border-brutal surface-card p-3 space-y-2.5">
+            <div className="border-2 border-[#001F24] bg-[#F8F8E1] text-[#1B2A3D] p-3 space-y-2.5">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="brutal-badge">
                   Siap Unggah ({pending.length} file) &middot; {UPLOAD_STAGE_LABELS[uploadState.stage]}
@@ -477,31 +477,31 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                     key={`${item.file.name}-${idx}`}
                     className={`flex items-center gap-2.5 p-1.5 border-2 ${
                       isBusy && idx === activeFileIndex
-                        ? 'border-[#013A42] bg-[#8ACCD5]/25'
-                        : 'border-subtle'
+                        ? 'border-[#001F24] bg-[#D9B44A] text-[#001F24]'
+                        : 'border-[#1B2A3D]/30'
                     }`}
                   >
                     {item.previewUrl ? (
                       <img
                         src={item.previewUrl}
                         alt={item.file.name}
-                        className="w-12 h-12 object-contain bg-[#F8F8E1] border-2 border-brutal shrink-0"
+                        className="w-12 h-12 object-contain bg-[#F8F8E1] border-2 border-[#001F24] shrink-0"
                       />
                     ) : (
-                      <div className="w-12 h-12 bg-[#013A42] text-[#F8F8E1] border-2 border-brutal flex items-center justify-center shrink-0">
+                      <div className="w-12 h-12 bg-[#0F3D3A] text-[#F8F8E1] border-2 border-[#001F24] flex items-center justify-center shrink-0">
                         <FileText className="w-5 h-5" />
                       </div>
                     )}
                     <div className="min-w-0 flex-1 text-xs">
                       <p className="font-bold truncate">{item.file.name}</p>
-                      <p className="font-mono-num text-muted">{formatBytes(item.file.size)}</p>
+                      <p className="font-mono-num opacity-80">{formatBytes(item.file.size)}</p>
                     </div>
                     {!isBusy && (
                       <button
                         type="button"
                         onClick={() => removePendingAt(idx)}
                         aria-label={`Hapus ${item.file.name} dari antrean unggah`}
-                        className="p-1 text-[#6C151E] hover:bg-[#8ACCD5]/40 border border-transparent hover:border-[#013A42] cursor-pointer shrink-0"
+                        className="p-1 text-[#6C151E] hover:bg-[#6C151E] hover:text-[#F8F8E1] border border-transparent hover:border-[#001F24] cursor-pointer shrink-0"
                       >
                         <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
                       </button>
@@ -513,13 +513,13 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
               {/* Real Transfer Progress Bar */}
               {(isBusy || uploadState.stage === 'error' || uploadState.stage === 'cancelled') && (
                 <div className="space-y-1.5" aria-live="polite">
-                  <div className="h-3.5 border-2 border-[#013A42] bg-[#F8F8E1] overflow-hidden">
+                  <div className="h-3.5 border-2 border-[#001F24] bg-[#F8F8E1] overflow-hidden">
                     <div
                       className={`h-full transition-all duration-150 ${
                         uploadState.stage === 'error'
                           ? 'bg-[#6C151E]'
                           : uploadState.stage === 'initiating'
-                          ? 'bg-[#8ACCD5]/60 animate-pulse w-1/4'
+                          ? 'bg-[#D9B44A] animate-pulse w-1/4'
                           : 'bg-[#0F3D3A]'
                       }`}
                       style={
@@ -591,9 +591,9 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
 
       {/* TAB 2: PASTE & VALIDATE GOOGLE DRIVE LINK */}
       {inputMode === 'drive_link' && showDriveLinkOption && (
-        <div className="border-2 border-brutal surface-card p-4 space-y-3">
+        <div className="border-2 border-[#001F24] bg-[#F8F8E1] text-[#1B2A3D] p-4 space-y-3">
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold uppercase">
+            <label className="block text-xs font-bold uppercase text-[#1B2A3D]">
               Tempel Tautan Google Drive
             </label>
             <input
@@ -606,7 +606,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
               placeholder="https://drive.google.com/file/d/.../view?usp=drive_link"
               className="w-full brutal-input px-3 py-2 text-xs"
             />
-            <p className="text-[11px] text-muted">
+            <p className="text-[11px] text-[#1B2A3D]/80">
               Mendukung format <code className="font-mono-num">/file/d/ID/view</code>,{' '}
               <code className="font-mono-num">/open?id=ID</code>,{' '}
               <code className="font-mono-num">/uc?id=ID</code>, dan parameter{' '}
@@ -623,7 +623,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                   name={`drive-link-type-${label}`}
                   checked={driveLinkFileType === 'image'}
                   onChange={() => setDriveLinkFileType('image')}
-                  className="accent-[#013A42]"
+                  className="accent-[#1B2A3D]"
                 />
                 <span>Gambar</span>
               </label>
@@ -633,7 +633,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                   name={`drive-link-type-${label}`}
                   checked={driveLinkFileType === 'pdf'}
                   onChange={() => setDriveLinkFileType('pdf')}
-                  className="accent-[#013A42]"
+                  className="accent-[#1B2A3D]"
                 />
                 <span>Dokumen PDF</span>
               </label>
@@ -671,7 +671,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
       {error && (
         <p
           role="alert"
-          className="block px-3 py-2 text-xs font-bold bg-[#6C151E] text-[#F8F8E1] border-2 border-[#013A42]"
+          className="block px-3 py-2 text-xs font-bold bg-[#6C151E] text-[#F8F8E1] border-2 border-[#D9B44A]"
         >
           {error}
         </p>
@@ -680,9 +680,9 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
       {successNote && (
         <p
           role="status"
-          className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-[#0F3D3A] text-[#F8F8E1] border-2 border-[#013A42]"
+          className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-[#0F3D3A] text-[#F8F8E1] border-2 border-[#D9B44A]"
         >
-          <CheckCircle2 className="w-4 h-4 text-[#8ACCD5] shrink-0" aria-hidden="true" />
+          <CheckCircle2 className="w-4 h-4 text-[#D9B44A] shrink-0" aria-hidden="true" />
           <span>{successNote}</span>
         </p>
       )}
@@ -695,11 +695,11 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
             return (
               <div
                 key={`${url}-${idx}`}
-                className="border-2 border-brutal surface-card overflow-hidden relative group"
+                className="border-2 border-[#001F24] surface-card overflow-hidden relative group"
               >
                 <div className="aspect-[16/10] overflow-hidden">
                   {isPdf ? (
-                    <div className="w-full h-full flex flex-col items-center justify-center p-2.5 text-center surface-highlight">
+                    <div className="w-full h-full flex flex-col items-center justify-center p-2.5 text-center card-gold text-[#001F24]">
                       <FileText className="w-6 h-6 mb-1" />
                       <span className="font-mono-num text-[10px] font-bold">PDF Terlampir</span>
                     </div>
@@ -712,7 +712,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                     type="button"
                     onClick={() => onRemoveUrl(url)}
                     aria-label={`Hapus lampiran ${idx + 1}`}
-                    className="absolute top-1.5 right-1.5 bg-[#6C151E] text-[#F8F8E1] border-2 border-[#013A42] p-1.5 cursor-pointer hover:bg-[#8ACCD5] hover:text-[#013A42] transition-colors"
+                    className="absolute top-1.5 right-1.5 bg-[#6C151E] text-[#F8F8E1] border-2 border-[#001F24] p-1.5 cursor-pointer hover:bg-[#D9B44A] hover:text-[#001F24] transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>

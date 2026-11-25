@@ -138,11 +138,15 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
   const needsReconnect = status === 'reconnect_required';
   const notConfigured = status === 'not_configured' || status === 'backend_unavailable';
 
+  const isDarkCard = isConnected || needsReconnect;
+
+  const accentTextClass = isDarkCard ? 'text-[#D9B44A]' : 'text-[#001F24]';
+
   const badgeClass = isConnected
-    ? 'brutal-badge-green'
+    ? 'brutal-badge'
     : needsReconnect
-    ? 'brutal-badge-bordo'
-    : 'brutal-badge';
+    ? 'brutal-badge'
+    : 'brutal-badge-navy';
 
   const statusLabel = loading
     ? 'Memeriksa koneksi...'
@@ -162,29 +166,29 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
       data-aos="fade-up"
       className={`brutal-card ${
         isConnected
-          ? 'card-beige frame-shadow-green'
+          ? 'card-green frame-green'
           : needsReconnect
-          ? 'card-beige frame-shadow-bordo'
-          : 'card-blue frame-midnight'
+          ? 'card-bordo frame-bordo'
+          : 'card-gold frame-gold'
       } ${compact ? 'p-3.5 sm:p-4' : 'p-4 sm:p-5'} space-y-3`}
     >
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
         <div className="space-y-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2">
             <span className={badgeClass}>{statusLabel}</span>
-            <span className="font-mono-num text-[11px] font-bold uppercase text-muted">
+            <span className={`font-mono-num text-[11px] font-bold uppercase ${accentTextClass}`}>
               Google Drive API v3 &middot; Penyimpanan Utama
             </span>
           </div>
           <h2 className="font-display text-base sm:text-lg font-extrabold flex items-center gap-2">
             {isConnected ? (
-              <CheckCircle2 className="w-4 h-4 text-[#0F3D3A] shrink-0" aria-hidden="true" />
+              <CheckCircle2 className="w-4 h-4 text-[#D9B44A] shrink-0" aria-hidden="true" />
             ) : needsReconnect ? (
-              <ShieldAlert className="w-4 h-4 text-[#6C151E] shrink-0" aria-hidden="true" />
+              <ShieldAlert className="w-4 h-4 text-[#D9B44A] shrink-0" aria-hidden="true" />
             ) : notConfigured ? (
-              <AlertTriangle className="w-4 h-4 text-[#6C151E] shrink-0" aria-hidden="true" />
+              <AlertTriangle className="w-4 h-4 text-[#001F24] shrink-0" aria-hidden="true" />
             ) : (
-              <CloudOff className="w-4 h-4 shrink-0" aria-hidden="true" />
+              <CloudOff className="w-4 h-4 text-[#001F24] shrink-0" aria-hidden="true" />
             )}
             <span>Integrasi Google Drive Pengelola</span>
           </h2>
@@ -202,7 +206,9 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
             onClick={loadStatus}
             disabled={loading}
             aria-label="Periksa ulang status koneksi Google Drive"
-            className="brutal-btn brutal-btn-outline p-2 text-xs font-bold cursor-pointer disabled:opacity-50"
+            className={`${
+              isDarkCard ? 'brutal-btn-on-dark-outline' : 'brutal-btn brutal-btn-outline'
+            } p-2 text-xs font-bold cursor-pointer disabled:opacity-50`}
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
@@ -212,7 +218,13 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
               type="button"
               onClick={handleConnect}
               disabled={connecting || loading}
-              className="brutal-btn brutal-btn-primary px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
+              className={`${
+                isConnected
+                  ? 'brutal-btn-frame-green'
+                  : needsReconnect
+                  ? 'brutal-btn-frame-bordo'
+                  : 'brutal-btn-frame-gold'
+              } px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60`}
             >
               {connecting ? (
                 <RefreshCw className="w-3.5 h-3.5 animate-spin" />
@@ -234,7 +246,9 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
               type="button"
               onClick={() => setConfirmDisconnectOpen(true)}
               disabled={disconnecting}
-              className="brutal-btn brutal-btn-bordo px-3 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
+              className={`${
+                needsReconnect ? 'brutal-btn-on-dark-outline' : 'brutal-btn-frame-bordo'
+              } px-3 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60`}
             >
               <Unlink className="w-3.5 h-3.5" />
               <span>Cabut Koneksi</span>
@@ -246,7 +260,7 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
       {errorMsg && (
         <div
           role="alert"
-          className="p-3 border-2 border-[#013A42] bg-[#6C151E] text-[#F8F8E1] text-xs font-bold"
+          className="p-3 border-2 border-[#D9B44A] bg-[#6C151E] text-[#F8F8E1] text-xs font-bold"
         >
           {errorMsg}
         </div>
@@ -255,7 +269,9 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
       {!loading && statusData && (
         <div className="pt-2.5 border-t-2 border-subtle grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <div className="space-y-1">
-            <p className="font-mono-num uppercase font-bold text-muted">Akun Pemilik yang Diizinkan</p>
+            <p className={`font-mono-num uppercase font-bold ${accentTextClass}`}>
+              Akun Pemilik yang Diizinkan
+            </p>
             <p className="font-mono-num font-bold break-all">
               {statusData.connectedEmail || statusData.expectedOwnerEmail}
             </p>
@@ -270,7 +286,9 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
           </div>
 
           <div className="space-y-1">
-            <p className="font-mono-num uppercase font-bold text-muted">Folder Utama &amp; Struktur Otomatis</p>
+            <p className={`font-mono-num uppercase font-bold ${accentTextClass}`}>
+              Folder Utama &amp; Struktur Otomatis
+            </p>
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1 font-bold">
                 <FolderOpen className="w-3.5 h-3.5" aria-hidden="true" />
@@ -281,7 +299,7 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
                   href={statusData.rootFolderUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 font-bold underline hover:text-[#6C151E]"
+                  className={`inline-flex items-center gap-1 font-bold underline ${accentTextClass} hover:opacity-80`}
                 >
                   <span>Buka di Drive</span>
                   <ExternalLink className="w-3 h-3" />
@@ -295,8 +313,8 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
                   return (
                     <span
                       key={folderName}
-                      className={`px-1.5 py-0.5 font-mono-num text-[10px] font-bold border border-[#013A42] ${
-                        hasId ? 'bg-[#0F3D3A] text-[#F8F8E1]' : 'bg-[#F8F8E1] text-[#013A42]'
+                      className={`px-1.5 py-0.5 font-mono-num text-[10px] font-bold border border-[#001F24] ${
+                        hasId ? 'bg-[#0F3D3A] text-[#F8F8E1]' : 'bg-[#F8F8E1] text-[#1B2A3D]'
                       }`}
                     >
                       {folderName}
@@ -310,22 +328,22 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
       )}
 
       {!loading && statusData && (statusData.missingConfig.length > 0 || status === 'backend_unavailable') && (
-        <div className="p-3 border-2 border-[#013A42] bg-[#F8F8E1] text-[#013A42] space-y-1 text-xs">
-          <p className="font-bold flex items-center gap-1.5">
+        <div className="p-3 border-2 border-[#001F24] bg-[#F8F8E1] text-[#1B2A3D] space-y-1 text-xs">
+          <p className="font-bold flex items-center gap-1.5 text-[#1B2A3D]">
             <Cloud className="w-4 h-4 shrink-0" />
             <span>Catatan Konfigurasi Deployment Netlify:</span>
           </p>
           {statusData.missingConfig.length > 0 && (
-            <p>
+            <p className="text-[#1B2A3D]">
               Environment variable belum diisi:{' '}
               <code className="font-mono-num font-bold">{statusData.missingConfig.join(', ')}</code>
             </p>
           )}
-          <p className="break-all">
+          <p className="break-all text-[#1B2A3D]">
             Redirect URI OAuth:{' '}
             <code className="font-mono-num font-bold">{statusData.redirectUri}</code>
           </p>
-          <p className="text-muted">
+          <p className="text-[#1B2A3D]">
             Sementara itu, opsi <strong>&ldquo;Masukkan Tautan Google Drive&rdquo;</strong> tetap dapat digunakan langsung di seluruh kolom gambar.
           </p>
         </div>
@@ -344,7 +362,7 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
           <button
             type="button"
             onClick={() => setConfirmDisconnectOpen(false)}
-            className="brutal-btn brutal-btn-outline px-4 py-2 text-xs font-bold cursor-pointer"
+            className="brutal-btn-on-dark-outline px-4 py-2 text-xs font-bold cursor-pointer"
           >
             Batal
           </button>
@@ -352,7 +370,7 @@ export const GoogleDriveConnectionPanel: React.FC<GoogleDriveConnectionPanelProp
             type="button"
             disabled={disconnecting}
             onClick={handleDisconnect}
-            className="brutal-btn brutal-btn-bordo px-4 py-2 text-xs font-bold cursor-pointer disabled:opacity-60"
+            className="brutal-btn-frame-bordo px-4 py-2 text-xs font-bold cursor-pointer disabled:opacity-60"
           >
             {disconnecting ? 'Mencabut...' : 'Ya, Cabut Koneksi'}
           </button>

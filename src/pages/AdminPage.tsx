@@ -124,29 +124,29 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
   return (
     <div className="min-h-screen surface-page flex flex-col lg:flex-row">
       {/* Mobile Admin Top Bar */}
-      <div className="lg:hidden sticky top-0 z-30 h-12 px-4 bg-[#013A42] text-[#F8F8E1] border-b-2 border-[#8ACCD5] flex items-center justify-between">
+      <div className="lg:hidden sticky top-0 z-30 h-12 px-4 bg-[#1B2A3D] text-[#F8F8E1] border-b-2 border-[#001F24] flex items-center justify-between">
         <span className="font-display font-extrabold text-[13px] tracking-tight">ADMIN CMS &middot; OSAMA</span>
         <button
           type="button"
           onClick={() => setSidebarOpen((p) => !p)}
           aria-label="Toggle menu admin"
-          className="brutal-btn-on-dark p-1.5 cursor-pointer"
+          className="brutal-btn-on-dark-outline p-1.5 cursor-pointer"
         >
           {sidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
         </button>
       </div>
 
-      {/* Sidebar Navigation: Midnight Green Identity Surface */}
+      {/* Sidebar Navigation: Ink Navy Surface with Beige Text & Gold Active Highlight */}
       <aside
         className={`${
           sidebarOpen ? 'block' : 'hidden'
-        } lg:block w-full lg:w-56 shrink-0 bg-[#013A42] text-[#F8F8E1] border-b-2 lg:border-b-0 lg:border-r-2 border-[#8ACCD5] flex flex-col justify-between`}
+        } lg:block w-full lg:w-56 shrink-0 bg-[#1B2A3D] text-[#F8F8E1] border-b-2 lg:border-b-0 lg:border-r-2 border-[#001F24] flex flex-col justify-between`}
       >
         <div className="p-3 space-y-3.5">
-          <div className="hidden lg:block pb-3 border-b-2 border-[#8ACCD5]/40">
-            <p className="font-mono-num text-[10px] font-bold text-[#8ACCD5] uppercase tracking-wider">Portfolio CMS</p>
+          <div className="hidden lg:block pb-3 border-b-2 border-[#D9B44A]/35">
+            <p className="font-mono-num text-[10px] font-bold text-[#D9B44A] uppercase tracking-wider">Portfolio CMS</p>
             <p className="font-display font-extrabold text-base leading-tight mt-0.5 text-[#F8F8E1]">OSAMA NUR SAMSIL</p>
-            <p className="text-[11px] text-[#F8F8E1]/75 truncate mt-1">{user?.email}</p>
+            <p className="text-[11px] text-[#F8F8E1]/80 truncate mt-1">{user?.email}</p>
           </div>
 
           <nav aria-label="Menu CMS Admin" className="space-y-0.5">
@@ -160,8 +160,8 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
                   onClick={() => requestTabChange(item.id)}
                   className={`w-full flex items-center justify-between gap-2 px-2.5 py-2 text-xs font-bold border-2 transition-colors cursor-pointer text-left ${
                     active
-                      ? 'bg-[#8ACCD5] text-[#013A42] border-[#F8F8E1] shadow-[2px_2px_0_0_#F8F8E1]'
-                      : 'text-[#F8F8E1] border-transparent hover:bg-[#8ACCD5]/15 hover:border-[#8ACCD5]'
+                      ? 'bg-[#D9B44A] text-[#001F24] border-[#001F24] shadow-[2px_2px_0_0_#001F24]'
+                      : 'text-[#F8F8E1] border-transparent hover:bg-[#D9B44A] hover:text-[#001F24] hover:border-[#001F24]'
                   }`}
                 >
                   <span className="flex items-center gap-2 min-w-0">
@@ -169,11 +169,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
                     <span className="truncate">{item.label}</span>
                   </span>
                   {item.id === 'messages' && unreadCount > 0 && (
-                    <span
-                      className={`font-mono-num text-[10px] font-extrabold px-1.5 py-0.5 ${
-                        active ? 'bg-[#6C151E] text-[#F8F8E1]' : 'bg-[#6C151E] text-[#F8F8E1]'
-                      }`}
-                    >
+                    <span className="font-mono-num text-[10px] font-extrabold px-1.5 py-0.5 bg-[#6C151E] text-[#F8F8E1] border border-[#D9B44A]">
                       {unreadCount}
                     </span>
                   )}
@@ -183,11 +179,11 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
           </nav>
         </div>
 
-        <div className="p-3 border-t-2 border-[#8ACCD5]/40 space-y-2">
+        <div className="p-3 border-t-2 border-[#D9B44A]/35 space-y-2">
           <button
             type="button"
             onClick={() => onNavigate('/')}
-            className="w-full brutal-btn-on-dark px-2.5 py-1.5 text-xs font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+            className="w-full brutal-btn-frame-navy px-2.5 py-1.5 text-xs font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer"
           >
             <ExternalLink className="w-3.5 h-3.5" />
             <span>Lihat Website Publik</span>
@@ -246,7 +242,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
           <button
             type="button"
             onClick={() => setPendingTab(null)}
-            className="brutal-btn brutal-btn-primary px-4 py-2 text-xs font-bold cursor-pointer"
+            className="brutal-btn-frame-navy px-4 py-2 text-xs font-bold cursor-pointer"
           >
             Tetap di Halaman Ini
           </button>
@@ -260,7 +256,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
                 setSidebarOpen(false);
               }
             }}
-            className="brutal-btn brutal-btn-outline px-4 py-2 text-xs font-bold cursor-pointer"
+            className="brutal-btn-on-dark-outline px-4 py-2 text-xs font-bold cursor-pointer"
           >
             Abaikan &amp; Pindah
           </button>

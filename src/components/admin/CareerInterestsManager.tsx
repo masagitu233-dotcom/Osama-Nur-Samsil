@@ -287,12 +287,12 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
       <section
         data-aos="fade-up"
         aria-labelledby="career-overview-heading"
-        className="brutal-card card-beige frame-shadow-green p-5 sm:p-6 space-y-4"
+        className="brutal-card card-green frame-green p-5 sm:p-6 space-y-4"
       >
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <span className="brutal-badge-green">Bagian A</span>
-            <h2 id="career-overview-heading" className="font-display text-lg font-extrabold mt-1.5">
+            <span className="brutal-badge">Bagian A</span>
+            <h2 id="career-overview-heading" className="font-display text-lg font-extrabold mt-1.5 text-[#F8F8E1]">
               Uraian Umum Bidang Pekerjaan
             </h2>
             <p className="text-xs sm:text-sm text-muted mt-0.5">
@@ -307,7 +307,7 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
         <form onSubmit={handleSaveOverview} className="space-y-3.5">
           <div>
             <div className="flex items-center justify-between gap-2 mb-1.5">
-              <label htmlFor="career-overview-input" className="block text-xs font-bold uppercase">
+              <label htmlFor="career-overview-input" className="block text-xs font-bold uppercase text-[#D9B44A]">
                 Uraian Umum Orientasi Pekerjaan
               </label>
               <span className="font-mono-num text-[11px] font-semibold text-muted">
@@ -334,14 +334,14 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
               role="status"
               className={`border-2 p-3 text-xs sm:text-sm font-semibold flex items-start gap-2 ${
                 overviewFeedback.type === 'success'
-                  ? 'bg-[#0F3D3A] text-[#F8F8E1] border-[#013A42]'
-                  : 'bg-[#6C151E] text-[#F8F8E1] border-[#013A42]'
+                  ? 'bg-[#1B2A3D] text-[#F8F8E1] border-[#D9B44A]'
+                  : 'bg-[#6C151E] text-[#F8F8E1] border-[#D9B44A]'
               }`}
             >
               {overviewFeedback.type === 'success' ? (
-                <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#8ACCD5]" aria-hidden="true" />
+                <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#D9B44A]" aria-hidden="true" />
               ) : (
-                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-[#8ACCD5]" aria-hidden="true" />
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-[#D9B44A]" aria-hidden="true" />
               )}
               <span>{overviewFeedback.message}</span>
             </div>
@@ -356,7 +356,7 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
                   setOverviewDirty(false);
                   setOverviewFeedback(null);
                 }}
-                className="brutal-btn brutal-btn-outline px-3.5 py-2 text-xs font-bold cursor-pointer"
+                className="brutal-btn-on-dark-outline px-3.5 py-2 text-xs font-bold cursor-pointer"
               >
                 Batalkan Perubahan
               </button>
@@ -364,7 +364,7 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
             <button
               type="submit"
               disabled={savingOverview}
-              className="brutal-btn brutal-btn-primary px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
+              className="brutal-btn-frame-green px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
             >
               <Save className="w-3.5 h-3.5" aria-hidden="true" />
               <span>{savingOverview ? 'Menyimpan...' : 'Simpan Uraian Umum'}</span>
@@ -408,7 +408,7 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
                     resetItemForm();
                     setItemFeedback(null);
                   }}
-                  className="text-xs font-bold inline-flex items-center gap-1 text-[#6C151E] hover:underline cursor-pointer"
+                  className="text-xs font-bold inline-flex items-center gap-1 text-[#D9B44A] hover:underline cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" aria-hidden="true" />
                   <span>Batal Edit</span>
@@ -485,7 +485,7 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
                     type="checkbox"
                     checked={isVisible}
                     onChange={(e) => setIsVisible(e.target.checked)}
-                    className="w-4 h-4 accent-[#013A42]"
+                    className="w-4 h-4 accent-[#D9B44A]"
                   />
                   <span>Tampilkan ke Publik</span>
                 </label>
@@ -497,14 +497,14 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
                 role="status"
                 className={`border-2 p-3 text-xs font-semibold flex items-start gap-2 ${
                   itemFeedback.type === 'success'
-                    ? 'bg-[#0F3D3A] text-[#F8F8E1] border-[#013A42]'
-                    : 'bg-[#6C151E] text-[#F8F8E1] border-[#013A42]'
+                    ? 'bg-[#0F3D3A] text-[#F8F8E1] border-[#D9B44A]'
+                    : 'bg-[#6C151E] text-[#F8F8E1] border-[#D9B44A]'
                 }`}
               >
                 {itemFeedback.type === 'success' ? (
-                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#8ACCD5]" aria-hidden="true" />
+                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#D9B44A]" aria-hidden="true" />
                 ) : (
-                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-[#8ACCD5]" aria-hidden="true" />
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-[#D9B44A]" aria-hidden="true" />
                 )}
                 <span>{itemFeedback.message}</span>
               </div>
@@ -515,7 +515,7 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
                 <button
                   type="button"
                   onClick={resetItemForm}
-                  className="brutal-btn brutal-btn-outline px-3.5 py-2 text-xs font-bold cursor-pointer"
+                  className="brutal-btn-on-dark-outline px-3.5 py-2 text-xs font-bold cursor-pointer"
                 >
                   Batal
                 </button>
@@ -523,7 +523,7 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
               <button
                 type="submit"
                 disabled={savingItem}
-                className="brutal-btn brutal-btn-primary px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
+                className="brutal-btn-frame-navy px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
               >
                 {editingItem ? (
                   <Save className="w-3.5 h-3.5" aria-hidden="true" />
@@ -563,16 +563,16 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
                   <article
                     key={item.id}
                     className={`brutal-card surface-card p-4 space-y-3 transition-colors ${
-                      isEditingThis ? 'ring-2 ring-[#6C151E]' : ''
+                      isEditingThis ? 'ring-2 ring-[#D9B44A]' : ''
                     }`}
                   >
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono-num">
-                          <span className="font-extrabold text-[#013A42]">
+                          <span className="font-extrabold text-[#D9B44A]">
                             #{String(idx + 1).padStart(2, '0')}
                           </span>
-                          <span className={item.status === 'published' ? 'brutal-badge' : 'brutal-badge-inverse'}>
+                          <span className={item.status === 'published' ? 'brutal-badge' : 'brutal-badge-bordo'}>
                             {item.status === 'published' ? 'Published' : 'Draft'}
                           </span>
                           <span className="text-muted font-semibold">
@@ -602,7 +602,7 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
                           disabled={idx === 0 || isBusy}
                           aria-label={`Naikkan urutan ${item.title}`}
                           title="Naikkan urutan"
-                          className="brutal-btn brutal-btn-outline px-2 py-1.5 text-xs font-bold inline-flex items-center gap-1 cursor-pointer disabled:opacity-40"
+                          className="brutal-btn-on-dark-outline px-2 py-1.5 text-xs font-bold inline-flex items-center gap-1 cursor-pointer disabled:opacity-40"
                         >
                           <ArrowUp className="w-3.5 h-3.5" aria-hidden="true" />
                           <span className="hidden sm:inline">Naik</span>
@@ -613,7 +613,7 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
                           disabled={idx === careerItems.length - 1 || isBusy}
                           aria-label={`Turunkan urutan ${item.title}`}
                           title="Turunkan urutan"
-                          className="brutal-btn brutal-btn-outline px-2 py-1.5 text-xs font-bold inline-flex items-center gap-1 cursor-pointer disabled:opacity-40"
+                          className="brutal-btn-on-dark-outline px-2 py-1.5 text-xs font-bold inline-flex items-center gap-1 cursor-pointer disabled:opacity-40"
                         >
                           <ArrowDown className="w-3.5 h-3.5" aria-hidden="true" />
                           <span className="hidden sm:inline">Turun</span>
@@ -624,7 +624,7 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
                         <button
                           type="button"
                           onClick={() => handleQuickToggle(item, 'status')}
-                          className="brutal-btn brutal-btn-outline px-2.5 py-1.5 text-xs font-bold cursor-pointer"
+                          className="brutal-btn-on-dark-outline px-2.5 py-1.5 text-xs font-bold cursor-pointer"
                         >
                           {item.status === 'published' ? 'Jadikan Draft' : 'Publikasikan'}
                         </button>
@@ -633,7 +633,7 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
                           onClick={() => handleQuickToggle(item, 'isVisible')}
                           aria-label={item.isVisible ? `Sembunyikan ${item.title}` : `Tampilkan ${item.title}`}
                           title={item.isVisible ? 'Sembunyikan' : 'Tampilkan'}
-                          className="brutal-btn brutal-btn-outline p-1.5 cursor-pointer"
+                          className="brutal-btn-on-dark-outline p-1.5 cursor-pointer"
                         >
                           {item.isVisible ? (
                             <Eye className="w-3.5 h-3.5" aria-hidden="true" />
@@ -645,7 +645,7 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
                           type="button"
                           onClick={() => handleStartEdit(item)}
                           aria-label={`Edit ${item.title}`}
-                          className="brutal-btn brutal-btn-secondary px-2.5 py-1.5 text-xs font-bold inline-flex items-center gap-1 cursor-pointer"
+                          className="brutal-btn-on-dark px-2.5 py-1.5 text-xs font-bold inline-flex items-center gap-1 cursor-pointer"
                         >
                           <Pencil className="w-3.5 h-3.5" aria-hidden="true" />
                           <span>Edit</span>
@@ -654,7 +654,7 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
                           type="button"
                           onClick={() => setDeleteTarget(item)}
                           aria-label={`Hapus ${item.title}`}
-                          className="brutal-btn brutal-btn-bordo px-2.5 py-1.5 text-xs font-bold inline-flex items-center gap-1 cursor-pointer"
+                          className="brutal-btn-frame-bordo px-2.5 py-1.5 text-xs font-bold inline-flex items-center gap-1 cursor-pointer"
                         >
                           <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
                           <span>Hapus</span>
@@ -684,7 +684,7 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
             type="button"
             disabled={deleting}
             onClick={() => setDeleteTarget(null)}
-            className="brutal-btn brutal-btn-outline px-4 py-2 text-xs font-bold cursor-pointer disabled:opacity-50"
+            className="brutal-btn-on-dark-outline px-4 py-2 text-xs font-bold cursor-pointer disabled:opacity-50"
           >
             Batal
           </button>
@@ -692,7 +692,7 @@ export const CareerInterestsManager: React.FC<CareerInterestsManagerProps> = ({ 
             type="button"
             disabled={deleting}
             onClick={handleConfirmDelete}
-            className="brutal-btn brutal-btn-bordo px-4 py-2 text-xs font-bold cursor-pointer disabled:opacity-50"
+            className="brutal-btn-frame-bordo px-4 py-2 text-xs font-bold cursor-pointer disabled:opacity-50"
           >
             {deleting ? 'Menghapus...' : 'Ya, Hapus'}
           </button>

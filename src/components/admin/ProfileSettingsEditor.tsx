@@ -212,7 +212,7 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ onDirtyChange, onO
               <button
                 type="button"
                 onClick={onOpenCareerInterests}
-                className="brutal-btn brutal-btn-secondary px-3.5 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+                className="brutal-btn-on-dark px-3.5 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
               >
                 <span>Kelola Bagian 06</span>
                 <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
@@ -247,7 +247,7 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ onDirtyChange, onO
                 const driveInfo = extractGoogleDriveInfo(form.photoUrl);
                 if (!driveInfo) return null;
                 return (
-                  <p className="mt-1.5 text-[11px] font-mono-num font-bold text-[#0F3D3A]">
+                  <p className="mt-1.5 text-[11px] font-mono-num font-bold text-[#D9B44A]">
                     Tautan Google Drive terdeteksi (ID: {driveInfo.fileId.slice(0, 10)}&hellip;) &mdash; ditampilkan otomatis sebagai gambar.
                   </p>
                 );
@@ -301,7 +301,7 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ onDirtyChange, onO
                 type="checkbox"
                 checked={form.isVisible}
                 onChange={(e) => updateField('isVisible', e.target.checked)}
-                className="w-4 h-4 accent-[#013A42]"
+                className="w-4 h-4 accent-[#D9B44A]"
               />
               <span>Tampilkan di halaman publik</span>
             </label>

@@ -92,7 +92,11 @@ export const MessagesPanel: React.FC = () => {
                       type="button"
                       onClick={() => setDeleteTarget(msg)}
                       aria-label={`Hapus pesan ${msg.subject}`}
-                      className="brutal-btn brutal-btn-bordo p-1.5 cursor-pointer"
+                      className={
+                        isNew
+                          ? 'brutal-btn brutal-btn-bordo p-1.5 cursor-pointer'
+                          : 'brutal-btn-frame-bordo p-1.5 cursor-pointer'
+                      }
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -120,14 +124,14 @@ export const MessagesPanel: React.FC = () => {
           <button
             type="button"
             onClick={() => setDeleteTarget(null)}
-            className="brutal-btn brutal-btn-outline px-4 py-2 text-xs font-bold cursor-pointer"
+            className="brutal-btn-on-dark-outline px-4 py-2 text-xs font-bold cursor-pointer"
           >
             Batal
           </button>
           <button
             type="button"
             onClick={confirmDelete}
-            className="brutal-btn brutal-btn-bordo px-4 py-2 text-xs font-bold cursor-pointer"
+            className="brutal-btn-frame-bordo px-4 py-2 text-xs font-bold cursor-pointer"
           >
             Hapus Permanen
           </button>
@@ -227,9 +231,9 @@ export const MediaLibraryPanel: React.FC = () => {
                 data-aos-delay={getAosStaggerDelay(idx, 100, 4)}
                 className="brutal-card surface-card overflow-hidden flex flex-col"
               >
-                <div className="aspect-[16/10] border-b-2 border-brutal overflow-hidden bg-[#8ACCD5]/25 relative">
+                <div className="aspect-[16/10] border-b-2 border-[#001F24] overflow-hidden bg-[#F8F8E1] relative">
                   {isPdf ? (
-                    <div className="w-full h-full flex flex-col items-center justify-center p-3 text-center surface-highlight">
+                    <div className="w-full h-full flex flex-col items-center justify-center p-3 text-center card-gold text-[#001F24]">
                       <FileText className="w-8 h-8 mb-1.5" />
                       <span className="font-mono-num text-[11px] font-bold">PDF Document</span>
                     </div>
@@ -238,7 +242,7 @@ export const MediaLibraryPanel: React.FC = () => {
                   )}
                   {asset.visibility && (
                     <span
-                      className={`absolute top-2 left-2 px-1.5 py-0.5 font-mono-num text-[10px] font-extrabold uppercase border border-[#013A42] ${
+                      className={`absolute top-2 left-2 px-1.5 py-0.5 font-mono-num text-[10px] font-extrabold uppercase border border-[#001F24] ${
                         asset.visibility === 'private'
                           ? 'bg-[#6C151E] text-[#F8F8E1]'
                           : 'bg-[#0F3D3A] text-[#F8F8E1]'
@@ -266,7 +270,7 @@ export const MediaLibraryPanel: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleCopy(asset.fileUrl)}
-                      className="flex-1 brutal-btn brutal-btn-secondary py-1.5 px-2 text-[11px] font-bold inline-flex items-center justify-center gap-1 cursor-pointer"
+                      className="flex-1 brutal-btn-on-dark py-1.5 px-2 text-[11px] font-bold inline-flex items-center justify-center gap-1 cursor-pointer"
                     >
                       <Copy className="w-3 h-3" />
                       <span>Salin URL</span>
@@ -278,7 +282,7 @@ export const MediaLibraryPanel: React.FC = () => {
                         rel="noopener noreferrer"
                         download={asset.fileName}
                         aria-label={`Unduh ${asset.fileName}`}
-                        className="brutal-btn brutal-btn-outline p-1.5"
+                        className="brutal-btn-on-dark-outline p-1.5"
                       >
                         <Download className="w-3.5 h-3.5" />
                       </a>
@@ -288,7 +292,7 @@ export const MediaLibraryPanel: React.FC = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Buka ${asset.fileName}`}
-                      className="brutal-btn brutal-btn-outline p-1.5"
+                      className="brutal-btn-on-dark-outline p-1.5"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
@@ -296,7 +300,7 @@ export const MediaLibraryPanel: React.FC = () => {
                       type="button"
                       onClick={() => setDeleteTarget(asset)}
                       aria-label={`Hapus ${asset.fileName}`}
-                      className="brutal-btn brutal-btn-bordo p-1.5 cursor-pointer"
+                      className="brutal-btn-frame-bordo p-1.5 cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -322,14 +326,14 @@ export const MediaLibraryPanel: React.FC = () => {
           <button
             type="button"
             onClick={() => setDeleteTarget(null)}
-            className="brutal-btn brutal-btn-outline px-4 py-2 text-xs font-bold cursor-pointer"
+            className="brutal-btn-on-dark-outline px-4 py-2 text-xs font-bold cursor-pointer"
           >
             Batal
           </button>
           <button
             type="button"
             onClick={confirmDelete}
-            className="brutal-btn brutal-btn-bordo px-4 py-2 text-xs font-bold cursor-pointer"
+            className="brutal-btn-frame-bordo px-4 py-2 text-xs font-bold cursor-pointer"
           >
             Hapus File
           </button>

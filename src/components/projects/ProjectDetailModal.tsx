@@ -44,26 +44,27 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
         title={project?.title || ''}
         subtitle={project ? `${categoryLabel}${project.period ? ` · ${project.period}` : ''}` : undefined}
         maxWidthClass="max-w-3xl"
+        tone="green"
       >
         {project && (
-          <div className="space-y-5">
-            {/* Media Showcase: Logo (object-contain) or Project Documentation Photos */}
+          <div className="space-y-5 text-[#F8F8E1]">
+            {/* Media Showcase: Official Dars Logo (object-contain) or Project Documentation Photos */}
             {isDars && !useCustomAsset ? (
               <div
                 data-aos="fade-up"
                 data-aos-offset="-2000"
-                className="border-2 border-[#013A42] bg-[#013A42] text-[#F8F8E1] p-5 flex flex-col sm:flex-row items-center gap-4 shadow-[3px_3px_0_0_#6C151E]"
+                className="border-2 border-[#D9B44A] bg-[#F4F4F0] text-[#1B2A3D] p-5 flex flex-col sm:flex-row items-center gap-5 shadow-[3px_3px_0_0_#001F24]"
               >
-                <div className="p-2.5 bg-[#F8F8E1] border-2 border-[#8ACCD5] shrink-0">
-                  <DarsLogo className="w-16 h-16 object-contain" />
+                <div className="w-32 h-28 sm:w-36 sm:h-32 shrink-0 flex items-center justify-center p-1">
+                  <DarsLogo className="w-full h-full object-contain" />
                 </div>
                 <div className="text-center sm:text-left min-w-0">
-                  <p className="font-mono-num text-[11px] font-bold uppercase text-[#8ACCD5]">
+                  <p className="font-mono-num text-[11px] font-bold uppercase text-[#0F3D3A]">
                     Platform Website Resmi
                   </p>
-                  <p className="font-display text-xl font-extrabold mt-0.5">{project.title}</p>
+                  <p className="font-display text-xl font-extrabold mt-0.5 text-[#1B2A3D]">{project.title}</p>
                   {project.liveUrl && (
-                    <p className="text-xs font-mono-num text-[#F8F8E1]/80 mt-0.5 truncate">
+                    <p className="text-xs font-mono-num text-[#1B2A3D]/80 mt-0.5 truncate">
                       {project.liveUrl}
                     </p>
                   )}
@@ -84,13 +85,11 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                     data-aos-offset="-2000"
                     data-aos-delay={getAosStaggerDelay(idx, 100, 2)}
                     aria-label={`Perbesar gambar ${project.title} ${idx + 1}`}
-                    className={`border-2 overflow-hidden bg-[#F8F8E1] shadow-[3px_3px_0_0_#013A42] cursor-pointer text-left group ${
-                      idx % 2 === 0 ? 'border-[#6C151E]' : 'border-[#0F3D3A]'
-                    }`}
+                    className="border-2 border-[#D9B44A] overflow-hidden bg-[#1B2A3D] shadow-[3px_3px_0_0_#001F24] cursor-pointer text-left group"
                   >
                     <div
                       className={`aspect-[16/9] w-full flex items-center justify-center ${
-                        isDars ? 'bg-[#013A42] p-4' : 'bg-[#F8F8E1]'
+                        isDars ? 'bg-[#F4F4F0] p-4' : 'bg-[#F8F8E1]'
                       }`}
                     >
                       <SafeImage
@@ -104,9 +103,9 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                         }
                       />
                     </div>
-                    <div className="px-2.5 py-1.5 border-t-2 border-[#013A42] bg-[#F8F8E1] flex items-center justify-between text-[11px] font-mono-num font-bold text-[#013A42]">
+                    <div className="px-2.5 py-1.5 border-t-2 border-[#D9B44A] bg-[#1B2A3D] flex items-center justify-between text-[11px] font-mono-num font-bold text-[#F8F8E1]">
                       <span>Dokumentasi {String(idx + 1).padStart(2, '0')}</span>
-                      <Maximize2 className="w-3.5 h-3.5 text-[#013A42]/75 group-hover:text-[#6C151E]" aria-hidden="true" />
+                      <Maximize2 className="w-3.5 h-3.5 text-[#D9B44A]" aria-hidden="true" />
                     </div>
                   </button>
                 ))}
@@ -114,16 +113,16 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
             ) : null}
 
             {/* Metadata Strip */}
-            <div className="border-2 border-[#013A42] bg-[#F8F8E1] p-3.5 flex flex-wrap items-center justify-between gap-2">
+            <div className="border-2 border-[#D9B44A] bg-[#1B2A3D] p-3.5 flex flex-wrap items-center justify-between gap-2">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="brutal-badge-bordo">{categoryLabel}</span>
-                <span className="font-display font-extrabold text-sm sm:text-base text-[#013A42]">
+                <span className="brutal-badge">{categoryLabel}</span>
+                <span className="font-display font-extrabold text-sm sm:text-base text-[#F8F8E1]">
                   {project.title}
                 </span>
               </div>
               {project.period && (
-                <span className="inline-flex items-center gap-1.5 text-xs font-mono-num font-bold text-[#013A42]/85">
-                  <Calendar className="w-3.5 h-3.5 text-[#6C151E]" aria-hidden="true" />
+                <span className="inline-flex items-center gap-1.5 text-xs font-mono-num font-bold text-[#F8F8E1]">
+                  <Calendar className="w-3.5 h-3.5 text-[#D9B44A]" aria-hidden="true" />
                   <span>{project.period}</span>
                 </span>
               )}
@@ -132,10 +131,10 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
             {/* Full Description */}
             {project.description && (
               <div>
-                <h3 className="font-display font-extrabold text-sm sm:text-base mb-1.5 text-[#013A42]">
+                <h3 className="font-display font-extrabold text-sm sm:text-base mb-1.5 text-[#D9B44A]">
                   Deskripsi Proyek
                 </h3>
-                <p className="text-sm text-muted leading-relaxed whitespace-pre-line">
+                <p className="text-sm text-[#F8F8E1] leading-relaxed whitespace-pre-line">
                   {project.description}
                 </p>
               </div>
@@ -144,10 +143,10 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
             {/* Role, Responsibilities & Development Documentation */}
             {project.documentation && (
               <div>
-                <h3 className="font-display font-extrabold text-sm sm:text-base mb-1.5 text-[#013A42]">
+                <h3 className="font-display font-extrabold text-sm sm:text-base mb-1.5 text-[#D9B44A]">
                   Peran, Tanggung Jawab &amp; Dokumentasi
                 </h3>
-                <p className="text-sm text-muted leading-relaxed whitespace-pre-line">
+                <p className="text-sm text-[#F8F8E1] leading-relaxed whitespace-pre-line">
                   {project.documentation}
                 </p>
               </div>
@@ -155,13 +154,13 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
 
             {/* External Links */}
             {(project.liveUrl || project.repoUrl) && (
-              <div className="flex flex-wrap gap-2.5 pt-3 border-t-2 border-[#013A42]">
+              <div className="flex flex-wrap gap-2.5 pt-3 border-t-2 border-[#D9B44A]/50">
                 {project.liveUrl && (
                   <a
                     href={project.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="brutal-btn brutal-btn-primary px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5"
+                    className="brutal-btn-frame-green px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5"
                   >
                     <span>{isDars ? 'Kunjungi Website Dars with Osama' : 'Kunjungi Website'}</span>
                     <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
@@ -172,7 +171,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                     href={project.repoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="brutal-btn brutal-btn-secondary px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5"
+                    className="brutal-btn-on-dark-outline px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5"
                   >
                     <span>Lihat Repositori</span>
                     <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />

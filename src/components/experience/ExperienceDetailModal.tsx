@@ -58,34 +58,35 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
         title={detail?.role || ''}
         subtitle={detail ? `${detail.categoryLabel} · ${detail.institutionName}` : undefined}
         maxWidthClass="max-w-3xl"
+        tone="bordo"
       >
         {detail && (
-          <div className="space-y-5">
+          <div className="space-y-5 text-[#F8F8E1]">
             {/* Metadata Strip: Category, Institution, Period, Duration & Location */}
-            <div data-aos="fade-up" data-aos-offset="-2000" className="border-2 border-[#013A42] bg-[#F8F8E1] p-3.5 space-y-2">
+            <div data-aos="fade-up" data-aos-offset="-2000" className="border-2 border-[#D9B44A] bg-[#1B2A3D] p-3.5 space-y-2">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="brutal-badge-bordo">{detail.categoryLabel}</span>
-                <span className="font-display font-extrabold text-sm sm:text-base text-[#013A42]">
+                <span className="brutal-badge">{detail.categoryLabel}</span>
+                <span className="font-display font-bold text-sm sm:text-base text-[#F8F8E1]">
                   {detail.institutionName}
                 </span>
               </div>
 
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-mono-num text-[#013A42]/85">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-mono-num font-semibold text-[#F8F8E1]/90">
                 {detail.period && (
                   <span className="inline-flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5 shrink-0 text-[#6C151E]" aria-hidden="true" />
+                    <Calendar className="w-3.5 h-3.5 shrink-0 text-[#D9B44A]" aria-hidden="true" />
                     <span>Periode: {detail.period}</span>
                   </span>
                 )}
                 {detail.duration && (
                   <span className="inline-flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 shrink-0 text-[#0F3D3A]" aria-hidden="true" />
+                    <Clock className="w-3.5 h-3.5 shrink-0 text-[#D9B44A]" aria-hidden="true" />
                     <span>Durasi: {detail.duration}</span>
                   </span>
                 )}
                 {detail.location && (
                   <span className="inline-flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 shrink-0 text-[#013A42]" aria-hidden="true" />
+                    <MapPin className="w-3.5 h-3.5 shrink-0 text-[#D9B44A]" aria-hidden="true" />
                     <span>{detail.location}</span>
                   </span>
                 )}
@@ -95,10 +96,10 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
             {/* Full Description */}
             {detail.description && (
               <div>
-                <h3 className="font-display font-extrabold text-sm sm:text-base mb-1.5 text-[#013A42]">
+                <h3 className="font-display font-bold text-sm sm:text-base mb-1.5 text-[#D9B44A]">
                   Deskripsi Lengkap
                 </h3>
-                <p className="text-sm leading-relaxed text-muted whitespace-pre-line">
+                <p className="text-sm font-normal leading-relaxed text-[#F8F8E1] whitespace-pre-line">
                   {detail.description}
                 </p>
               </div>
@@ -107,10 +108,10 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
             {/* Responsibilities & Programs */}
             {detail.responsibilities.length > 0 && (
               <div>
-                <h3 className="font-display font-extrabold text-sm sm:text-base mb-2 text-[#013A42]">
+                <h3 className="font-display font-bold text-sm sm:text-base mb-2 text-[#D9B44A]">
                   {detail.responsibilitiesHeading}
                 </h3>
-                <ul className="list-disc pl-5 space-y-1 text-sm text-muted">
+                <ul className="list-disc pl-5 space-y-1 text-sm font-normal text-[#F8F8E1]">
                   {detail.responsibilities.map((item, idx) => (
                     <li key={idx}>{item}</li>
                   ))}
@@ -120,16 +121,16 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
 
             {/* Natural-Ratio Responsive Documentation Photo Gallery */}
             {photos.length > 0 && (
-              <section aria-labelledby="exp-gallery-heading" className="pt-3.5 border-t-2 border-[#013A42]">
+              <section aria-labelledby="exp-gallery-heading" className="pt-3.5 border-t-2 border-[#D9B44A]/60">
                 <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
                   <div>
                     <h3
                       id="exp-gallery-heading"
-                      className="font-display font-extrabold text-sm sm:text-base text-[#013A42]"
+                      className="font-display font-bold text-sm sm:text-base text-[#D9B44A]"
                     >
                       Galeri Dokumentasi ({photos.length} Foto)
                     </h3>
-                    <p className="text-xs text-muted mt-0.5">
+                    <p className="text-xs font-semibold text-[#F8F8E1]/90 mt-0.5">
                       Klik foto untuk melihat ukuran penuh tanpa terpotong.
                     </p>
                   </div>
@@ -147,8 +148,8 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
                         data-aos-offset="-2000"
                         data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
                         aria-label={`Perbesar dokumentasi ${detail.institutionName} foto ${idx + 1} dari ${photos.length}`}
-                        className={`w-full block break-inside-avoid mb-3.5 border-2 bg-[#F8F8E1] shadow-[3px_3px_0_0_#013A42] hover:shadow-[4px_4px_0_0_#013A42] cursor-pointer overflow-hidden text-left group ${
-                          isPrimary ? 'border-[#6C151E]' : 'border-[#013A42]'
+                        className={`w-full block break-inside-avoid mb-3.5 border-2 bg-[#1B2A3D] shadow-[3px_3px_0_0_#001F24] hover:shadow-[4px_4px_0_0_#D9B44A] cursor-pointer overflow-hidden text-left group ${
+                          isPrimary ? 'border-[#D9B44A]' : 'border-[#F8F8E1]'
                         }`}
                       >
                         <div className="w-full bg-[#F8F8E1]">
@@ -159,18 +160,18 @@ export const ExperienceDetailModal: React.FC<ExperienceDetailModalProps> = ({ de
                             className="w-full h-auto block object-contain"
                           />
                         </div>
-                        <div className="px-2.5 py-1.5 border-t-2 border-[#013A42] bg-[#F8F8E1] flex items-center justify-between gap-2 text-[11px] font-mono-num font-bold text-[#013A42]">
+                        <div className="px-2.5 py-1.5 border-t-2 border-[#D9B44A] bg-[#1B2A3D] flex items-center justify-between gap-2 text-[11px] font-mono-num font-semibold text-[#F8F8E1]">
                           <span className="inline-flex items-center gap-1.5 truncate">
                             <span>Foto {String(idx + 1).padStart(2, '0')}</span>
                             {isPrimary && (
-                              <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] bg-[#6C151E] text-[#F8F8E1]">
+                              <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] bg-[#D9B44A] text-[#001F24] font-bold">
                                 <Star className="w-2.5 h-2.5 fill-current" aria-hidden="true" />
                                 <span>Foto Utama</span>
                               </span>
                             )}
                           </span>
                           <Maximize2
-                            className="w-3.5 h-3.5 shrink-0 text-[#013A42]/75 group-hover:text-[#6C151E] transition-colors"
+                            className="w-3.5 h-3.5 shrink-0 text-[#D9B44A] transition-colors"
                             aria-hidden="true"
                           />
                         </div>

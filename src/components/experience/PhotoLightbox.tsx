@@ -51,15 +51,15 @@ export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
       role="dialog"
       aria-modal="true"
       aria-label={`Pratinjau foto dokumentasi ${title}`}
-      className="fixed inset-0 z-[60] bg-[#013A42]/92 flex flex-col justify-between p-3 sm:p-6"
+      className="fixed inset-0 z-[60] bg-[#1B2A3D]/95 flex flex-col justify-between p-3 sm:p-6"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       {/* Top Lightbox Header */}
-      <div className="max-w-6xl w-full mx-auto flex items-center justify-between gap-3 pb-3 border-b-2 border-[#8ACCD5]/50 text-[#F8F8E1]">
+      <div className="max-w-6xl w-full mx-auto flex items-center justify-between gap-3 pb-3 border-b-2 border-[#D9B44A]/50 text-[#F8F8E1]">
         <div className="min-w-0 flex flex-wrap items-center gap-2.5">
-          <span className="font-mono-num text-xs sm:text-sm font-extrabold text-[#8ACCD5] whitespace-nowrap">
+          <span className="font-mono-num text-xs sm:text-sm font-extrabold text-[#D9B44A] whitespace-nowrap">
             Foto {activeIndex + 1} / {total}
           </span>
           {isPrimary && (
@@ -103,7 +103,7 @@ export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
         )}
 
         <div className="max-w-full max-h-full flex items-center justify-center">
-          <div className="border-[3px] border-[#8ACCD5] bg-[#F8F8E1] shadow-[6px_6px_0_0_#6C151E] p-1.5 sm:p-2 max-w-full">
+          <div className="border-[3px] border-[#D9B44A] bg-[#F8F8E1] shadow-[6px_6px_0_0_#6C151E] p-1.5 sm:p-2 max-w-full">
             <SafeImage
               src={activeUrl}
               alt={`Dokumentasi ${title} — Foto ${activeIndex + 1} dari ${total}`}
@@ -127,7 +127,7 @@ export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
       </div>
 
       {/* Bottom Navigation Bar (Essential for Mobile Touch & Quick Switching) */}
-      <div className="max-w-6xl w-full mx-auto pt-3 border-t-2 border-[#8ACCD5]/40 flex items-center justify-between gap-3">
+      <div className="max-w-6xl w-full mx-auto pt-3 border-t-2 border-[#D9B44A]/40 flex items-center justify-between gap-3">
         {total > 1 ? (
           <>
             <button

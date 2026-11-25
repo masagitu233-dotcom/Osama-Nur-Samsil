@@ -5,7 +5,7 @@ import type { ProjectItem } from '../types/portfolio';
 import { SafeImage } from '../components/ui/SafeImage';
 import { DarsLogo } from '../components/ui/DarsLogo';
 import { ProjectDetailModal } from '../components/projects/ProjectDetailModal';
-import { getCardTone } from '../utils/cardVariants';
+import { getSectionCardTone } from '../utils/cardVariants';
 import { getAosStaggerDelay, refreshAos } from '../utils/aos';
 import {
   ACTIVE_PROJECT_CATEGORY_LABELS,
@@ -75,8 +75,8 @@ export const ProjectsPage: React.FC = () => {
                 onClick={() => setCategory(tab.value)}
                 className={`px-3.5 py-1.5 text-xs font-bold border-2 border-brutal cursor-pointer whitespace-nowrap transition-colors ${
                   active
-                    ? 'card-blue shadow-[2.5px_2.5px_0_0_#013A42]'
-                    : 'card-beige hover:bg-[#8ACCD5] hover:text-[#013A42]'
+                    ? 'bg-[#0F3D3A] text-[#F8F8E1] shadow-[2.5px_2.5px_0_0_#001F24]'
+                    : 'bg-[#F8F8E1] text-[#1B2A3D] hover:bg-[#D9B44A] hover:text-[#001F24]'
                 }`}
               >
                 {tab.label}
@@ -87,7 +87,7 @@ export const ProjectsPage: React.FC = () => {
 
         <div className="relative sm:w-64">
           <Search
-            className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted"
+            className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#1B2A3D]"
             aria-hidden="true"
           />
           <input
@@ -117,14 +117,14 @@ export const ProjectsPage: React.FC = () => {
           </div>
 
           {filteredWebsiteProjects.length === 0 ? (
-            <div className="brutal-card card-beige p-8 text-center">
-              <p className="font-display text-base font-bold">
+            <div className="brutal-card card-green frame-green p-8 text-center">
+              <p className="font-display text-base font-bold text-[#F8F8E1]">
                 Tidak ada proyek Website &amp; Digital yang cocok dengan pencarian.
               </p>
               <button
                 type="button"
                 onClick={() => setQuery('')}
-                className="mt-3 brutal-btn brutal-btn-secondary px-4 py-2 text-xs font-bold cursor-pointer"
+                className="mt-3 brutal-btn-frame-green px-4 py-2 text-xs font-bold cursor-pointer"
               >
                 Reset Pencarian
               </button>
@@ -135,13 +135,7 @@ export const ProjectsPage: React.FC = () => {
                 const isDars = isDarsPlatformProject(proj);
                 const useCustomAsset = hasCustomUploadedDarsAsset(proj);
                 const primaryPhoto = resolveProjectPrimaryPhoto(proj);
-                const tone = getCardTone(idx, ['beige', 'green', 'bordo', 'blue', 'midnight']);
-                const imgBorder =
-                  tone.tone === 'beige'
-                    ? 'border-[#6C151E]'
-                    : tone.tone === 'blue'
-                    ? 'border-[#013A42]'
-                    : 'border-[#8ACCD5]';
+                const tone = getSectionCardTone('projects');
                 const catLabel = ACTIVE_PROJECT_CATEGORY_LABELS[normalizeProjectCategory(proj.category)];
 
                 return (
@@ -151,15 +145,13 @@ export const ProjectsPage: React.FC = () => {
                     data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
                     className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                   >
-                    <div className={`aspect-[16/9] w-full border-b-2 ${imgBorder} overflow-hidden shrink-0`}>
+                    <div className={`aspect-[16/9] w-full border-b-2 ${tone.mediaBorderClass} overflow-hidden shrink-0`}>
                       {isDars && !useCustomAsset ? (
-                        <div className="w-full h-full bg-[#013A42] flex items-center justify-center p-5">
-                          <div className="p-2.5 bg-[#F8F8E1] border-2 border-[#8ACCD5] shadow-[4px_4px_0_0_#6C151E] flex items-center justify-center">
-                            <DarsLogo className="w-20 h-20 object-contain" />
-                          </div>
+                        <div className="w-full h-full bg-[#F4F4F0] flex items-center justify-center p-3">
+                          <DarsLogo className="w-full h-full object-contain" />
                         </div>
                       ) : isDars ? (
-                        <div className="w-full h-full bg-[#013A42] flex items-center justify-center p-4">
+                        <div className="w-full h-full bg-[#F4F4F0] flex items-center justify-center p-3">
                           <SafeImage
                             src={primaryPhoto}
                             alt={proj.title}
@@ -237,7 +229,7 @@ export const ProjectsPage: React.FC = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
                 {filteredManualArticles.map((proj, idx) => {
-                  const tone = getCardTone(idx, ['beige', 'blue', 'green']);
+                  const tone = getSectionCardTone('projects');
                   return (
                     <article
                       key={proj.id}
@@ -246,7 +238,7 @@ export const ProjectsPage: React.FC = () => {
                       className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                     >
                       {proj.imageUrls[0] && (
-                        <div className="aspect-[16/9] border-b-2 border-[#013A42] overflow-hidden bg-[#F8F8E1] shrink-0">
+                        <div className={`aspect-[16/9] border-b-2 ${tone.mediaBorderClass} overflow-hidden bg-[#F8F8E1] shrink-0`}>
                           <SafeImage
                             src={proj.imageUrls[0]}
                             alt={proj.title}

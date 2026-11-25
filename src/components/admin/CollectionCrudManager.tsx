@@ -482,7 +482,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
           <button
             type="button"
             onClick={openCreateModal}
-            className="brutal-btn brutal-btn-primary px-4 py-2 text-xs font-bold cursor-pointer"
+            className="brutal-btn-frame-navy px-4 py-2 text-xs font-bold cursor-pointer"
           >
             Tambah Data Pertama
           </button>
@@ -501,9 +501,9 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
               >
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono-num">
-                    <span className="font-bold text-muted">#{String(item.displayOrder ?? idx + 1).padStart(2, '0')}</span>
+                    <span className="font-bold text-[#D9B44A]">#{String(item.displayOrder ?? idx + 1).padStart(2, '0')}</span>
                     <span
-                      className={item.status === 'published' ? 'brutal-badge' : 'brutal-badge-inverse'}
+                      className={item.status === 'published' ? 'brutal-badge' : 'brutal-badge-bordo'}
                     >
                       {item.status === 'published' ? 'Published' : 'Draft'}
                     </span>
@@ -528,7 +528,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     onClick={() => handleReorder(idx, -1)}
                     disabled={idx === 0}
                     aria-label={`Naikkan urutan ${displayTitle}`}
-                    className="brutal-btn brutal-btn-outline p-1.5 cursor-pointer disabled:opacity-40"
+                    className="brutal-btn-on-dark-outline p-1.5 cursor-pointer disabled:opacity-40"
                   >
                     <ArrowUp className="w-3.5 h-3.5" />
                   </button>
@@ -537,14 +537,14 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     onClick={() => handleReorder(idx, 1)}
                     disabled={idx === items.length - 1}
                     aria-label={`Turunkan urutan ${displayTitle}`}
-                    className="brutal-btn brutal-btn-outline p-1.5 cursor-pointer disabled:opacity-40"
+                    className="brutal-btn-on-dark-outline p-1.5 cursor-pointer disabled:opacity-40"
                   >
                     <ArrowDown className="w-3.5 h-3.5" />
                   </button>
                   <button
                     type="button"
                     onClick={() => handleQuickToggle(item, 'status')}
-                    className="brutal-btn brutal-btn-outline px-2.5 py-1.5 text-xs font-bold cursor-pointer"
+                    className="brutal-btn-on-dark-outline px-2.5 py-1.5 text-xs font-bold cursor-pointer"
                   >
                     {item.status === 'published' ? 'Jadikan Draft' : 'Publikasikan'}
                   </button>
@@ -552,7 +552,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     type="button"
                     onClick={() => handleQuickToggle(item, 'isVisible')}
                     aria-label={item.isVisible ? `Sembunyikan ${displayTitle}` : `Tampilkan ${displayTitle}`}
-                    className="brutal-btn brutal-btn-outline p-1.5 cursor-pointer"
+                    className="brutal-btn-on-dark-outline p-1.5 cursor-pointer"
                   >
                     {item.isVisible ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
                   </button>
@@ -560,7 +560,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     type="button"
                     onClick={() => openEditModal(item)}
                     aria-label={`Edit ${displayTitle}`}
-                    className="brutal-btn brutal-btn-secondary px-2.5 py-1.5 text-xs font-bold inline-flex items-center gap-1 cursor-pointer"
+                    className="brutal-btn-on-dark px-2.5 py-1.5 text-xs font-bold inline-flex items-center gap-1 cursor-pointer"
                   >
                     <Pencil className="w-3.5 h-3.5" />
                     <span>Edit</span>
@@ -569,7 +569,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     type="button"
                     onClick={() => setDeleteTarget({ id: item.id, title: displayTitle })}
                     aria-label={`Hapus ${displayTitle}`}
-                    className="brutal-btn brutal-btn-bordo p-1.5 cursor-pointer"
+                    className="brutal-btn-frame-bordo p-1.5 cursor-pointer"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -650,7 +650,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     type="checkbox"
                     checked={Boolean(formState[field.key])}
                     onChange={(e) => setField(field.key, e.target.checked)}
-                    className="w-4 h-4 accent-[#013A42]"
+                    className="w-4 h-4 accent-[#D9B44A]"
                   />
                   <span>{field.label}</span>
                 </label>
@@ -843,7 +843,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                       const driveInfo = extractGoogleDriveInfo(currentUrl);
                       if (!driveInfo) return null;
                       return (
-                        <p className="mt-1.5 text-[11px] font-mono-num font-bold text-[#0F3D3A]">
+                        <p className="mt-1.5 text-[11px] font-mono-num font-bold text-[#D9B44A]">
                           Tautan Google Drive terdeteksi (ID: {driveInfo.fileId.slice(0, 10)}&hellip;) &mdash; ditampilkan otomatis.
                         </p>
                       );
@@ -885,7 +885,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                   type="checkbox"
                   checked={Boolean(formState.isVisible)}
                   onChange={(e) => setField('isVisible', e.target.checked)}
-                  className="w-4 h-4 accent-[#013A42]"
+                  className="w-4 h-4 accent-[#D9B44A]"
                 />
                 <span>Tampilkan ke Publik</span>
               </label>
@@ -896,14 +896,14 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
             <button
               type="button"
               onClick={closeModal}
-              className="brutal-btn brutal-btn-outline px-4 py-2 text-xs font-bold cursor-pointer"
+              className="brutal-btn-on-dark-outline px-4 py-2 text-xs font-bold cursor-pointer"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="brutal-btn brutal-btn-primary px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
+              className="brutal-btn-frame-navy px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
             >
               <Save className="w-3.5 h-3.5" />
               <span>{saving ? 'Menyimpan...' : 'Simpan ke Firestore'}</span>
@@ -926,14 +926,14 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
           <button
             type="button"
             onClick={() => setDeleteTarget(null)}
-            className="brutal-btn brutal-btn-outline px-4 py-2 text-xs font-bold cursor-pointer"
+            className="brutal-btn-on-dark-outline px-4 py-2 text-xs font-bold cursor-pointer"
           >
             Batal
           </button>
           <button
             type="button"
             onClick={confirmDelete}
-            className="brutal-btn brutal-btn-bordo px-4 py-2 text-xs font-bold cursor-pointer"
+            className="brutal-btn-frame-bordo px-4 py-2 text-xs font-bold cursor-pointer"
           >
             Ya, Hapus
           </button>

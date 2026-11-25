@@ -63,20 +63,20 @@ export const ContactPage: React.FC = () => {
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left: Editable Contact Channels */}
+        {/* Left: Editable Contact Channels (Bordo #6C151E + Beige #F8F8E1) */}
         <aside className="lg:col-span-5 space-y-4">
-          <div data-aos="fade-up" data-aos-delay="0" className="brutal-card card-beige frame-shadow-green p-5 space-y-3.5">
-            <h2 className="font-display text-lg sm:text-xl font-extrabold">Saluran Kontak Resmi</h2>
+          <div data-aos="fade-up" data-aos-delay="0" className="brutal-card card-bordo frame-bordo p-5 space-y-3.5">
+            <h2 className="font-display text-lg sm:text-xl font-extrabold text-[#F8F8E1]">Saluran Kontak Resmi</h2>
 
             <div className="divide-y divide-[var(--card-border-subtle)] text-sm">
               <div className="py-3 first:pt-0">
-                <p className="font-mono-num text-[11px] font-bold text-[#6C151E] uppercase">Email</p>
+                <p className="font-mono-num text-[11px] font-bold text-[#D9B44A] uppercase">Email</p>
                 {contacts.email ? (
                   <a
                     href={`mailto:${contacts.email}`}
-                    className="mt-0.5 inline-flex items-center gap-2 font-bold text-sm sm:text-[15px] hover:underline break-all"
+                    className="mt-0.5 inline-flex items-center gap-2 font-bold text-sm sm:text-[15px] text-[#F8F8E1] hover:text-[#D9B44A] transition-colors break-all"
                   >
-                    <Mail className="w-4 h-4 shrink-0" aria-hidden="true" />
+                    <Mail className="w-4 h-4 shrink-0 text-[#D9B44A]" aria-hidden="true" />
                     <span>{contacts.email}</span>
                   </a>
                 ) : (
@@ -85,17 +85,17 @@ export const ContactPage: React.FC = () => {
               </div>
 
               <div className="py-3">
-                <p className="font-mono-num text-[11px] font-bold text-[#0F3D3A] uppercase">WhatsApp</p>
+                <p className="font-mono-num text-[11px] font-bold text-[#D9B44A] uppercase">WhatsApp</p>
                 {waUrl ? (
                   <a
                     href={waUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-0.5 inline-flex items-center gap-2 font-bold text-sm sm:text-[15px] hover:underline"
+                    className="mt-0.5 inline-flex items-center gap-2 font-bold text-sm sm:text-[15px] text-[#F8F8E1] hover:text-[#D9B44A] transition-colors"
                   >
-                    <MessageSquare className="w-4 h-4 shrink-0" aria-hidden="true" />
+                    <MessageSquare className="w-4 h-4 shrink-0 text-[#D9B44A]" aria-hidden="true" />
                     <span>{contacts.whatsappLabel || contacts.whatsapp}</span>
-                    <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                    <ArrowUpRight className="w-4 h-4 text-[#D9B44A]" aria-hidden="true" />
                   </a>
                 ) : (
                   <p className="mt-0.5 text-muted text-xs sm:text-sm">
@@ -105,14 +105,14 @@ export const ContactPage: React.FC = () => {
               </div>
 
               <div className="py-3 last:pb-0">
-                <p className="font-mono-num text-[11px] font-bold text-muted uppercase">Domisili</p>
-                <p className="mt-0.5 font-bold text-sm sm:text-[15px]">{profile.domicile}</p>
+                <p className="font-mono-num text-[11px] font-bold text-[#D9B44A] uppercase">Domisili</p>
+                <p className="mt-0.5 font-bold text-sm sm:text-[15px] text-[#F8F8E1]">{profile.domicile}</p>
               </div>
             </div>
           </div>
 
           {/* Professional Links */}
-          <div data-aos="fade-up" data-aos-delay="100" className="brutal-card card-green frame-midnight p-5 space-y-3">
+          <div data-aos="fade-up" data-aos-delay="100" className="brutal-card card-bordo frame-bordo p-5 space-y-3">
             <span className="brutal-badge">Jejaring Digital</span>
             <h2 className="font-display text-lg font-extrabold text-[#F8F8E1]">Media Sosial &amp; Tautan Profesional</h2>
             <div className="flex flex-col gap-1.5 text-sm font-bold">
@@ -121,10 +121,10 @@ export const ContactPage: React.FC = () => {
                   href={contacts.websiteUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between py-2 border-b border-[#8ACCD5]/30 text-[#F8F8E1] hover:text-[#8ACCD5] transition-colors"
+                  className="flex items-center justify-between py-2 border-b border-[var(--card-border-subtle)] text-[#F8F8E1] hover:text-[#D9B44A] transition-colors"
                 >
                   <span>Dars with Osama (Website)</span>
-                  <ArrowUpRight className="w-4 h-4 text-[#8ACCD5]" aria-hidden="true" />
+                  <ArrowUpRight className="w-4 h-4 text-[#D9B44A]" aria-hidden="true" />
                 </a>
               )}
               {contacts.linkedinUrl ? (
@@ -132,10 +132,10 @@ export const ContactPage: React.FC = () => {
                   href={contacts.linkedinUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between py-2 border-b border-[#8ACCD5]/30 text-[#F8F8E1] hover:text-[#8ACCD5] transition-colors"
+                  className="flex items-center justify-between py-2 border-b border-[var(--card-border-subtle)] text-[#F8F8E1] hover:text-[#D9B44A] transition-colors"
                 >
                   <span>LinkedIn</span>
-                  <ArrowUpRight className="w-4 h-4 text-[#8ACCD5]" aria-hidden="true" />
+                  <ArrowUpRight className="w-4 h-4 text-[#D9B44A]" aria-hidden="true" />
                 </a>
               ) : (
                 <p className="text-xs font-semibold text-muted py-1">
@@ -147,10 +147,10 @@ export const ContactPage: React.FC = () => {
                   href={contacts.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between py-2 border-b border-[#8ACCD5]/30 text-[#F8F8E1] hover:text-[#8ACCD5] transition-colors"
+                  className="flex items-center justify-between py-2 border-b border-[var(--card-border-subtle)] text-[#F8F8E1] hover:text-[#D9B44A] transition-colors"
                 >
                   <span>GitHub</span>
-                  <ArrowUpRight className="w-4 h-4 text-[#8ACCD5]" aria-hidden="true" />
+                  <ArrowUpRight className="w-4 h-4 text-[#D9B44A]" aria-hidden="true" />
                 </a>
               ) : (
                 <p className="text-xs font-semibold text-muted py-1">
@@ -162,24 +162,24 @@ export const ContactPage: React.FC = () => {
                   href={contacts.instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between py-2 text-[#F8F8E1] hover:text-[#8ACCD5] transition-colors"
+                  className="flex items-center justify-between py-2 text-[#F8F8E1] hover:text-[#D9B44A] transition-colors"
                 >
                   <span>Instagram</span>
-                  <ArrowUpRight className="w-4 h-4 text-[#8ACCD5]" aria-hidden="true" />
+                  <ArrowUpRight className="w-4 h-4 text-[#D9B44A]" aria-hidden="true" />
                 </a>
               )}
             </div>
           </div>
         </aside>
 
-        {/* Right: Validated Contact Form */}
+        {/* Right: Validated Contact Form (Bordo #6C151E + Beige #F8F8E1) */}
         <section
           aria-labelledby="contact-form-heading"
           data-aos="fade-up"
           data-aos-delay="100"
-          className="lg:col-span-7 brutal-card card-beige frame-shadow-bordo p-5 sm:p-6"
+          className="lg:col-span-7 brutal-card card-bordo frame-bordo p-5 sm:p-6"
         >
-          <h2 id="contact-form-heading" className="font-display text-lg sm:text-xl font-extrabold mb-1.5">
+          <h2 id="contact-form-heading" className="font-display text-lg sm:text-xl font-extrabold mb-1.5 text-[#F8F8E1]">
             Kirim Pesan Langsung
           </h2>
           <p className="text-xs sm:text-sm text-muted mb-5">
@@ -189,12 +189,12 @@ export const ContactPage: React.FC = () => {
           {submitted && (
             <div
               role="status"
-              className="mb-5 p-3.5 border-2 border-[#013A42] card-blue flex items-start gap-2.5"
+              className="mb-5 p-3.5 border-2 border-[#001F24] card-gold flex items-start gap-2.5 text-[#001F24]"
             >
-              <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" aria-hidden="true" />
+              <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#001F24]" aria-hidden="true" />
               <div className="text-xs sm:text-sm">
-                <p className="font-display font-extrabold">Pesan Terkirim</p>
-                <p className="mt-0.5">
+                <p className="font-display font-extrabold text-[#001F24]">Pesan Terkirim</p>
+                <p className="mt-0.5 text-[#001F24]">
                   Terima kasih telah menghubungi {profile.fullName}. Pesan Anda telah tercatat dan akan segera ditinjau.
                 </p>
               </div>
@@ -204,7 +204,7 @@ export const ContactPage: React.FC = () => {
           <form onSubmit={handleSubmit} noValidate className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div>
-                <label htmlFor="contact-name" className="block text-xs font-bold uppercase tracking-wider mb-1">
+                <label htmlFor="contact-name" className="block text-xs font-bold uppercase tracking-wider mb-1 text-[#F8F8E1]">
                   Nama Lengkap *
                 </label>
                 <input
@@ -218,7 +218,7 @@ export const ContactPage: React.FC = () => {
                   className="w-full brutal-input px-3 py-2 text-sm"
                 />
                 {errors.senderName && (
-                  <p role="alert" className="mt-1 inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-bold bg-[#6C151E] text-[#F8F8E1] border border-[#013A42]">
+                  <p role="alert" className="mt-1 inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-bold bg-[#D9B44A] text-[#001F24] border border-[#001F24]">
                     <AlertCircle className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                     <span>{errors.senderName}</span>
                   </p>
@@ -226,7 +226,7 @@ export const ContactPage: React.FC = () => {
               </div>
 
               <div>
-                <label htmlFor="contact-email" className="block text-xs font-bold uppercase tracking-wider mb-1">
+                <label htmlFor="contact-email" className="block text-xs font-bold uppercase tracking-wider mb-1 text-[#F8F8E1]">
                   Alamat Email *
                 </label>
                 <input
@@ -240,7 +240,7 @@ export const ContactPage: React.FC = () => {
                   className="w-full brutal-input px-3 py-2 text-sm"
                 />
                 {errors.senderEmail && (
-                  <p role="alert" className="mt-1 inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-bold bg-[#6C151E] text-[#F8F8E1] border border-[#013A42]">
+                  <p role="alert" className="mt-1 inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-bold bg-[#D9B44A] text-[#001F24] border border-[#001F24]">
                     <AlertCircle className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                     <span>{errors.senderEmail}</span>
                   </p>
@@ -249,7 +249,7 @@ export const ContactPage: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="contact-subject" className="block text-xs font-bold uppercase tracking-wider mb-1">
+              <label htmlFor="contact-subject" className="block text-xs font-bold uppercase tracking-wider mb-1 text-[#F8F8E1]">
                 Subjek Pesan *
               </label>
               <input
@@ -263,7 +263,7 @@ export const ContactPage: React.FC = () => {
                 className="w-full brutal-input px-3 py-2 text-sm"
               />
               {errors.subject && (
-                <p role="alert" className="mt-1 inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-bold bg-[#6C151E] text-[#F8F8E1] border border-[#013A42]">
+                <p role="alert" className="mt-1 inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-bold bg-[#D9B44A] text-[#001F24] border border-[#001F24]">
                   <AlertCircle className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                   <span>{errors.subject}</span>
                 </p>
@@ -271,7 +271,7 @@ export const ContactPage: React.FC = () => {
             </div>
 
             <div>
-              <label htmlFor="contact-message" className="block text-xs font-bold uppercase tracking-wider mb-1">
+              <label htmlFor="contact-message" className="block text-xs font-bold uppercase tracking-wider mb-1 text-[#F8F8E1]">
                 Isi Pesan *
               </label>
               <textarea
@@ -285,7 +285,7 @@ export const ContactPage: React.FC = () => {
                 className="w-full brutal-input px-3 py-2 text-sm resize-y"
               />
               {errors.message && (
-                <p role="alert" className="mt-1 inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-bold bg-[#6C151E] text-[#F8F8E1] border border-[#013A42]">
+                <p role="alert" className="mt-1 inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-bold bg-[#D9B44A] text-[#001F24] border border-[#001F24]">
                   <AlertCircle className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                   <span>{errors.message}</span>
                 </p>
@@ -295,7 +295,7 @@ export const ContactPage: React.FC = () => {
             <button
               type="submit"
               disabled={submitting}
-              className="brutal-btn brutal-btn-primary font-display font-bold text-xs sm:text-sm px-5 py-2.5 inline-flex items-center gap-2 cursor-pointer disabled:opacity-60"
+              className="brutal-btn-frame-bordo font-display font-bold text-xs sm:text-sm px-5 py-2.5 inline-flex items-center gap-2 cursor-pointer disabled:opacity-60"
             >
               <Send className="w-4 h-4" aria-hidden="true" />
               <span>{submitting ? 'Mengirim Pesan...' : 'Kirim Pesan Sekarang'}</span>

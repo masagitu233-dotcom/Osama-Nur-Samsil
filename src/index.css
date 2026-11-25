@@ -5,42 +5,44 @@
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* Official 5-Color Identity Palette */
+  /* Official 6-Color Strict Core Palette (Zero Pastels) */
   --color-beige: #F8F8E1;
-  --color-blue: #8ACCD5;
-  --color-midnight: #013A42;
+  --color-gold: #D9B44A;
   --color-bordo: #6C151E;
   --color-green: #0F3D3A;
+  --color-navy: #1B2A3D;
+  --color-ink-gold: #001F24;
 }
 
 :root {
-  /* Core 5-Color Identity Variables */
+  /* Core 6-Color Identity Variables */
   --color-beige: #F8F8E1;
-  --color-blue: #8ACCD5;
-  --color-midnight: #013A42;
+  --color-gold: #D9B44A;
   --color-bordo: #6C151E;
   --color-green: #0F3D3A;
+  --color-navy: #1B2A3D;
+  --color-ink-gold: #001F24;
 
-  /* Single Cohesive Editorial Theme Tokens */
+  /* Theme Tokens strictly derived from the 6 official colors */
   --bg-page: var(--color-beige);
-  --surface: var(--color-beige);
-  --surface-highlight: var(--color-blue);
-  --surface-inverse: var(--color-midnight);
+  --surface: var(--color-navy);
+  --surface-highlight: var(--color-gold);
+  --surface-inverse: var(--color-navy);
 
-  --primary: var(--color-midnight);
+  --primary: var(--color-navy);
   --primary-text: var(--color-beige);
-  --secondary: var(--color-blue);
-  --secondary-text: var(--color-midnight);
+  --secondary: var(--color-gold);
+  --secondary-text: var(--color-ink-gold);
 
-  --text-primary: var(--color-midnight);
-  --text-muted: color-mix(in srgb, var(--color-midnight) 78%, transparent);
+  --text-primary: var(--color-navy);
+  --text-muted: color-mix(in srgb, var(--color-navy) 86%, transparent);
   --text-inverse: var(--color-beige);
-  --text-inverse-muted: color-mix(in srgb, var(--color-beige) 84%, transparent);
+  --text-inverse-muted: color-mix(in srgb, var(--color-beige) 90%, transparent);
 
-  --border: var(--color-midnight);
-  --border-subtle: color-mix(in srgb, var(--color-midnight) 24%, transparent);
-  --shadow: var(--color-midnight);
-  --interactive-hover: var(--color-blue);
+  --border: var(--color-ink-gold);
+  --border-subtle: color-mix(in srgb, var(--color-navy) 28%, transparent);
+  --shadow: var(--color-ink-gold);
+  --interactive-hover: var(--color-gold);
   --focus-ring: var(--color-bordo);
 }
 
@@ -59,7 +61,7 @@
     color: var(--text-primary);
   }
 
-  /* Minimal Dotted Intersection Grid strictly on the base page backdrop */
+  /* Minimal Dotted Intersection Grid strictly on the Beige base page backdrop */
   body::before {
     content: "";
     position: fixed;
@@ -69,7 +71,7 @@
     background-repeat: repeat;
     background-position: top left;
     background-size: 40px 40px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 50 50'%3E%3Cline x1='0' y1='25.5' x2='50' y2='25.5' stroke='%23013A42' stroke-opacity='0.12' stroke-width='1'/%3E%3Cline x1='25.5' y1='0' x2='25.5' y2='50' stroke='%23013A42' stroke-opacity='0.12' stroke-width='1'/%3E%3Ccircle cx='25.5' cy='25.5' r='2.25' fill='%23013A42' fill-opacity='0.28'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 50 50'%3E%3Cline x1='0' y1='25.5' x2='50' y2='25.5' stroke='%231B2A3D' stroke-opacity='0.12' stroke-width='1'/%3E%3Cline x1='25.5' y1='0' x2='25.5' y2='50' stroke='%231B2A3D' stroke-opacity='0.12' stroke-width='1'/%3E%3Ccircle cx='25.5' cy='25.5' r='2.25' fill='%231B2A3D' fill-opacity='0.28'/%3E%3C/svg%3E");
   }
 
   @media (min-width: 640px) {
@@ -110,61 +112,60 @@
 }
 
 /* ==================================================
-   5 PLANNED CARD SURFACE VARIANTS
-   Each variant sets local muted-text & divider tokens
-   for guaranteed WCAG readability on every surface.
+   OFFICIAL 6-COLOR SECTION CARD SURFACES
+   Strict Palette Mapping (Zero Pastels):
+   - Pengalaman & Organisasi / Contact -> Bordo (#6C151E) + Beige (#F8F8E1)
+   - Pendidikan / Profil / Admin       -> Ink Navy (#1B2A3D) + Beige (#F8F8E1)
+   - Hero / Proyek / Sertifikat        -> Green (#0F3D3A) + Beige (#F8F8E1)
+   - Keahlian & Kompetensi             -> Muted Golden Yellow (#D9B44A) + Deep Midnight Ink (#001F24)
    ================================================== */
 
 .surface-page {
   background-color: transparent;
-  color: var(--color-midnight);
+  color: var(--color-navy);
 }
 
 body.surface-page {
   background-color: var(--color-beige);
 }
 
-/* 1. Card Beige: Beige bg + Midnight Green text & border */
-.surface-card,
-.card-beige {
-  background-color: var(--color-beige);
-  color: var(--color-midnight);
-  --card-muted: color-mix(in srgb, var(--color-midnight) 78%, transparent);
-  --card-border-subtle: color-mix(in srgb, var(--color-midnight) 22%, transparent);
-}
-
-/* 2. Card Blue: Non Photo Blue bg + Midnight Green text & border */
-.surface-highlight,
-.card-blue {
-  background-color: var(--color-blue);
-  color: var(--color-midnight);
-  --card-muted: color-mix(in srgb, var(--color-midnight) 82%, transparent);
-  --card-border-subtle: color-mix(in srgb, var(--color-midnight) 28%, transparent);
-}
-
-/* 3. Card Bordo: Bordo bg + Beige text + Midnight Green border */
+/* 1. Card Bordo: Pengalaman & Organisasi + Formulir Hubungi Saya */
 .card-bordo {
   background-color: var(--color-bordo);
   color: var(--color-beige);
-  --card-muted: color-mix(in srgb, var(--color-beige) 86%, transparent);
-  --card-border-subtle: color-mix(in srgb, var(--color-beige) 28%, transparent);
+  --card-muted: color-mix(in srgb, var(--color-beige) 90%, transparent);
+  --card-border-subtle: color-mix(in srgb, var(--color-gold) 45%, transparent);
 }
 
-/* 4. Card Green: Deep Green bg + Beige text + Midnight Green border */
+/* 2. Card Ink Navy: Pendidikan, Profil & Admin Panels */
+.surface-card,
+.surface-dark,
+.card-navy {
+  background-color: var(--color-navy);
+  color: var(--color-beige);
+  --card-muted: color-mix(in srgb, var(--color-beige) 90%, transparent);
+  --card-border-subtle: color-mix(in srgb, var(--color-gold) 42%, transparent);
+}
+
+/* 3. Card Green: Hero, Proyek & Karya Digital, Sertifikat & Pelatihan */
 .card-green {
   background-color: var(--color-green);
   color: var(--color-beige);
-  --card-muted: color-mix(in srgb, var(--color-beige) 86%, transparent);
-  --card-border-subtle: color-mix(in srgb, var(--color-blue) 32%, transparent);
+  --card-muted: color-mix(in srgb, var(--color-beige) 90%, transparent);
+  --card-border-subtle: color-mix(in srgb, var(--color-gold) 45%, transparent);
 }
 
-/* 5. Card Midnight: Midnight Green bg + Beige text + Non Photo Blue accents */
-.surface-dark,
-.card-midnight {
-  background-color: var(--color-midnight);
-  color: var(--color-beige);
-  --card-muted: color-mix(in srgb, var(--color-beige) 84%, transparent);
-  --card-border-subtle: color-mix(in srgb, var(--color-blue) 32%, transparent);
+/* 4. Card Gold: Keahlian & Kompetensi (Solid Deep Midnight Ink #001F24 text) */
+.surface-highlight,
+.card-gold {
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
+  --card-muted: var(--color-ink-gold);
+  --card-border-subtle: color-mix(in srgb, var(--color-ink-gold) 38%, transparent);
+}
+
+.card-gold .text-muted {
+  color: var(--color-ink-gold);
 }
 
 .text-muted {
@@ -188,8 +189,8 @@ body.surface-page {
    ================================================== */
 
 .brutal-card {
-  border: 2px solid var(--color-midnight);
-  box-shadow: 4px 4px 0 0 var(--color-midnight);
+  border: 2px solid var(--color-ink-gold);
+  box-shadow: 4px 4px 0 0 var(--color-ink-gold);
 }
 
 .brutal-card:not([data-aos]) {
@@ -198,35 +199,48 @@ body.surface-page {
 
 .brutal-card-interactive:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 0 var(--color-midnight);
+  box-shadow: 6px 6px 0 0 var(--color-ink-gold);
 }
 
-/* Planned Frame & Hard-Shadow Variations (Midnight Green, Bordo, Green) */
+/* Crisp High-Contrast Frame & Hard-Shadow Variations */
+.frame-navy {
+  border: 2px solid var(--color-ink-gold);
+  box-shadow: 4px 4px 0 0 var(--color-ink-gold);
+}
+
+.frame-navy.brutal-card-interactive:hover {
+  box-shadow: 6px 6px 0 0 var(--color-ink-gold);
+}
+
 .frame-bordo {
-  border: 2px solid var(--color-bordo);
-  box-shadow: 4px 4px 0 0 var(--color-bordo);
+  border: 2px solid var(--color-ink-gold);
+  box-shadow: 4px 4px 0 0 var(--color-ink-gold);
 }
 
 .frame-bordo.brutal-card-interactive:hover {
-  box-shadow: 6px 6px 0 0 var(--color-bordo);
+  box-shadow: 6px 6px 0 0 var(--color-ink-gold);
 }
 
 .frame-green {
-  border: 2px solid var(--color-green);
-  box-shadow: 4px 4px 0 0 var(--color-green);
+  border: 2px solid var(--color-ink-gold);
+  box-shadow: 4px 4px 0 0 var(--color-ink-gold);
 }
 
 .frame-green.brutal-card-interactive:hover {
-  box-shadow: 6px 6px 0 0 var(--color-green);
+  box-shadow: 6px 6px 0 0 var(--color-ink-gold);
 }
 
-.frame-midnight {
-  border: 2px solid var(--color-midnight);
-  box-shadow: 4px 4px 0 0 var(--color-midnight);
+.frame-gold {
+  border: 2px solid var(--color-ink-gold);
+  box-shadow: 4px 4px 0 0 var(--color-navy);
+}
+
+.frame-gold.brutal-card-interactive:hover {
+  box-shadow: 6px 6px 0 0 var(--color-navy);
 }
 
 .frame-shadow-bordo {
-  border: 2px solid var(--color-midnight);
+  border: 2px solid var(--color-ink-gold);
   box-shadow: 4px 4px 0 0 var(--color-bordo);
 }
 
@@ -235,7 +249,7 @@ body.surface-page {
 }
 
 .frame-shadow-green {
-  border: 2px solid var(--color-midnight);
+  border: 2px solid var(--color-ink-gold);
   box-shadow: 4px 4px 0 0 var(--color-green);
 }
 
@@ -243,9 +257,18 @@ body.surface-page {
   box-shadow: 6px 6px 0 0 var(--color-green);
 }
 
+.frame-shadow-gold {
+  border: 2px solid var(--color-ink-gold);
+  box-shadow: 4px 4px 0 0 var(--color-gold);
+}
+
+.frame-shadow-gold.brutal-card-interactive:hover {
+  box-shadow: 6px 6px 0 0 var(--color-gold);
+}
+
 .brutal-card-on-dark {
-  border: 2px solid var(--color-beige);
-  box-shadow: 5px 5px 0 0 var(--color-bordo);
+  border: 2px solid var(--color-gold);
+  box-shadow: 6px 6px 0 0 var(--color-ink-gold);
 }
 
 /* ==================================================
@@ -253,19 +276,19 @@ body.surface-page {
    ================================================== */
 
 .brutal-btn {
-  border: 2px solid var(--color-midnight);
-  box-shadow: 2.5px 2.5px 0 0 var(--color-midnight);
-  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms ease, color 140ms ease;
+  border: 2px solid var(--color-ink-gold);
+  box-shadow: 2.5px 2.5px 0 0 var(--color-ink-gold);
+  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms ease, color 140ms ease, border-color 140ms ease;
 }
 
 .brutal-btn:hover:not(:disabled) {
   transform: translate(-1.5px, -1.5px);
-  box-shadow: 4px 4px 0 0 var(--color-midnight);
+  box-shadow: 4px 4px 0 0 var(--color-ink-gold);
 }
 
 .brutal-btn:active:not(:disabled) {
   transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 0 var(--color-midnight);
+  box-shadow: 1px 1px 0 0 var(--color-ink-gold);
 }
 
 .brutal-btn:disabled {
@@ -273,114 +296,255 @@ body.surface-page {
   cursor: not-allowed;
 }
 
-/* Primary Button: Midnight Green bg + Beige text */
+/* Primary Button on Beige Canvas: Ink Navy bg + Beige text */
 .brutal-btn-primary {
-  background-color: var(--color-midnight);
+  background-color: var(--color-navy);
   color: var(--color-beige);
-  border-color: var(--color-midnight);
+  border-color: var(--color-ink-gold);
 }
 
 .brutal-btn-primary:hover:not(:disabled) {
-  background-color: var(--color-blue);
-  color: var(--color-midnight);
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
 }
 
-/* Secondary Button: Non Photo Blue bg + Midnight Green text */
+/* Secondary Button on Beige Canvas: Muted Golden Yellow bg + Deep Midnight Ink text */
 .brutal-btn-secondary {
-  background-color: var(--color-blue);
-  color: var(--color-midnight);
-  border-color: var(--color-midnight);
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
+  border-color: var(--color-ink-gold);
 }
 
 .brutal-btn-secondary:hover:not(:disabled) {
-  background-color: var(--color-beige);
-  color: var(--color-midnight);
+  background-color: var(--color-navy);
+  color: var(--color-beige);
 }
 
-/* Bordo Emphasis / Destructive Button */
+/* Bordo Emphasis / Destructive Button on Beige Canvas */
 .brutal-btn-bordo {
   background-color: var(--color-bordo);
   color: var(--color-beige);
-  border-color: var(--color-midnight);
+  border-color: var(--color-ink-gold);
 }
 
 .brutal-btn-bordo:hover:not(:disabled) {
-  background-color: var(--color-beige);
-  color: var(--color-bordo);
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
 }
 
-/* Green Emphasis Button */
+/* Green Emphasis Button on Beige Canvas */
 .brutal-btn-green {
   background-color: var(--color-green);
   color: var(--color-beige);
-  border-color: var(--color-midnight);
+  border-color: var(--color-ink-gold);
 }
 
 .brutal-btn-green:hover:not(:disabled) {
-  background-color: var(--color-blue);
-  color: var(--color-midnight);
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
 }
 
-/* Outline Button: Beige bg + Midnight Green text */
+/* Outline Button on Beige Canvas: Beige bg + Ink Navy text */
 .brutal-btn-outline {
   background-color: var(--color-beige);
-  color: var(--color-midnight);
-  border-color: var(--color-midnight);
+  color: var(--color-navy);
+  border-color: var(--color-ink-gold);
 }
 
 .brutal-btn-outline:hover:not(:disabled) {
-  background-color: var(--color-blue);
-  color: var(--color-midnight);
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
 }
 
-/* Button placed on dark cards (Midnight Green, Bordo, Green, Navbar, Footer, Lightbox) */
+/* ==================================================
+   FRAME-MATCHED PRIMARY BUTTONS INSIDE COLORED FRAMES
+   Matches the parent card/frame background with crisp high-contrast
+   text, solid border, and hard Neo-Brutalist offset shadow.
+   ================================================== */
+
+/* Primary button inside Green (#0F3D3A) frames */
+.brutal-btn-frame-green {
+  background-color: var(--color-green);
+  color: var(--color-beige);
+  border: 2px solid var(--color-beige);
+  box-shadow: 3px 3px 0 0 var(--color-gold);
+  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+
+.brutal-btn-frame-green:hover:not(:disabled) {
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
+  border-color: var(--color-ink-gold);
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 4px 4px 0 0 var(--color-beige);
+}
+
+.brutal-btn-frame-green:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 0 var(--color-gold);
+}
+
+.brutal-btn-frame-green:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Primary button inside Bordo (#6C151E) frames */
+.brutal-btn-frame-bordo {
+  background-color: var(--color-bordo);
+  color: var(--color-beige);
+  border: 2px solid var(--color-beige);
+  box-shadow: 3px 3px 0 0 var(--color-gold);
+  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+
+.brutal-btn-frame-bordo:hover:not(:disabled) {
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
+  border-color: var(--color-ink-gold);
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 4px 4px 0 0 var(--color-beige);
+}
+
+.brutal-btn-frame-bordo:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 0 var(--color-gold);
+}
+
+.brutal-btn-frame-bordo:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Primary button inside Ink Navy (#1B2A3D) frames */
+.brutal-btn-frame-navy {
+  background-color: var(--color-navy);
+  color: var(--color-beige);
+  border: 2px solid var(--color-beige);
+  box-shadow: 3px 3px 0 0 var(--color-gold);
+  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+
+.brutal-btn-frame-navy:hover:not(:disabled) {
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
+  border-color: var(--color-ink-gold);
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 4px 4px 0 0 var(--color-beige);
+}
+
+.brutal-btn-frame-navy:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 0 var(--color-gold);
+}
+
+.brutal-btn-frame-navy:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Primary button inside Muted Golden Yellow (#D9B44A) frames */
+.brutal-btn-frame-gold {
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
+  border: 2px solid var(--color-ink-gold);
+  box-shadow: 3px 3px 0 0 var(--color-ink-gold);
+  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+
+.brutal-btn-frame-gold:hover:not(:disabled) {
+  background-color: var(--color-navy);
+  color: var(--color-beige);
+  border-color: var(--color-ink-gold);
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 4px 4px 0 0 var(--color-ink-gold);
+}
+
+.brutal-btn-frame-gold:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 0 var(--color-ink-gold);
+}
+
+.brutal-btn-frame-gold:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* High-contrast accent/secondary buttons placed on dark frames (Green, Bordo, Navy, Lightbox) */
 .brutal-btn-on-dark {
-  background-color: var(--color-blue);
-  color: var(--color-midnight);
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
   border: 2px solid var(--color-beige);
   box-shadow: 2.5px 2.5px 0 0 var(--color-beige);
-  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms ease;
+  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms ease, color 140ms ease;
 }
 
 .brutal-btn-on-dark:hover:not(:disabled) {
   background-color: var(--color-beige);
-  color: var(--color-midnight);
+  color: var(--color-navy);
   transform: translate(-1.5px, -1.5px);
-  box-shadow: 4px 4px 0 0 var(--color-blue);
+  box-shadow: 4px 4px 0 0 var(--color-gold);
+}
+
+.brutal-btn-on-dark:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .brutal-btn-on-dark-outline {
   background-color: transparent;
   color: var(--color-beige);
   border: 2px solid var(--color-beige);
-  box-shadow: 2.5px 2.5px 0 0 var(--color-blue);
+  box-shadow: 2.5px 2.5px 0 0 var(--color-gold);
   transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms ease, color 140ms ease;
 }
 
 .brutal-btn-on-dark-outline:hover:not(:disabled) {
-  background-color: var(--color-blue);
-  color: var(--color-midnight);
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
+  border-color: var(--color-ink-gold);
   transform: translate(-1.5px, -1.5px);
   box-shadow: 4px 4px 0 0 var(--color-beige);
 }
 
-/* Form Controls */
-.brutal-input {
-  border: 2px solid var(--color-midnight);
+.brutal-btn-on-dark-outline:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* High-contrast dark accent button placed on Muted Golden Yellow (#D9B44A) cards */
+.brutal-btn-on-gold {
+  background-color: var(--color-ink-gold);
+  color: var(--color-beige);
+  border: 2px solid var(--color-ink-gold);
+  box-shadow: 2.5px 2.5px 0 0 var(--color-bordo);
+  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1), background-color 140ms ease, color 140ms ease;
+}
+
+.brutal-btn-on-gold:hover:not(:disabled) {
   background-color: var(--color-beige);
-  color: var(--color-midnight);
+  color: var(--color-ink-gold);
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 4px 4px 0 0 var(--color-ink-gold);
+}
+
+/* Form Controls: Always Beige backdrop + Ink Navy text for crisp readability */
+.brutal-input {
+  border: 2px solid var(--color-ink-gold);
+  background-color: var(--color-beige);
+  color: var(--color-navy);
   transition: box-shadow 140ms ease, border-color 140ms ease;
 }
 
 .brutal-input::placeholder {
-  color: var(--text-muted);
-  opacity: 0.72;
+  color: color-mix(in srgb, var(--color-navy) 65%, transparent);
+  opacity: 1;
 }
 
 .brutal-input:focus {
   outline: none;
-  box-shadow: 3px 3px 0 0 var(--color-bordo);
-  border-color: var(--color-midnight);
+  box-shadow: 3px 3px 0 0 var(--color-gold);
+  border-color: var(--color-ink-gold);
 }
 
 /* ==================================================
@@ -389,9 +553,9 @@ body.surface-page {
 
 .brutal-badge {
   display: inline-block;
-  background-color: var(--color-blue);
-  color: var(--color-midnight);
-  border: 1.5px solid var(--color-midnight);
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
+  border: 1.5px solid var(--color-ink-gold);
   padding: 0.125rem 0.45rem;
   font-family: var(--font-mono);
   font-size: 0.68rem;
@@ -403,7 +567,7 @@ body.surface-page {
   display: inline-block;
   background-color: var(--color-bordo);
   color: var(--color-beige);
-  border: 1.5px solid var(--color-midnight);
+  border: 1.5px solid var(--color-ink-gold);
   padding: 0.125rem 0.45rem;
   font-family: var(--font-mono);
   font-size: 0.68rem;
@@ -415,7 +579,7 @@ body.surface-page {
   display: inline-block;
   background-color: var(--color-green);
   color: var(--color-beige);
-  border: 1.5px solid var(--color-midnight);
+  border: 1.5px solid var(--color-ink-gold);
   padding: 0.125rem 0.45rem;
   font-family: var(--font-mono);
   font-size: 0.68rem;
@@ -426,8 +590,8 @@ body.surface-page {
 .brutal-badge-beige {
   display: inline-block;
   background-color: var(--color-beige);
-  color: var(--color-midnight);
-  border: 1.5px solid var(--color-midnight);
+  color: var(--color-navy);
+  border: 1.5px solid var(--color-ink-gold);
   padding: 0.125rem 0.45rem;
   font-family: var(--font-mono);
   font-size: 0.68rem;
@@ -435,11 +599,12 @@ body.surface-page {
   line-height: 1.3;
 }
 
+.brutal-badge-navy,
 .brutal-badge-inverse {
   display: inline-block;
-  background-color: var(--color-midnight);
+  background-color: var(--color-navy);
   color: var(--color-beige);
-  border: 1.5px solid var(--color-midnight);
+  border: 1.5px solid var(--color-ink-gold);
   padding: 0.125rem 0.45rem;
   font-family: var(--font-mono);
   font-size: 0.68rem;
@@ -447,10 +612,22 @@ body.surface-page {
   line-height: 1.3;
 }
 
-/* Skeleton Loader strictly within 5-color system */
+.brutal-badge-on-gold {
+  display: inline-block;
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
+  border: 1.5px solid var(--color-ink-gold);
+  padding: 0.125rem 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* Skeleton Loader strictly within official palette */
 .brutal-skeleton {
-  background-color: color-mix(in srgb, var(--color-blue) 35%, var(--color-beige));
-  border: 2px solid var(--border-subtle);
+  background-color: color-mix(in srgb, var(--color-gold) 30%, var(--color-beige));
+  border: 2px solid var(--color-gold);
 }
 
 .text-balance {

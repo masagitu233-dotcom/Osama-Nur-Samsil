@@ -23,15 +23,15 @@ export class ErrorBoundary extends React.Component<{ children: React.ReactNode }
     if (this.state.hasError) {
       return (
         <div className="min-h-screen surface-page flex items-center justify-center p-6">
-          <div className="max-w-xl w-full surface-card brutal-card p-8">
+          <div className="max-w-xl w-full card-navy brutal-card frame-shadow-bordo p-8">
             <span className="brutal-badge mb-3">Pemulihan Sistem</span>
-            <h1 className="text-2xl font-extrabold mb-3">Terjadi Gangguan Saat Memuat Halaman</h1>
+            <h1 className="text-2xl font-extrabold mb-3 text-[#F8F8E1]">Terjadi Gangguan Saat Memuat Halaman</h1>
             <p className="text-sm text-muted mb-6 break-words">{this.state.errorMessage}</p>
             <div className="flex flex-wrap gap-3">
               <button
                 type="button"
                 onClick={() => window.location.reload()}
-                className="brutal-btn brutal-btn-primary font-bold px-5 py-2.5 text-sm cursor-pointer"
+                className="brutal-btn-on-dark font-bold px-5 py-2.5 text-sm cursor-pointer"
               >
                 Muat Ulang Halaman
               </button>
@@ -41,7 +41,7 @@ export class ErrorBoundary extends React.Component<{ children: React.ReactNode }
                   window.history.pushState({}, '', '/');
                   window.location.reload();
                 }}
-                className="brutal-btn brutal-btn-secondary font-bold px-5 py-2.5 text-sm cursor-pointer"
+                className="brutal-btn-on-dark-outline font-bold px-5 py-2.5 text-sm cursor-pointer"
               >
                 Kembali ke Beranda
               </button>

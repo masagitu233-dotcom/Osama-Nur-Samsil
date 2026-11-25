@@ -37,14 +37,14 @@ export const SafeImage: React.FC<SafeImageProps> = ({
         aria-label={alt}
         className={`flex flex-col items-center justify-center surface-highlight p-5 text-center select-none ${className}`}
       >
-        <div className="w-10 h-10 border-2 border-[#013A42] bg-[#F8F8E1] text-[#013A42] flex items-center justify-center mb-2.5 shrink-0">
+        <div className="w-10 h-10 border-2 border-[#001F24] bg-[#F8F8E1] text-[#001F24] flex items-center justify-center mb-2.5 shrink-0">
           <ImageIcon className="w-5 h-5" aria-hidden="true" />
         </div>
-        <span className="font-display font-bold text-xs sm:text-sm leading-snug max-w-[24ch] text-[#013A42]">
+        <span className="font-display font-bold text-xs sm:text-sm leading-snug max-w-[24ch] text-[#001F24]">
           {fallbackLabel || alt}
         </span>
         {allFailed && isDriveSource && (
-          <span className="mt-1.5 text-[11px] leading-tight text-[#013A42]/85 max-w-[28ch]">
+          <span className="mt-1.5 text-[11px] leading-tight text-[#001F24] max-w-[28ch]">
             Gambar Google Drive gagal dimuat. Pastikan akses file diatur ke &ldquo;Siapa saja yang memiliki link&rdquo;.
           </span>
         )}

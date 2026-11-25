@@ -59,11 +59,11 @@ export const ExperiencePhotoManager: React.FC<ExperiencePhotoManagerProps> = ({
       />
 
       {/* Attached Documentation Gallery Manager */}
-      <div className="border-2 border-brutal bg-[#F8F8E1] p-3.5 space-y-2.5">
-        <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b-2 border-subtle">
+      <div className="border-2 border-[#001F24] bg-[#F8F8E1] text-[#1B2A3D] p-3.5 space-y-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b-2 border-[#1B2A3D]/25">
           <div className="flex items-center gap-1.5">
-            <ImageIcon className="w-4 h-4 text-[#013A42]" aria-hidden="true" />
-            <span className="font-display font-extrabold text-xs sm:text-sm text-[#013A42]">
+            <ImageIcon className="w-4 h-4 text-[#1B2A3D]" aria-hidden="true" />
+            <span className="font-display font-extrabold text-xs sm:text-sm text-[#1B2A3D]">
               Galeri Foto Pengalaman ({imageUrls.length} / {MAX_EXPERIENCE_PHOTOS})
             </span>
           </div>
@@ -75,12 +75,12 @@ export const ExperiencePhotoManager: React.FC<ExperiencePhotoManagerProps> = ({
         </div>
 
         {imageUrls.length === 0 ? (
-          <p className="text-xs text-muted py-2.5 text-center">
+          <p className="text-xs text-[#1B2A3D] py-2.5 text-center">
             Belum ada foto dokumentasi pada pengalaman ini. Unggah satu atau beberapa foto di atas, atau tempel tautan Google Drive.
           </p>
         ) : (
           <>
-            <p className="text-[11px] text-muted">
+            <p className="text-[11px] text-[#1B2A3D]">
               Seret kartu foto atau gunakan tombol panah untuk mengatur urutan galeri. Klik <strong>Jadikan Foto Utama</strong> kapan saja tanpa perlu mengunggah ulang.
             </p>
 
@@ -118,16 +118,16 @@ export const ExperiencePhotoManager: React.FC<ExperiencePhotoManagerProps> = ({
                       isPrimary
                         ? 'border-[#6C151E] shadow-[4px_4px_0_0_#6C151E]'
                         : isDropTarget
-                        ? 'border-[#8ACCD5] shadow-[4px_4px_0_0_#013A42] ring-2 ring-[#013A42]'
-                        : 'border-[#013A42] shadow-[3px_3px_0_0_#013A42]'
+                        ? 'border-[#D9B44A] shadow-[4px_4px_0_0_#001F24] ring-2 ring-[#1B2A3D]'
+                        : 'border-[#001F24] shadow-[3px_3px_0_0_#001F24]'
                     } ${isDragging ? 'opacity-50' : ''}`}
                   >
                     {/* Header bar: Order + Drag Handle + Primary Badge */}
                     <div
                       className={`px-2.5 py-1.5 border-b-2 flex items-center justify-between gap-2 text-[11px] font-mono-num font-bold ${
                         isPrimary
-                          ? 'bg-[#6C151E] text-[#F8F8E1] border-[#013A42]'
-                          : 'bg-[#8ACCD5]/45 text-[#013A42] border-[#013A42]'
+                          ? 'bg-[#6C151E] text-[#F8F8E1] border-[#001F24]'
+                          : 'bg-[#D9B44A] text-[#001F24] border-[#001F24]'
                       }`}
                     >
                       <span className="inline-flex items-center gap-1 cursor-grab active:cursor-grabbing">
@@ -140,7 +140,7 @@ export const ExperiencePhotoManager: React.FC<ExperiencePhotoManagerProps> = ({
                           <span>Foto Utama</span>
                         </span>
                       ) : (
-                        <span className="text-[10px] opacity-80">Dokumentasi</span>
+                        <span className="text-[10px] font-semibold">Dokumentasi</span>
                       )}
                     </div>
 
@@ -155,7 +155,7 @@ export const ExperiencePhotoManager: React.FC<ExperiencePhotoManagerProps> = ({
                     </div>
 
                     {/* Action Controls: Set Primary + Reorder + Delete */}
-                    <div className="p-1.5 border-t-2 border-[#013A42] bg-[#F8F8E1] space-y-1.5">
+                    <div className="p-1.5 border-t-2 border-[#001F24] bg-[#F8F8E1] space-y-1.5">
                       {!isPrimary && (
                         <button
                           type="button"

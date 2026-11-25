@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { ExternalLink, Menu, Play, Share2, X } from 'lucide-react';
+import { BookOpen, ExternalLink, Menu, Play, Share2, X } from 'lucide-react';
 import type { PublicRoute } from '../../types/portfolio';
 import { usePortfolio } from '../../context/PortfolioContext';
-import { DarsLogo } from '../ui/DarsLogo';
 
 interface NavbarProps {
   currentRoute: PublicRoute;
@@ -43,13 +42,13 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onShar
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-[#013A42] text-[#F8F8E1] border-b-2 border-[#8ACCD5]">
+    <header className="sticky top-0 z-40 bg-[#F8F8E1] text-[#1B2A3D] border-b-2 border-[#001F24]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4">
-        {/* Zone 1: Single-line brand wordmark (Beige on Midnight Green) */}
+        {/* Zone 1: Single-line portfolio brand wordmark (Ink Navy on Beige) */}
         <a
           href="/"
           onClick={(e) => handleLinkClick(e, '/')}
-          className="font-display font-extrabold text-sm sm:text-[15px] lg:text-base tracking-tight text-[#F8F8E1] hover:text-[#8ACCD5] transition-colors whitespace-nowrap shrink-0"
+          className="font-display font-extrabold text-sm sm:text-[15px] lg:text-base tracking-tight text-[#1B2A3D] hover:text-[#6C151E] transition-colors whitespace-nowrap shrink-0"
         >
           {(publicData.profile.fullName || 'OSAMA NUR SAMSIL').toUpperCase()}
         </a>
@@ -64,10 +63,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onShar
                 href={item.route}
                 onClick={(e) => handleLinkClick(e, item.route)}
                 aria-current={active ? 'page' : undefined}
-                className={`text-[13px] font-semibold whitespace-nowrap shrink-0 py-1 border-b-2 transition-colors ${
+                className={`text-[13px] font-bold whitespace-nowrap shrink-0 py-1 border-b-[3px] transition-colors ${
                   active
-                    ? 'border-[#8ACCD5] text-[#8ACCD5]'
-                    : 'border-transparent text-[#F8F8E1] hover:text-[#8ACCD5] hover:border-[#8ACCD5]'
+                    ? 'border-[#D9B44A] text-[#1B2A3D]'
+                    : 'border-transparent text-[#1B2A3D] hover:border-[#D9B44A] hover:text-[#6C151E]'
                 }`}
               >
                 {item.label}
@@ -76,15 +75,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onShar
           })}
         </nav>
 
-        {/* Zone 3: Dedicated External Platform Buttons (Dars with Osama & YouTube) + Contact Me + Mobile Menu */}
+        {/* Zone 3: Dedicated External Platform Buttons + Contact Me + Mobile Menu */}
         <div className="flex items-center gap-2 shrink-0">
           <a
             href={DARS_NAV_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-display font-extrabold bg-[#8ACCD5] text-[#013A42] border-2 border-[#F8F8E1] shadow-[2.5px_2.5px_0_0_#F8F8E1] hover:bg-[#F8F8E1] hover:text-[#013A42] hover:-translate-x-[1px] hover:-translate-y-[1px] transition-all whitespace-nowrap shrink-0"
+            className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-display font-extrabold bg-[#D9B44A] text-[#001F24] border-2 border-[#001F24] shadow-[2.5px_2.5px_0_0_#001F24] hover:bg-[#0F3D3A] hover:text-[#F8F8E1] hover:-translate-x-[1px] hover:-translate-y-[1px] transition-all whitespace-nowrap shrink-0"
           >
-            <DarsLogo className="w-3.5 h-3.5 shrink-0" />
+            <BookOpen className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
             <span>Dars with Osama</span>
           </a>
 
@@ -92,7 +91,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onShar
             href={YOUTUBE_NAV_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-display font-extrabold bg-[#6C151E] text-[#F8F8E1] border-2 border-[#F8F8E1] shadow-[2.5px_2.5px_0_0_#8ACCD5] hover:bg-[#F8F8E1] hover:text-[#6C151E] hover:-translate-x-[1px] hover:-translate-y-[1px] transition-all whitespace-nowrap shrink-0"
+            className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-display font-extrabold bg-[#6C151E] text-[#F8F8E1] border-2 border-[#001F24] shadow-[2.5px_2.5px_0_0_#001F24] hover:bg-[#1B2A3D] hover:text-[#F8F8E1] hover:-translate-x-[1px] hover:-translate-y-[1px] transition-all whitespace-nowrap shrink-0"
           >
             <Play className="w-3 h-3 fill-current shrink-0" aria-hidden="true" />
             <span>YouTube</span>
@@ -101,7 +100,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onShar
           <a
             href="/contact"
             onClick={(e) => handleLinkClick(e, '/contact')}
-            className="hidden lg:inline-flex items-center justify-center brutal-btn-on-dark-outline font-display font-bold text-xs px-2.5 py-1.5 whitespace-nowrap shrink-0"
+            className="hidden lg:inline-flex items-center justify-center brutal-btn brutal-btn-primary font-display font-bold text-xs px-2.5 py-1.5 whitespace-nowrap shrink-0"
           >
             Contact Me
           </a>
@@ -111,7 +110,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onShar
             onClick={() => setMobileOpen((prev) => !prev)}
             aria-expanded={mobileOpen}
             aria-label={mobileOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'}
-            className="lg:hidden brutal-btn-on-dark p-2 cursor-pointer"
+            className="lg:hidden brutal-btn brutal-btn-secondary p-2 cursor-pointer"
           >
             {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
@@ -120,19 +119,19 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onShar
 
       {/* Mobile & Tablet Navigation Drawer */}
       {mobileOpen && (
-        <div className="lg:hidden border-t-2 border-[#8ACCD5] bg-[#013A42] text-[#F8F8E1]">
+        <div className="lg:hidden border-t-2 border-[#001F24] bg-[#F8F8E1] text-[#1B2A3D]">
           <nav aria-label="Navigasi seluler" className="px-4 py-3.5 flex flex-col gap-1">
             {/* Dedicated External Channel Buttons */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pb-2.5 mb-1.5 border-b-2 border-[#8ACCD5]/40">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pb-2.5 mb-1.5 border-b-2 border-[#1B2A3D]/25">
               <a
                 href={DARS_NAV_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMobileOpen(false)}
-                className="w-full px-3 py-2 text-xs font-display font-extrabold bg-[#8ACCD5] text-[#013A42] border-2 border-[#F8F8E1] shadow-[2.5px_2.5px_0_0_#F8F8E1] flex items-center justify-between gap-2"
+                className="w-full px-3 py-2 text-xs font-display font-extrabold bg-[#D9B44A] text-[#001F24] border-2 border-[#001F24] shadow-[2.5px_2.5px_0_0_#001F24] flex items-center justify-between gap-2"
               >
                 <span className="inline-flex items-center gap-2">
-                  <DarsLogo className="w-4 h-4 shrink-0" />
+                  <BookOpen className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                   <span>Dars with Osama</span>
                 </span>
                 <ExternalLink className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
@@ -143,7 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onShar
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMobileOpen(false)}
-                className="w-full px-3 py-2 text-xs font-display font-extrabold bg-[#6C151E] text-[#F8F8E1] border-2 border-[#F8F8E1] shadow-[2.5px_2.5px_0_0_#8ACCD5] flex items-center justify-between gap-2"
+                className="w-full px-3 py-2 text-xs font-display font-extrabold bg-[#6C151E] text-[#F8F8E1] border-2 border-[#001F24] shadow-[2.5px_2.5px_0_0_#001F24] flex items-center justify-between gap-2"
               >
                 <span className="inline-flex items-center gap-2">
                   <Play className="w-3.5 h-3.5 fill-current shrink-0" aria-hidden="true" />
@@ -163,22 +162,22 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onShar
                   aria-current={active ? 'page' : undefined}
                   className={`px-3.5 py-2.5 text-sm font-bold border-2 transition-colors ${
                     active
-                      ? 'bg-[#8ACCD5] text-[#013A42] border-[#F8F8E1]'
-                      : 'border-transparent text-[#F8F8E1] hover:border-[#8ACCD5] hover:text-[#8ACCD5]'
+                      ? 'bg-[#D9B44A] text-[#001F24] border-[#001F24]'
+                      : 'border-transparent text-[#1B2A3D] hover:border-[#001F24] hover:bg-[#D9B44A]/35'
                   }`}
                 >
                   {item.label}
                 </a>
               );
             })}
-            <div className="pt-2.5 mt-1.5 border-t-2 border-[#8ACCD5]/40">
+            <div className="pt-2.5 mt-1.5 border-t-2 border-[#1B2A3D]/25">
               <button
                 type="button"
                 onClick={() => {
                   setMobileOpen(false);
                   onShareProfile();
                 }}
-                className="w-full brutal-btn-on-dark px-3 py-2 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full brutal-btn brutal-btn-primary px-3 py-2 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Share2 className="w-3.5 h-3.5" />
                 <span>Bagikan Profil</span>

@@ -8,6 +8,7 @@ interface ModalProps {
   subtitle?: string;
   maxWidthClass?: string;
   variant?: 'default' | 'lightbox';
+  tone?: 'bordo' | 'navy' | 'green' | 'gold';
   disableEscapeClose?: boolean;
   children: React.ReactNode;
 }
@@ -19,6 +20,7 @@ export const Modal: React.FC<ModalProps> = ({
   subtitle,
   maxWidthClass = 'max-w-2xl',
   variant = 'default',
+  tone,
   disableEscapeClose = false,
   children,
 }) => {
@@ -39,38 +41,53 @@ export const Modal: React.FC<ModalProps> = ({
   if (!open) return null;
 
   const isLightbox = variant === 'lightbox';
+  const resolvedTone = tone || (isLightbox ? 'green' : 'navy');
+  const isGold = resolvedTone === 'gold';
+
+  const containerClass =
+    resolvedTone === 'gold'
+      ? 'card-gold brutal-card frame-gold'
+      : resolvedTone === 'green'
+      ? 'card-green brutal-card-on-dark'
+      : resolvedTone === 'bordo'
+      ? 'card-bordo brutal-card-on-dark'
+      : 'card-navy brutal-card-on-dark';
+
+  const headerClass =
+    resolvedTone === 'gold'
+      ? 'border-[#001F24] bg-[#D9B44A] text-[#001F24]'
+      : resolvedTone === 'green'
+      ? 'border-[#D9B44A] bg-[#0F3D3A] text-[#F8F8E1]'
+      : resolvedTone === 'bordo'
+      ? 'border-[#D9B44A] bg-[#6C151E] text-[#F8F8E1]'
+      : 'border-[#D9B44A] bg-[#1B2A3D] text-[#F8F8E1]';
+
+  const subtitleClass = isGold ? 'text-[#001F24]' : 'text-[#D9B44A]';
+
+  const closeBtnClass =
+    resolvedTone === 'gold'
+      ? 'brutal-btn-frame-gold'
+      : resolvedTone === 'green'
+      ? 'brutal-btn-frame-green'
+      : resolvedTone === 'bordo'
+      ? 'brutal-btn-frame-bordo'
+      : 'brutal-btn-frame-navy';
 
   return (
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-[#013A42]/80"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-[#1B2A3D]/80"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div
-        className={`w-full ${maxWidthClass} max-h-[88vh] flex flex-col overflow-hidden ${
-          isLightbox
-            ? 'card-midnight brutal-card-on-dark'
-            : 'card-beige brutal-card frame-shadow-bordo'
-        }`}
-      >
-        <div
-          className={`flex items-start justify-between gap-3 px-5 py-3.5 border-b-2 ${
-            isLightbox
-              ? 'border-[#8ACCD5] bg-[#013A42] text-[#F8F8E1]'
-              : 'border-[#013A42] card-blue text-[#013A42]'
-          }`}
-        >
+      <div className={`w-full ${maxWidthClass} max-h-[88vh] flex flex-col overflow-hidden ${containerClass}`}>
+        <div className={`flex items-start justify-between gap-3 px-5 py-3.5 border-b-2 ${headerClass}`}>
           <div className="min-w-0">
             {subtitle && (
-              <p
-                className={`font-mono-num text-[11px] font-bold mb-0.5 ${
-                  isLightbox ? 'text-[#8ACCD5]' : 'text-[#013A42]/85'
-                }`}
-              >
+              <p className={`font-mono-num text-[11px] font-bold mb-0.5 ${subtitleClass}`}>
                 {subtitle}
               </p>
             )}
@@ -82,11 +99,7 @@ export const Modal: React.FC<ModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Tutup dialog"
-            className={`${
-              isLightbox
-                ? 'brutal-btn-on-dark'
-                : 'brutal-btn brutal-btn-primary'
-            } p-1.5 shrink-0 cursor-pointer`}
+            className={`${closeBtnClass} p-1.5 shrink-0 cursor-pointer`}
           >
             <X className="w-4 h-4" />
           </button>

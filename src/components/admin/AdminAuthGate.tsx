@@ -18,21 +18,21 @@ export const AdminAuthGate: React.FC<AdminAuthGateProps> = ({ onNavigate }) => {
         <button
           type="button"
           onClick={() => onNavigate('/')}
-          className="inline-flex items-center gap-1.5 text-xs font-mono-num font-bold hover:bg-[#8ACCD5] hover:text-[#013A42] px-2.5 py-1.5 border-2 border-transparent hover:border-[#013A42] cursor-pointer transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-mono-num font-bold hover:bg-[#D9B44A] hover:text-[#001F24] px-2.5 py-1.5 border-2 border-transparent hover:border-[#001F24] cursor-pointer transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" />
           <span>Kembali ke Halaman Publik</span>
         </button>
 
-        <div data-aos="fade-up" className="brutal-card card-beige frame-shadow-bordo p-5 sm:p-6 space-y-4">
-          <div className="flex items-start justify-between gap-3 pb-4 border-b-2 border-brutal">
+        <div data-aos="fade-up" className="brutal-card card-navy frame-navy p-5 sm:p-6 space-y-4">
+          <div className="flex items-start justify-between gap-3 pb-4 border-b-2 border-[#D9B44A]/35">
             <div>
-              <span className="brutal-badge-bordo">Akses Terbatas &middot; CMS Admin</span>
-              <h1 className="font-display text-xl sm:text-2xl font-extrabold mt-2">
+              <span className="brutal-badge">Akses Terbatas &middot; CMS Admin</span>
+              <h1 className="font-display text-xl sm:text-2xl font-extrabold mt-2 text-[#F8F8E1]">
                 Dashboard Admin Portofolio
               </h1>
             </div>
-            <div className="w-10 h-10 bg-[#6C151E] text-[#F8F8E1] border-2 border-[#013A42] shadow-[2.5px_2.5px_0_0_#013A42] flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 bg-[#6C151E] text-[#F8F8E1] border-2 border-[#D9B44A] shadow-[2.5px_2.5px_0_0_#001F24] flex items-center justify-center shrink-0">
               <ShieldCheck className="w-5 h-5" aria-hidden="true" />
             </div>
           </div>
@@ -42,7 +42,7 @@ export const AdminAuthGate: React.FC<AdminAuthGateProps> = ({ onNavigate }) => {
           </p>
 
           {!authReady || adminCheckLoading ? (
-            <div className="p-3.5 border-2 border-brutal surface-highlight text-xs sm:text-sm font-bold">
+            <div className="p-3.5 border-2 border-[#001F24] card-gold text-xs sm:text-sm font-bold text-[#001F24]">
               Memverifikasi sesi autentikasi &amp; hak akses administrator...
             </div>
           ) : (
@@ -50,11 +50,11 @@ export const AdminAuthGate: React.FC<AdminAuthGateProps> = ({ onNavigate }) => {
               {authError && (
                 <div
                   role="alert"
-                  className="p-3.5 border-2 border-[#013A42] card-bordo text-xs sm:text-sm font-semibold space-y-2"
+                  className="p-3.5 border-2 border-[#D9B44A] card-bordo text-xs sm:text-sm font-semibold space-y-2"
                 >
                   <p>{authError}</p>
                   {user && (
-                    <p className="font-mono-num text-xs bg-[#8ACCD5] text-[#013A42] p-2 border border-[#F8F8E1] break-all">
+                    <p className="font-mono-num text-xs bg-[#D9B44A] text-[#001F24] p-2 border border-[#001F24] break-all">
                       UID Akun Anda: {user.uid}
                     </p>
                   )}
@@ -66,7 +66,7 @@ export const AdminAuthGate: React.FC<AdminAuthGateProps> = ({ onNavigate }) => {
                   <button
                     type="button"
                     onClick={loginWithGoogle}
-                    className="brutal-btn brutal-btn-primary font-display font-bold text-xs sm:text-sm px-4 py-2.5 inline-flex items-center gap-2 cursor-pointer"
+                    className="brutal-btn-frame-navy font-display font-bold text-xs sm:text-sm px-4 py-2.5 inline-flex items-center gap-2 cursor-pointer"
                   >
                     <LogIn className="w-4 h-4" aria-hidden="true" />
                     <span>Masuk dengan Akun Google Admin</span>
@@ -75,7 +75,7 @@ export const AdminAuthGate: React.FC<AdminAuthGateProps> = ({ onNavigate }) => {
                   <button
                     type="button"
                     onClick={logoutAdmin}
-                    className="brutal-btn brutal-btn-secondary font-display font-bold text-xs sm:text-sm px-4 py-2.5 inline-flex items-center gap-2 cursor-pointer"
+                    className="brutal-btn-on-dark-outline font-display font-bold text-xs sm:text-sm px-4 py-2.5 inline-flex items-center gap-2 cursor-pointer"
                   >
                     <LogOut className="w-4 h-4" aria-hidden="true" />
                     <span>Keluar &amp; Ganti Akun ({user.email})</span>
@@ -91,7 +91,7 @@ export const AdminAuthGate: React.FC<AdminAuthGateProps> = ({ onNavigate }) => {
               type="button"
               onClick={() => setShowGuide((prev) => !prev)}
               aria-expanded={showGuide}
-              className="w-full flex items-center justify-between text-xs font-mono-num font-bold text-muted hover:text-[#6C151E] cursor-pointer transition-colors"
+              className="w-full flex items-center justify-between text-xs font-mono-num font-bold text-[#D9B44A] hover:text-[#F8F8E1] cursor-pointer transition-colors"
             >
               <span>Petunjuk Konfigurasi Admin Awal melalui Firebase Console</span>
               {showGuide ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -101,15 +101,15 @@ export const AdminAuthGate: React.FC<AdminAuthGateProps> = ({ onNavigate }) => {
               <ol className="mt-3 space-y-2 text-xs text-muted list-decimal pl-5 leading-relaxed">
                 <li>
                   Buka Firebase Console untuk proyek{' '}
-                  <code className="font-mono-num font-bold">{FIREBASE_PROJECT_ID}</code> (Database:{' '}
-                  <code className="font-mono-num font-bold">{FIRESTORE_DATABASE_ID}</code>).
+                  <code className="font-mono-num font-bold text-[#D9B44A]">{FIREBASE_PROJECT_ID}</code> (Database:{' '}
+                  <code className="font-mono-num font-bold text-[#D9B44A]">{FIRESTORE_DATABASE_ID}</code>).
                 </li>
                 <li>
-                  Akun pemilik utama (<code className="font-mono-num font-bold">{BOOTSTRAPPED_ADMIN_EMAIL}</code>) sudah diotorisasi secara otomatis pada Firestore Security Rules selama email terverifikasi oleh Google Auth.
+                  Akun pemilik utama (<code className="font-mono-num font-bold text-[#D9B44A]">{BOOTSTRAPPED_ADMIN_EMAIL}</code>) sudah diotorisasi secara otomatis pada Firestore Security Rules selama email terverifikasi oleh Google Auth.
                 </li>
                 <li>
                   Untuk menambahkan admin lain secara aman: masuk ke <strong>Authentication &rarr; Users</strong>, salin <strong>User UID</strong>, lalu buat dokumen pada koleksi Firestore{' '}
-                  <code className="font-mono-num font-bold">admins/&lt;UID&gt;</code> dengan field:{' '}
+                  <code className="font-mono-num font-bold text-[#D9B44A]">admins/&lt;UID&gt;</code> dengan field:{' '}
                   <code className="font-mono-num">email</code>, <code className="font-mono-num">displayName</code>,{' '}
                   <code className="font-mono-num">role: &quot;admin&quot;</code>,{' '}
                   <code className="font-mono-num">createdAt</code>, dan <code className="font-mono-num">updatedAt</code>.

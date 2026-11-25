@@ -1,6 +1,6 @@
 import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { getCardTone } from '../utils/cardVariants';
+import { getSectionCardTone } from '../utils/cardVariants';
 import { getAosStaggerDelay } from '../utils/aos';
 import { SafeImage } from '../components/ui/SafeImage';
 import { DarsPublicationsCatalog } from '../components/publications/DarsPublicationsCatalog';
@@ -28,38 +28,36 @@ export const EducationPage: React.FC = () => {
         </h2>
 
         {education.length === 0 ? (
-          <div data-aos="fade-up" className="brutal-card card-beige p-6 text-sm text-muted">
+          <div data-aos="fade-up" className="brutal-card card-navy frame-navy p-6 text-sm text-[#F8F8E1]">
             Belum ada riwayat pendidikan yang dipublikasikan.
           </div>
         ) : (
           <div className="space-y-4">
             {education.map((edu, idx) => {
-              const tone = getCardTone(idx, ['beige', 'green', 'blue']);
+              const tone = getSectionCardTone('education');
               return (
                 <article
                   key={edu.id}
                   data-aos="fade-up"
                   data-aos-delay={getAosStaggerDelay(idx, 100, 2)}
-                  className={`brutal-card p-5 sm:p-6 ${tone.cardClass} ${
-                    idx === 0 ? 'frame-shadow-bordo' : tone.frameClass
-                  }`}
+                  className={`brutal-card p-5 sm:p-6 ${tone.cardClass} ${tone.frameClass}`}
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono-num">
-                    <span className="font-bold text-muted uppercase">
+                    <span className="font-semibold text-[#D9B44A] uppercase">
                       {edu.category} &middot; {edu.location}
                     </span>
-                    <span className={idx === 0 ? 'brutal-badge-bordo' : tone.badgeClass}>
+                    <span className={tone.badgeClass}>
                       Kelulusan {edu.graduationYear}
                     </span>
                   </div>
-                  <h3 className="font-display text-xl sm:text-2xl font-extrabold mt-2">
+                  <h3 className="font-display text-xl sm:text-2xl font-extrabold mt-2 text-[#F8F8E1]">
                     {edu.institution}
                   </h3>
-                  <p className="text-sm sm:text-base font-bold mt-1">
+                  <p className="text-sm sm:text-base font-semibold mt-1 text-[#D9B44A]">
                     {edu.degree} &mdash; {edu.fieldOfStudy}
                   </p>
                   {edu.description && (
-                    <p className="text-sm text-muted mt-3 leading-relaxed max-w-3xl">
+                    <p className="text-sm text-[#F8F8E1]/90 mt-3 leading-relaxed max-w-3xl">
                       {edu.description}
                     </p>
                   )}
@@ -70,7 +68,7 @@ export const EducationPage: React.FC = () => {
                           key={`${edu.id}-img-${imgIdx}`}
                           data-aos="fade-up"
                           data-aos-delay={getAosStaggerDelay(imgIdx, 100, 4)}
-                          className="aspect-[4/3] border-2 border-[#013A42] bg-[#F8F8E1] overflow-hidden"
+                          className={`aspect-[4/3] border-2 ${tone.mediaBorderClass} bg-[#F8F8E1] overflow-hidden`}
                         >
                           <SafeImage
                             src={imgUrl}

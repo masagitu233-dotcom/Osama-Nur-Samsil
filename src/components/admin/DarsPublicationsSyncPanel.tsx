@@ -88,23 +88,23 @@ export const DarsPublicationsSyncPanel: React.FC = () => {
       </div>
 
       {/* Integration Architecture Summary */}
-      <div data-aos="fade-up" data-aos-delay={100} className="brutal-card card-beige frame-shadow-green p-4 sm:p-5 space-y-3">
-        <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-[#0F3D3A]">
+      <div data-aos="fade-up" data-aos-delay={100} className="brutal-card card-green frame-green p-4 sm:p-5 space-y-3">
+        <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-[#D9B44A]">
           <CheckCircle2 className="w-4 h-4 shrink-0" />
           <span>Sumber Tunggal Aktif: {DARS_SITE_BASE_URL}</span>
         </div>
         <dl className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2 border-t border-subtle text-xs">
           <div>
-            <dt className="font-mono-num uppercase text-muted font-bold">Koleksi Sumber</dt>
-            <dd className="font-mono-num font-bold mt-1">{DARS_ARTICLES_COLLECTION} (status = published)</dd>
+            <dt className="font-mono-num uppercase text-[#D9B44A] font-bold">Koleksi Sumber</dt>
+            <dd className="font-mono-num font-bold mt-1 text-[#F8F8E1]">{DARS_ARTICLES_COLLECTION} (status = published)</dd>
           </div>
           <div>
-            <dt className="font-mono-num uppercase text-muted font-bold">Mode Akses</dt>
-            <dd className="font-bold mt-1">Read-Only (Tanpa Salinan ke Database Portofolio)</dd>
+            <dt className="font-mono-num uppercase text-[#D9B44A] font-bold">Mode Akses</dt>
+            <dd className="font-bold mt-1 text-[#F8F8E1]">Read-Only (Tanpa Salinan ke Database Portofolio)</dd>
           </div>
           <div>
-            <dt className="font-mono-num uppercase text-muted font-bold">Total Artikel Tersinkron</dt>
-            <dd className="font-mono-num font-extrabold text-sm sm:text-base mt-0.5">
+            <dt className="font-mono-num uppercase text-[#D9B44A] font-bold">Total Artikel Tersinkron</dt>
+            <dd className="font-mono-num font-extrabold text-sm sm:text-base mt-0.5 text-[#F8F8E1]">
               {loading ? 'Memeriksa...' : errorMessage ? 'Gagal Memuat' : `${articles.length} Artikel`}
             </dd>
           </div>
@@ -115,8 +115,8 @@ export const DarsPublicationsSyncPanel: React.FC = () => {
       </div>
 
       {errorMessage && (
-        <div role="alert" className="brutal-card card-bordo p-4 flex items-start gap-2.5 text-xs sm:text-sm text-[#F8F8E1]">
-          <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-[#8ACCD5]" />
+        <div role="alert" className="brutal-card card-bordo frame-bordo p-4 flex items-start gap-2.5 text-xs sm:text-sm text-[#F8F8E1]">
+          <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-[#D9B44A]" />
           <div>
             <p className="font-bold">Sinkronisasi Sedang Terkendala</p>
             <p className="mt-0.5 opacity-90">{errorMessage}</p>
@@ -126,11 +126,11 @@ export const DarsPublicationsSyncPanel: React.FC = () => {
 
       {/* Read-only preview of latest synced articles */}
       {!loading && !errorMessage && articles.length > 0 && (
-        <section data-aos="fade-up" className="brutal-card card-beige p-4 sm:p-5 space-y-3">
-          <h2 className="font-display text-base sm:text-lg font-extrabold">
+        <section data-aos="fade-up" className="brutal-card card-green frame-green p-4 sm:p-5 space-y-3">
+          <h2 className="font-display text-base sm:text-lg font-extrabold text-[#F8F8E1]">
             Pratinjau Artikel Terbaru yang Tampil di Halaman Publik
           </h2>
-          <div className="divide-y divide-[var(--border-subtle)]">
+          <div className="divide-y divide-[var(--card-border-subtle)]">
             {articles.slice(0, 10).map((item) => (
               <div
                 key={item.id}
@@ -141,7 +141,7 @@ export const DarsPublicationsSyncPanel: React.FC = () => {
                     {item.category && <span className="brutal-badge">{item.category}</span>}
                     {item.publishedAt && <span>{formatPublicationDateId(item.publishedAt)}</span>}
                   </div>
-                  <p className="font-display font-bold text-sm mt-1 truncate">
+                  <p className="font-display font-bold text-sm mt-1 truncate text-[#F8F8E1]">
                     {item.title}
                   </p>
                 </div>
@@ -149,7 +149,7 @@ export const DarsPublicationsSyncPanel: React.FC = () => {
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="brutal-btn brutal-btn-outline px-3 py-1.5 text-xs font-bold inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap"
+                  className="brutal-btn-frame-green px-3 py-1.5 text-xs font-bold inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap"
                 >
                   <span>Buka Artikel</span>
                   <ExternalLink className="w-3.5 h-3.5" />

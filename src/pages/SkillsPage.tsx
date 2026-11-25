@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import type { InterestCategory, SkillCategory } from '../types/portfolio';
-import { getCardTone, type CardTone } from '../utils/cardVariants';
+import { getSectionCardTone } from '../utils/cardVariants';
 import { getAosStaggerDelay, refreshAos } from '../utils/aos';
 import { SafeImage } from '../components/ui/SafeImage';
 
@@ -12,7 +12,6 @@ const SKILL_GROUPS: Array<{
   index: string;
   title: string;
   subtitle: string;
-  sequence: CardTone[];
   sectionBadge: string;
 }> = [
   {
@@ -20,7 +19,6 @@ const SKILL_GROUPS: Array<{
     index: '01.',
     title: 'Technical Skills',
     subtitle: 'Pengembangan web, deployment, database, dan sistem digital',
-    sequence: ['beige', 'blue', 'green', 'bordo'],
     sectionBadge: 'brutal-badge',
   },
   {
@@ -28,7 +26,6 @@ const SKILL_GROUPS: Array<{
     index: '02.',
     title: 'Perangkat & AI Tools',
     subtitle: 'Aplikasi produktivitas, desain, dokumentasi, dan kecerdasan buatan',
-    sequence: ['blue', 'beige', 'midnight', 'green'],
     sectionBadge: 'brutal-badge-green',
   },
   {
@@ -36,7 +33,6 @@ const SKILL_GROUPS: Array<{
     index: '03.',
     title: 'Soft Skills',
     subtitle: 'Kepemimpinan, pembinaan, komunikasi, dan manajemen tim',
-    sequence: ['green', 'beige', 'bordo', 'blue'],
     sectionBadge: 'brutal-badge-bordo',
   },
   {
@@ -44,7 +40,6 @@ const SKILL_GROUPS: Array<{
     index: '04.',
     title: 'Academic Skills',
     subtitle: 'Kajian hukum keluarga, keilmuan Islam, dan penulisan ilmiah',
-    sequence: ['beige', 'bordo', 'blue', 'midnight'],
     sectionBadge: 'brutal-badge',
   },
   {
@@ -52,7 +47,6 @@ const SKILL_GROUPS: Array<{
     index: '05.',
     title: 'Language Skills',
     subtitle: 'Penguasaan bahasa dengan tingkat deskriptif mandiri',
-    sequence: ['bordo', 'midnight', 'green'],
     sectionBadge: 'brutal-badge-bordo',
   },
 ];
@@ -113,8 +107,8 @@ export const SkillsPage: React.FC = () => {
               onClick={() => setGroup(tab.value)}
               className={`px-3.5 py-1.5 text-xs font-bold border-2 border-brutal cursor-pointer whitespace-nowrap transition-colors ${
                 active
-                  ? 'card-blue shadow-[2.5px_2.5px_0_0_#013A42]'
-                  : 'card-beige hover:bg-[#8ACCD5] hover:text-[#013A42]'
+                  ? 'bg-[#D9B44A] text-[#001F24] shadow-[2.5px_2.5px_0_0_#001F24]'
+                  : 'bg-[#F8F8E1] text-[#1B2A3D] hover:bg-[#D9B44A] hover:text-[#001F24]'
               }`}
             >
               {tab.label}
@@ -139,13 +133,13 @@ export const SkillsPage: React.FC = () => {
                 </div>
 
                 {items.length === 0 ? (
-                  <div data-aos="fade-up" className="brutal-card card-beige p-5 text-sm text-muted">
+                  <div data-aos="fade-up" className="brutal-card card-gold frame-gold p-5 text-sm text-[#001F24]">
                     Belum ada item pada kategori {sec.title}. Tambahkan melalui Dashboard Admin.
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {items.map((item, idx) => {
-                      const tone = getCardTone(idx, sec.sequence);
+                      const tone = getSectionCardTone('skills');
                       return (
                         <article
                           key={item.id}
@@ -155,7 +149,7 @@ export const SkillsPage: React.FC = () => {
                         >
                           <div>
                             {item.imageUrl && (
-                              <div className="aspect-[16/9] mb-3 border-2 border-[#013A42] bg-[#F8F8E1] overflow-hidden">
+                              <div className={`aspect-[16/9] mb-3 border-2 ${tone.mediaBorderClass} bg-[#F8F8E1] overflow-hidden`}>
                                 <SafeImage
                                   src={item.imageUrl}
                                   alt={item.name}
@@ -193,7 +187,7 @@ export const SkillsPage: React.FC = () => {
         <div className="pt-6 border-t-2 border-brutal grid grid-cols-1 md:grid-cols-2 gap-5">
           {INTEREST_GROUPS.map((sec, idx) => {
             const items = interests.filter((i) => i.category === sec.key);
-            const tone = getCardTone(idx, ['beige', 'blue', 'green', 'bordo', 'midnight']);
+            const tone = getSectionCardTone('skills');
             return (
               <section
                 key={sec.key}
@@ -212,7 +206,7 @@ export const SkillsPage: React.FC = () => {
                     {items.map((item) => (
                       <li key={item.id} className="py-2.5 first:pt-0 last:pb-0 flex items-start gap-3">
                         {item.imageUrl && (
-                          <div className="w-12 h-12 shrink-0 border-2 border-[#013A42] bg-[#F8F8E1] overflow-hidden">
+                          <div className={`w-12 h-12 shrink-0 border-2 ${tone.mediaBorderClass} bg-[#F8F8E1] overflow-hidden`}>
                             <SafeImage
                               src={item.imageUrl}
                               alt={item.title}

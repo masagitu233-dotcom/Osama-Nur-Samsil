@@ -4,7 +4,7 @@ import { usePortfolio } from '../context/PortfolioContext';
 import type { ExperienceCategory, ExperienceItem, OrganizationItem } from '../types/portfolio';
 import { filterExperiences } from '../utils/portfolioLogic';
 import { SafeImage } from '../components/ui/SafeImage';
-import { getCardTone } from '../utils/cardVariants';
+import { getSectionCardTone } from '../utils/cardVariants';
 import { resolveExperiencePrimaryPhoto } from '../utils/experienceGallery';
 import { getAosStaggerDelay, refreshAos } from '../utils/aos';
 import {
@@ -107,8 +107,8 @@ export const ExperiencePage: React.FC = () => {
                 onClick={() => setCategory(tab.value)}
                 className={`px-3.5 py-1.5 text-xs font-bold border-2 border-brutal cursor-pointer whitespace-nowrap transition-colors ${
                   active
-                    ? 'card-blue shadow-[2.5px_2.5px_0_0_#013A42]'
-                    : 'card-beige hover:bg-[#8ACCD5] hover:text-[#013A42]'
+                    ? 'bg-[#6C151E] text-[#F8F8E1] shadow-[2.5px_2.5px_0_0_#001F24]'
+                    : 'bg-[#F8F8E1] text-[#1B2A3D] hover:bg-[#D9B44A] hover:text-[#001F24]'
                 }`}
               >
                 {tab.label}
@@ -120,7 +120,7 @@ export const ExperiencePage: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2.5">
           <div className="relative flex-1 sm:w-60">
             <Search
-              className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted"
+              className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#1B2A3D]"
               aria-hidden="true"
             />
             <input
@@ -133,14 +133,14 @@ export const ExperiencePage: React.FC = () => {
             />
           </div>
 
-          <div className="flex border-2 border-brutal card-beige">
+          <div className="flex border-2 border-brutal bg-[#F8F8E1] text-[#1B2A3D]">
             <button
               type="button"
               onClick={() => setViewMode('cards')}
               aria-label="Tampilan kartu"
               aria-pressed={viewMode === 'cards'}
               className={`px-2.5 py-1.5 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
-                viewMode === 'cards' ? 'card-midnight' : 'hover:bg-[#8ACCD5] hover:text-[#013A42]'
+                viewMode === 'cards' ? 'card-navy' : 'hover:bg-[#D9B44A] hover:text-[#001F24]'
               }`}
             >
               <LayoutGrid className="w-3.5 h-3.5" aria-hidden="true" />
@@ -152,7 +152,7 @@ export const ExperiencePage: React.FC = () => {
               aria-label="Tampilan timeline"
               aria-pressed={viewMode === 'timeline'}
               className={`px-2.5 py-1.5 text-xs font-bold inline-flex items-center gap-1.5 border-l-2 border-brutal cursor-pointer transition-colors ${
-                viewMode === 'timeline' ? 'card-midnight' : 'hover:bg-[#8ACCD5] hover:text-[#013A42]'
+                viewMode === 'timeline' ? 'card-navy' : 'hover:bg-[#D9B44A] hover:text-[#001F24]'
               }`}
             >
               <List className="w-3.5 h-3.5" aria-hidden="true" />
@@ -162,17 +162,17 @@ export const ExperiencePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Experience List — Concise Uniform-Height Neo-Brutalist Cards with 16:9 Primary Photo */}
+      {/* Experience List — Concise Uniform-Height Neo-Brutalist Cards in Bordo (#6C151E) */}
       {filteredExperiences.length === 0 ? (
-        <div className="brutal-card card-beige p-8 text-center">
-          <p className="font-display text-base font-bold">Tidak ada pengalaman yang cocok dengan filter saat ini.</p>
+        <div className="brutal-card card-bordo frame-bordo p-8 text-center">
+          <p className="font-display text-base font-bold text-[#F8F8E1]">Tidak ada pengalaman yang cocok dengan filter saat ini.</p>
           <button
             type="button"
             onClick={() => {
               setCategory('all');
               setQuery('');
             }}
-            className="mt-3 brutal-btn brutal-btn-secondary px-4 py-2 text-xs font-bold cursor-pointer"
+            className="mt-3 brutal-btn-frame-bordo px-4 py-2 text-xs font-bold cursor-pointer"
           >
             Reset Filter
           </button>
@@ -180,14 +180,8 @@ export const ExperiencePage: React.FC = () => {
       ) : viewMode === 'cards' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
           {filteredExperiences.map((exp, idx) => {
-            const tone = getCardTone(idx, ['beige', 'blue', 'green', 'bordo', 'midnight']);
+            const tone = getSectionCardTone('experience');
             const primaryPhoto = resolveExperiencePrimaryPhoto(exp.imageUrls, exp.primaryImageUrl);
-            const photoFrameBorder =
-              tone.tone === 'beige'
-                ? 'border-[#6C151E]'
-                : tone.tone === 'blue'
-                ? 'border-[#013A42]'
-                : 'border-[#8ACCD5]';
 
             return (
               <article
@@ -196,7 +190,7 @@ export const ExperiencePage: React.FC = () => {
                 data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
                 className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
               >
-                <div className={`aspect-[16/9] w-full overflow-hidden border-b-2 ${photoFrameBorder} bg-[#F8F8E1] shrink-0`}>
+                <div className={`aspect-[16/9] w-full overflow-hidden border-b-2 ${tone.mediaBorderClass} bg-[#F8F8E1] shrink-0`}>
                   <SafeImage
                     src={primaryPhoto}
                     alt={`Foto utama ${exp.institution}`}
@@ -212,10 +206,10 @@ export const ExperiencePage: React.FC = () => {
                         {categoryLabel(exp.category)}
                       </span>
                       {exp.period && (
-                        <span className="font-bold text-muted">{exp.period}</span>
+                        <span className="font-semibold text-[#D9B44A]">{exp.period}</span>
                       )}
                     </div>
-                    <h2 className="font-display text-base sm:text-[17px] font-extrabold leading-snug line-clamp-2 min-h-[2.75rem]">
+                    <h2 className="font-display text-base sm:text-[17px] font-extrabold leading-snug line-clamp-2 min-h-[2.75rem] text-[#F8F8E1]">
                       {exp.institution}
                     </h2>
                   </div>
@@ -237,7 +231,7 @@ export const ExperiencePage: React.FC = () => {
       ) : (
         <ol className="space-y-4">
           {filteredExperiences.map((exp, idx) => {
-            const tone = getCardTone(idx, ['beige', 'blue', 'green', 'bordo', 'midnight']);
+            const tone = getSectionCardTone('experience');
             const primaryPhoto = resolveExperiencePrimaryPhoto(exp.imageUrls, exp.primaryImageUrl);
             return (
               <li
@@ -246,7 +240,7 @@ export const ExperiencePage: React.FC = () => {
                 data-aos-delay={getAosStaggerDelay(idx, 100, 2)}
                 className={`brutal-card p-4 sm:p-5 grid grid-cols-1 md:grid-cols-12 gap-4 items-center ${tone.cardClass} ${tone.frameClass}`}
               >
-                <div className="md:col-span-4 aspect-[16/9] w-full border-2 border-[#013A42] bg-[#F8F8E1] overflow-hidden">
+                <div className={`md:col-span-4 aspect-[16/9] w-full border-2 ${tone.mediaBorderClass} bg-[#F8F8E1] overflow-hidden`}>
                   <SafeImage
                     src={primaryPhoto}
                     alt={`Foto utama ${exp.institution}`}
@@ -254,9 +248,9 @@ export const ExperiencePage: React.FC = () => {
                     className="w-full h-full block object-cover object-[50%_22%]"
                   />
                 </div>
-                <div className="md:col-span-8 flex flex-col items-start gap-2.5">
+                <div className="md:col-span-8 flex flex-col items-start gap-2.5 text-[#F8F8E1]">
                   <span className={tone.badgeClass}>{categoryLabel(exp.category)}</span>
-                  <h2 className="font-display text-lg sm:text-xl font-extrabold leading-snug">
+                  <h2 className="font-display text-lg sm:text-xl font-extrabold leading-snug text-[#F8F8E1]">
                     {exp.institution}
                   </h2>
                   <div className="pt-0.5">
@@ -279,7 +273,7 @@ export const ExperiencePage: React.FC = () => {
       <section aria-labelledby="org-heading" className="pt-4">
         <div data-aos="fade-up" className="mb-5 pb-3 border-b-2 border-brutal">
           <span className="brutal-badge-bordo">Kepemimpinan Organisasi</span>
-          <h2 id="org-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1.5">
+          <h2 id="org-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1.5 text-[#1B2A3D]">
             Pengalaman Organisasi
           </h2>
         </div>
@@ -291,14 +285,8 @@ export const ExperiencePage: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
             {publicData.organizations.map((org, idx) => {
-              const tone = getCardTone(idx, ['bordo', 'beige', 'green', 'blue']);
+              const tone = getSectionCardTone('experience');
               const primaryPhoto = resolveExperiencePrimaryPhoto(org.imageUrls, org.primaryImageUrl);
-              const photoFrameBorder =
-                tone.tone === 'beige'
-                  ? 'border-[#6C151E]'
-                  : tone.tone === 'blue'
-                  ? 'border-[#013A42]'
-                  : 'border-[#8ACCD5]';
 
               return (
                 <article
@@ -307,7 +295,7 @@ export const ExperiencePage: React.FC = () => {
                   data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
                   className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                 >
-                  <div className={`aspect-[16/9] w-full overflow-hidden border-b-2 ${photoFrameBorder} bg-[#F8F8E1] shrink-0`}>
+                  <div className={`aspect-[16/9] w-full overflow-hidden border-b-2 ${tone.mediaBorderClass} bg-[#F8F8E1] shrink-0`}>
                     <SafeImage
                       src={primaryPhoto}
                       alt={`Foto utama ${org.organizationName}`}
@@ -321,7 +309,7 @@ export const ExperiencePage: React.FC = () => {
                       <span className={tone.badgeClass}>
                         {org.category || 'Organisasi'}
                       </span>
-                      <h3 className="font-display text-base sm:text-[17px] font-extrabold leading-snug min-h-[2.75rem]">
+                      <h3 className="font-display text-base sm:text-[17px] font-extrabold leading-snug min-h-[2.75rem] text-[#F8F8E1]">
                         {org.organizationName}
                       </h3>
                     </div>

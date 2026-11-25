@@ -7,9 +7,9 @@ export const ToastBanner: React.FC = () => {
   if (!toast) return null;
 
   const styles = {
-    success: 'bg-[#0F3D3A] text-[#F8F8E1] border-2 border-[#013A42] shadow-[5px_5px_0_0_#013A42]',
-    error: 'bg-[#6C151E] text-[#F8F8E1] border-2 border-[#013A42] shadow-[5px_5px_0_0_#013A42]',
-    info: 'bg-[#8ACCD5] text-[#013A42] border-2 border-[#013A42] shadow-[5px_5px_0_0_#013A42]',
+    success: 'bg-[#0F3D3A] text-[#F8F8E1] border-2 border-[#001F24] shadow-[5px_5px_0_0_#001F24]',
+    error: 'bg-[#6C151E] text-[#F8F8E1] border-2 border-[#001F24] shadow-[5px_5px_0_0_#001F24]',
+    info: 'bg-[#D9B44A] text-[#001F24] border-2 border-[#001F24] shadow-[5px_5px_0_0_#001F24]',
   }[toast.type];
 
   const Icon = toast.type === 'success' ? CheckCircle2 : toast.type === 'error' ? AlertTriangle : Info;
