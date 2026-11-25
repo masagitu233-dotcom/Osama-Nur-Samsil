@@ -19,6 +19,7 @@ export interface ProfileData {
   vision: string;
   mission: string;
   careerFocus: string;
+  careerInterestsOverview?: string;
   photoUrl: string;
   cvUrl: string;
   cvFileName: string;

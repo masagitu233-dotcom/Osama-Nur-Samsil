@@ -1,21 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ArrowRight,
-  ArrowUpRight,
   Download,
-  ExternalLink,
   Share2,
 } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
-import type { PublicRoute } from '../types/portfolio';
+import type { ExperienceItem, ProjectItem, PublicRoute } from '../types/portfolio';
 import { SafeImage } from '../components/ui/SafeImage';
 import { DarsLogo } from '../components/ui/DarsLogo';
+import {
+  ExperienceDetailModal,
+  type ExperienceDetailViewData,
+} from '../components/experience/ExperienceDetailModal';
+import { ProjectDetailModal } from '../components/projects/ProjectDetailModal';
 import { getCardTone } from '../utils/cardVariants';
 import { getGoogleDriveDownloadUrl } from '../utils/googleDriveMedia';
 import {
+  ACTIVE_PROJECT_CATEGORY_LABELS,
   hasCustomUploadedDarsAsset,
   isDarsPlatformProject,
+  normalizeProjectCategory,
   prepareWebsiteProjects,
+  resolveProjectPrimaryPhoto,
 } from '../utils/projectsCatalog';
 import { resolveExperiencePrimaryPhoto } from '../utils/experienceGallery';
 import { getAosStaggerDelay } from '../utils/aos';
@@ -25,9 +31,41 @@ interface HomePageProps {
   onShareProfile: () => void;
 }
 
+function getExperienceCategoryLabel(category: ExperienceItem['category']): string {
+  switch (category) {
+    case 'mentoring':
+      return 'Pembinaan';
+    case 'teaching':
+      return 'Pengajaran';
+    case 'committee':
+      return 'Kepanitiaan';
+    default:
+      return 'Pengalaman Kerja';
+  }
+}
+
+function toExperienceDetail(exp: ExperienceItem): ExperienceDetailViewData {
+  return {
+    id: exp.id,
+    role: exp.role,
+    categoryLabel: getExperienceCategoryLabel(exp.category),
+    institutionName: exp.institution,
+    period: exp.period,
+    duration: exp.duration,
+    location: exp.location,
+    description: exp.description,
+    responsibilities: exp.responsibilities,
+    responsibilitiesHeading: 'Tanggung Jawab & Program Utama',
+    imageUrls: exp.imageUrls,
+    primaryImageUrl: exp.primaryImageUrl,
+  };
+}
+
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }) => {
   const { publicData, showToast } = usePortfolio();
   const { profile, experiences, organizations, education, projects, skills, certificates } = publicData;
+  const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
+  const [selectedExperience, setSelectedExperience] = useState<ExperienceDetailViewData | null>(null);
 
   const featuredExperiences = experiences.filter((e) => e.featured).slice(0, 3);
   const shownExperiences = featuredExperiences.length > 0 ? featuredExperiences : experiences.slice(0, 3);
@@ -369,135 +407,148 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-          {/* Featured Project Spotlight */}
-          {featuredProject && (
-            <article data-aos="fade-up" className="lg:col-span-6 brutal-card card-beige frame-shadow-bordo overflow-hidden flex flex-col">
-              <div className="border-b-2 border-[#6C151E] overflow-hidden">
-                {isDarsPlatformProject(featuredProject) && !hasCustomUploadedDarsAsset(featuredProject) ? (
-                  <div className="w-full min-h-[180px] sm:min-h-[200px] bg-[#0F3D3A] flex flex-col items-center justify-center p-5 sm:p-6">
-                    <div className="bg-[#F8F8E1] border-2 border-[#013A42] shadow-[4px_4px_0_0_#013A42] p-3">
-                      <DarsLogo className="w-16 h-16 sm:w-20 sm:h-20" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
+          {/* Featured Project Card (Uniform 16:9 media, concise metadata, Detail button) */}
+          {featuredProject && (() => {
+            const isDars = isDarsPlatformProject(featuredProject);
+            const useCustomAsset = hasCustomUploadedDarsAsset(featuredProject);
+            const primaryProjectPhoto = resolveProjectPrimaryPhoto(featuredProject);
+            const projectTone = getCardTone(0, ['beige', 'blue', 'green', 'bordo']);
+            const projectCategoryLabel =
+              ACTIVE_PROJECT_CATEGORY_LABELS[normalizeProjectCategory(featuredProject.category)];
+
+            return (
+              <article
+                key={featuredProject.id}
+                data-testid="home-featured-project"
+                data-aos="fade-up"
+                data-aos-delay={getAosStaggerDelay(0, 100, 3)}
+                className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${projectTone.cardClass} ${projectTone.frameClass}`}
+              >
+                <div className="aspect-[16/9] w-full border-b-2 border-[#6C151E] overflow-hidden shrink-0">
+                  {isDars && !useCustomAsset ? (
+                    <div className="w-full h-full bg-[#013A42] flex items-center justify-center p-5">
+                      <div className="bg-[#F8F8E1] border-2 border-[#8ACCD5] shadow-[4px_4px_0_0_#6C151E] p-2.5 flex items-center justify-center">
+                        <DarsLogo className="w-20 h-20 object-contain" />
+                      </div>
                     </div>
-                    <p className="mt-3 font-display text-xs font-extrabold uppercase tracking-wider text-[#8ACCD5]">
-                      Platform Digital · darswithosama.netlify.app
-                    </p>
-                  </div>
-                ) : (
-                  <div className="aspect-[16/9] w-full bg-[#F8F8E1]">
-                    <SafeImage
-                      src={featuredProject.imageUrls[0]}
-                      alt={featuredProject.title}
-                      fallbackLabel={featuredProject.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="p-5 flex-1 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-2 text-xs font-mono-num font-bold">
-                    <span className="brutal-badge-bordo">Proyek Unggulan</span>
-                    <span className="text-muted">{featuredProject.period || 'Aktif'}</span>
-                  </div>
-                  <h3 className="font-display text-xl sm:text-2xl font-extrabold mt-2.5">
-                    {featuredProject.title}
-                  </h3>
-                  <p className="text-sm text-muted mt-2 leading-relaxed">
-                    {featuredProject.description}
-                  </p>
-                </div>
-
-                <div className="mt-5 pt-4 border-t border-subtle flex flex-wrap items-center gap-2.5">
-                  {featuredProject.liveUrl && (
-                    <a
-                      href={featuredProject.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="brutal-btn brutal-btn-primary px-3.5 py-2 text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap"
-                    >
-                      <span>Kunjungi Website</span>
-                      <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
-                    </a>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => onNavigate('/projects')}
-                    className="brutal-btn brutal-btn-secondary px-3.5 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
-                  >
-                    <span>Detail &amp; Karya Lain</span>
-                    <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-                  </button>
-                </div>
-              </div>
-            </article>
-          )}
-
-          {/* Featured Experiences Stack (With Individual Primary Photos) */}
-          <div className="lg:col-span-6 flex flex-col gap-3.5">
-            {shownExperiences.map((exp, idx) => {
-              const tone = getCardTone(idx, ['blue', 'green', 'bordo']);
-              const primaryPhoto = resolveExperiencePrimaryPhoto(exp.imageUrls, exp.primaryImageUrl);
-              return (
-                <article
-                  key={exp.id}
-                  data-testid={`home-featured-exp-${idx}`}
-                  data-aos="fade-up"
-                  data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
-                  className={`brutal-card brutal-card-interactive p-4 flex-1 flex flex-col justify-between gap-3 ${tone.cardClass} ${tone.frameClass}`}
-                >
-                  <div className="flex items-start gap-3.5">
-                    <div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 border-2 border-[#013A42] bg-[#F8F8E1] overflow-hidden">
+                  ) : isDars ? (
+                    <div className="w-full h-full bg-[#013A42] flex items-center justify-center p-4">
                       <SafeImage
-                        src={primaryPhoto}
-                        alt={`Foto ${exp.institution}`}
-                        fallbackLabel={exp.institution}
-                        className="w-full h-full object-cover object-[50%_22%]"
+                        src={primaryProjectPhoto}
+                        alt={featuredProject.title}
+                        fallbackLabel={featuredProject.title}
+                        className="w-full h-full object-contain"
                       />
                     </div>
-
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center justify-between gap-1.5 text-[11px] font-mono-num">
-                        <span className="font-bold">
-                          0{idx + 1}. {exp.category === 'mentoring' ? 'Pembinaan' : exp.category === 'teaching' ? 'Pengajaran' : exp.category === 'committee' ? 'Kepanitiaan' : 'Pekerjaan'}
-                        </span>
-                        <span className={tone.badgeClass}>
-                          {exp.period}
-                        </span>
-                      </div>
-                      <h3 className="font-display text-base font-extrabold mt-1.5 leading-snug">
-                        {exp.role}
-                      </h3>
-                      <p className="text-xs font-bold mt-0.5 text-muted truncate">
-                        {exp.institution}
-                      </p>
-                      <p className="text-xs text-muted mt-1.5 line-clamp-2 leading-relaxed">
-                        {exp.description}
-                      </p>
+                  ) : (
+                    <div className="w-full h-full bg-[#F8F8E1]">
+                      <SafeImage
+                        src={primaryProjectPhoto}
+                        alt={featuredProject.title}
+                        fallbackLabel={featuredProject.title}
+                        className="w-full h-full block object-cover"
+                      />
                     </div>
+                  )}
+                </div>
+
+                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
+                  <div className="flex-1 flex flex-col gap-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono-num">
+                      <span className={projectTone.badgeClass}>{projectCategoryLabel}</span>
+                      {featuredProject.period && (
+                        <span className="font-bold text-muted">{featuredProject.period}</span>
+                      )}
+                    </div>
+                    <h3 className="font-display text-base sm:text-[17px] font-extrabold leading-snug line-clamp-2 min-h-[2.75rem]">
+                      {featuredProject.title}
+                    </h3>
                   </div>
 
-                  <div className="pt-2.5 border-t border-subtle flex items-center justify-between text-xs">
-                    <span className="font-mono-num text-[11px] text-muted truncate">
-                      {exp.duration || exp.location}
-                    </span>
+                  <div className="mt-auto pt-3 border-t border-subtle">
                     <button
                       type="button"
-                      onClick={() => onNavigate('/experience')}
-                      className={`font-bold inline-flex items-center gap-1 hover:underline cursor-pointer shrink-0 ${
-                        tone.isDark ? 'text-[#8ACCD5]' : 'text-[#013A42]'
-                      }`}
+                      onClick={() => setSelectedProject(featuredProject)}
+                      className={`${projectTone.buttonClass} w-full py-2 px-3.5 text-xs font-bold cursor-pointer`}
                     >
-                      <span>Selengkapnya</span>
-                      <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+                      Lihat Detail
                     </button>
                   </div>
-                </article>
-              );
-            })}
-          </div>
+                </div>
+              </article>
+            );
+          })()}
+
+          {/* Featured Experience Cards (Uniform 16:9 media, concise metadata, Detail button) */}
+          {shownExperiences.map((exp, idx) => {
+            const cardIndex = featuredProject ? idx + 1 : idx;
+            const tone = getCardTone(cardIndex, ['beige', 'blue', 'green', 'bordo', 'midnight']);
+            const primaryPhoto = resolveExperiencePrimaryPhoto(exp.imageUrls, exp.primaryImageUrl);
+            const photoFrameBorder =
+              tone.tone === 'beige'
+                ? 'border-[#6C151E]'
+                : tone.tone === 'blue'
+                ? 'border-[#013A42]'
+                : 'border-[#8ACCD5]';
+
+            return (
+              <article
+                key={exp.id}
+                data-testid={`home-featured-exp-${idx}`}
+                data-aos="fade-up"
+                data-aos-delay={getAosStaggerDelay(cardIndex, 100, 3)}
+                className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
+              >
+                <div className={`aspect-[16/9] w-full overflow-hidden border-b-2 ${photoFrameBorder} bg-[#F8F8E1] shrink-0`}>
+                  <SafeImage
+                    src={primaryPhoto}
+                    alt={`Foto utama ${exp.institution}`}
+                    fallbackLabel={exp.institution}
+                    className="w-full h-full block object-cover object-[50%_22%]"
+                  />
+                </div>
+
+                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
+                  <div className="flex-1 flex flex-col gap-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono-num">
+                      <span className={tone.badgeClass}>
+                        {getExperienceCategoryLabel(exp.category)}
+                      </span>
+                      {exp.period && (
+                        <span className="font-bold text-muted">{exp.period}</span>
+                      )}
+                    </div>
+                    <h3 className="font-display text-base sm:text-[17px] font-extrabold leading-snug line-clamp-2 min-h-[2.75rem]">
+                      {exp.institution}
+                    </h3>
+                  </div>
+
+                  <div className="mt-auto pt-3 border-t border-subtle">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedExperience(toExperienceDetail(exp))}
+                      className={`${tone.buttonClass} w-full py-2 px-3.5 text-xs font-bold cursor-pointer`}
+                    >
+                      Lihat Detail
+                    </button>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
+
+      {/* Shared Detail Modals (Full descriptions, gallery & external links) */}
+      <ProjectDetailModal
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+      />
+      <ExperienceDetailModal
+        detail={selectedExperience}
+        onClose={() => setSelectedExperience(null)}
+      />
     </div>
   );
 };

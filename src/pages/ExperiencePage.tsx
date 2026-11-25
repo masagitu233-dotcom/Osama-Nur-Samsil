@@ -206,11 +206,16 @@ export const ExperiencePage: React.FC = () => {
                 </div>
 
                 <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
-                  <div className="flex-1 flex flex-col items-start gap-2">
-                    <span className={tone.badgeClass}>
-                      {categoryLabel(exp.category)}
-                    </span>
-                    <h2 className="font-display text-base sm:text-[17px] font-extrabold leading-snug min-h-[2.75rem]">
+                  <div className="flex-1 flex flex-col gap-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono-num">
+                      <span className={tone.badgeClass}>
+                        {categoryLabel(exp.category)}
+                      </span>
+                      {exp.period && (
+                        <span className="font-bold text-muted">{exp.period}</span>
+                      )}
+                    </div>
+                    <h2 className="font-display text-base sm:text-[17px] font-extrabold leading-snug line-clamp-2 min-h-[2.75rem]">
                       {exp.institution}
                     </h2>
                   </div>

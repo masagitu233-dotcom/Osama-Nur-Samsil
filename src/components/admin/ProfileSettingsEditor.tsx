@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Save } from 'lucide-react';
+import { ArrowRight, Save } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import {
   saveContactInfo,
@@ -14,7 +14,11 @@ interface DirtyProps {
   onDirtyChange: (dirty: boolean) => void;
 }
 
-export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
+interface ProfileEditorProps extends DirtyProps {
+  onOpenCareerInterests?: () => void;
+}
+
+export const ProfileEditor: React.FC<ProfileEditorProps> = ({ onDirtyChange, onOpenCareerInterests }) => {
   const { adminData, showToast } = usePortfolio();
   const [form, setForm] = useState<Omit<ProfileData, 'id' | 'createdAt' | 'updatedAt'>>({
     fullName: adminData.profile.fullName,
@@ -25,6 +29,7 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
     vision: adminData.profile.vision,
     mission: adminData.profile.mission,
     careerFocus: adminData.profile.careerFocus,
+    careerInterestsOverview: adminData.profile.careerInterestsOverview ?? '',
     photoUrl: adminData.profile.photoUrl,
     cvUrl: adminData.profile.cvUrl,
     cvFileName: adminData.profile.cvFileName,
@@ -44,6 +49,7 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
       vision: adminData.profile.vision,
       mission: adminData.profile.mission,
       careerFocus: adminData.profile.careerFocus,
+      careerInterestsOverview: adminData.profile.careerInterestsOverview ?? '',
       photoUrl: adminData.profile.photoUrl,
       cvUrl: adminData.profile.cvUrl,
       cvFileName: adminData.profile.cvFileName,
@@ -192,6 +198,27 @@ export const ProfileEditor: React.FC<DirtyProps> = ({ onDirtyChange }) => {
               className="w-full brutal-input px-3 py-2 text-sm"
             />
           </div>
+
+          {onOpenCareerInterests && (
+            <div className="pt-3 border-t border-subtle flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="font-display font-extrabold text-sm">
+                  06. Bidang Pekerjaan yang Diminati (Halaman About)
+                </p>
+                <p className="text-xs text-muted mt-0.5">
+                  Kelola uraian umum dan daftar bidang pekerjaan terurut pada formulir khusus.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={onOpenCareerInterests}
+                className="brutal-btn brutal-btn-secondary px-3.5 py-2 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+              >
+                <span>Kelola Bagian 06</span>
+                <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Media & Visibility */}

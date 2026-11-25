@@ -237,6 +237,11 @@ export async function saveProfile(data: Omit<ProfileData, 'id' | 'createdAt' | '
   const docRef = doc(db, 'profile', 'main');
   try {
     const existingSnap = await getDoc(docRef);
+    const existingData = existingSnap.exists() ? (existingSnap.data() as Partial<ProfileData>) : null;
+    const overviewValue =
+      data.careerInterestsOverview !== undefined
+        ? data.careerInterestsOverview
+        : existingData?.careerInterestsOverview ?? '';
     const payload = {
       fullName: clampString(data.fullName, 120),
       headline: clampString(data.headline, 240),
@@ -246,6 +251,7 @@ export async function saveProfile(data: Omit<ProfileData, 'id' | 'createdAt' | '
       vision: clampString(data.vision, 1500),
       mission: clampString(data.mission, 2000),
       careerFocus: clampString(data.careerFocus, 1000),
+      careerInterestsOverview: clampString(overviewValue, 2000),
       photoUrl: clampString(data.photoUrl, 2048),
       cvUrl: clampString(data.cvUrl, 2048),
       cvFileName: clampString(data.cvFileName, 200),
@@ -269,6 +275,54 @@ export async function saveProfile(data: Omit<ProfileData, 'id' | 'createdAt' | '
     await syncPublicProfileFromFirestore(payload);
 
     await logAdminActivity('update', 'profile', payload.fullName);
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, path);
+  }
+}
+
+export async function saveCareerInterestsOverview(
+  overview: string,
+  fallbackProfile: ProfileData
+): Promise<void> {
+  const path = 'profile/main';
+  const docRef = doc(db, 'profile', 'main');
+  try {
+    const existingSnap = await getDoc(docRef);
+    const base = existingSnap.exists()
+      ? (existingSnap.data() as Partial<ProfileData>)
+      : fallbackProfile;
+
+    const payload = {
+      fullName: clampString(base.fullName || fallbackProfile.fullName, 120),
+      headline: clampString(base.headline || fallbackProfile.headline, 240),
+      shortBio: clampString(base.shortBio || fallbackProfile.shortBio, 800),
+      biography: clampString(base.biography ?? fallbackProfile.biography ?? '', 5000),
+      domicile: clampString(base.domicile || fallbackProfile.domicile, 160),
+      vision: clampString(base.vision ?? fallbackProfile.vision ?? '', 1500),
+      mission: clampString(base.mission ?? fallbackProfile.mission ?? '', 2000),
+      careerFocus: clampString(base.careerFocus ?? fallbackProfile.careerFocus ?? '', 1000),
+      careerInterestsOverview: clampString(overview, 2000),
+      photoUrl: clampString(base.photoUrl ?? fallbackProfile.photoUrl ?? '', 2048),
+      cvUrl: clampString(base.cvUrl ?? fallbackProfile.cvUrl ?? '', 2048),
+      cvFileName: clampString(base.cvFileName ?? fallbackProfile.cvFileName ?? '', 200),
+      status: base.status === 'draft' ? 'draft' : 'published',
+      isVisible: base.isVisible !== undefined ? Boolean(base.isVisible) : true,
+      updatedAt: serverTimestamp(),
+    };
+
+    if (existingSnap.exists()) {
+      await setDoc(docRef, {
+        ...payload,
+        createdAt: existingSnap.data().createdAt,
+      });
+    } else {
+      await setDoc(docRef, {
+        ...payload,
+        createdAt: serverTimestamp(),
+      });
+    }
+
+    await logAdminActivity('update', 'career_interests', 'Uraian Umum Bidang Pekerjaan');
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, path);
   }

@@ -28,6 +28,7 @@ export const INITIAL_PORTFOLIO_DATA: PortfolioBundle = {
       '1. Mengembangkan materi pembelajaran dan kajian ilmiah yang sistematis serta mudah diakses secara digital.\n2. Membangun tata kelola administrasi, pembinaan, dan media informasi yang rapi dan akuntabel.\n3. Terus bertumbuh melalui pembelajaran lintas disiplin di bidang hukum keluarga, pendidikan, komunikasi, dan kecerdasan buatan (AI).',
     careerFocus:
       'Terbuka untuk peluang kerja remote, freelance, full-time, dan kolaborasi profesional di bidang pendidikan & pembinaan, penulisan & riset keislaman/hukum, pengelolaan konten pembelajaran digital, administrasi akademik, serta dukungan media & pemanfaatan AI.',
+    careerInterestsOverview: '',
     photoUrl: ASSET_PATHS.heroPortrait,
     cvUrl: '',
     cvFileName: '',

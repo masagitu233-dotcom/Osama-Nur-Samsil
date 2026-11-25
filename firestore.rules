@@ -73,7 +73,7 @@ service cloud.firestore {
       return data.keys().hasAll(['fullName', 'headline', 'shortBio', 'domicile', 'status', 'isVisible', 'createdAt', 'updatedAt'])
         && data.keys().hasOnly([
           'fullName', 'headline', 'shortBio', 'biography', 'domicile',
-          'vision', 'mission', 'careerFocus', 'photoUrl', 'cvUrl', 'cvFileName',
+          'vision', 'mission', 'careerFocus', 'careerInterestsOverview', 'photoUrl', 'cvUrl', 'cvFileName',
           'status', 'isVisible', 'createdAt', 'updatedAt'
         ])
         && isBoundedString(data.fullName, 1, 120)
@@ -84,6 +84,7 @@ service cloud.firestore {
         && (!('vision' in data) || isBoundedString(data.vision, 0, 1500))
         && (!('mission' in data) || isBoundedString(data.mission, 0, 2000))
         && (!('careerFocus' in data) || isBoundedString(data.careerFocus, 0, 1000))
+        && (!('careerInterestsOverview' in data) || isBoundedString(data.careerInterestsOverview, 0, 2000))
         && (!('photoUrl' in data) || isBoundedString(data.photoUrl, 0, 2048))
         && (!('cvUrl' in data) || isBoundedString(data.cvUrl, 0, 2048))
         && (!('cvFileName' in data) || isBoundedString(data.cvFileName, 0, 200))

@@ -3,6 +3,7 @@ import {
   Award,
   BookOpen,
   Briefcase,
+  Compass,
   ExternalLink,
   FolderKanban,
   GraduationCap,
@@ -23,6 +24,7 @@ import type { PublicRoute } from '../types/portfolio';
 import { AdminAuthGate } from '../components/admin/AdminAuthGate';
 import { AdminOverview } from '../components/admin/AdminOverview';
 import { ContactAndSeoEditor, ProfileEditor } from '../components/admin/ProfileSettingsEditor';
+import { CareerInterestsManager } from '../components/admin/CareerInterestsManager';
 import { CollectionCrudManager, type CrudCollectionName } from '../components/admin/CollectionCrudManager';
 import { DarsPublicationsSyncPanel } from '../components/admin/DarsPublicationsSyncPanel';
 import { MediaLibraryPanel, MessagesPanel } from '../components/admin/MessagesAndMediaPanel';
@@ -36,6 +38,7 @@ interface AdminPageProps {
 type AdminTab =
   | 'overview'
   | 'profile'
+  | 'career_interests'
   | CrudCollectionName
   | 'dars_publications'
   | 'contacts_seo'
@@ -45,6 +48,7 @@ type AdminTab =
 const SIDEBAR_ITEMS: Array<{ id: AdminTab; label: string; icon: React.ComponentType<{ className?: string }> }> = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
   { id: 'profile', label: 'Profil, Bio & CV', icon: User },
+  { id: 'career_interests', label: '06. Bidang Pekerjaan', icon: Compass },
   { id: 'experiences', label: 'Pengalaman', icon: Briefcase },
   { id: 'organizations', label: 'Organisasi', icon: Users },
   { id: 'education', label: 'Pendidikan', icon: GraduationCap },
@@ -205,7 +209,15 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
           {activeTab === 'overview' && (
             <AdminOverview onSelectTab={(tab) => requestTabChange(tab as AdminTab)} />
           )}
-          {activeTab === 'profile' && <ProfileEditor onDirtyChange={setHasUnsavedChanges} />}
+          {activeTab === 'profile' && (
+            <ProfileEditor
+              onDirtyChange={setHasUnsavedChanges}
+              onOpenCareerInterests={() => requestTabChange('career_interests')}
+            />
+          )}
+          {activeTab === 'career_interests' && (
+            <CareerInterestsManager onDirtyChange={setHasUnsavedChanges} />
+          )}
           {isCollectionTab(activeTab) && (
             <CollectionCrudManager
               key={activeTab}
