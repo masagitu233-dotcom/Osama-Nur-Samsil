@@ -21,6 +21,40 @@ export default defineConfig(() => {
     plugins: [
       react(),
       tailwindcss(),
+      // Mirrors Netlify's X-Robots-Tag and /admin HTML noindex metadata in dev & preview servers
+      // so /admin, /admin/, and /admin/* always emit consistent HTTP headers and meta tags.
+      {
+        name: 'admin-seo-headers',
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            const rawPath = (req.url || '/').split('?')[0];
+            if (rawPath === '/admin' || rawPath.startsWith('/admin/')) {
+              res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive');
+            }
+            next();
+          });
+        },
+        configurePreviewServer(server) {
+          server.middlewares.use((req, res, next) => {
+            const rawPath = (req.url || '/').split('?')[0];
+            if (rawPath === '/admin' || rawPath.startsWith('/admin/')) {
+              res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive');
+            }
+            next();
+          });
+        },
+        transformIndexHtml: {
+          order: 'pre',
+          handler(html, ctx) {
+            const rawPath = (ctx.originalUrl || ctx.path || '/').split('?')[0];
+            if (rawPath === '/admin' || rawPath.startsWith('/admin/')) {
+              const siteOrigin = resolveCanonicalOrigin(configuredBuildSiteUrl);
+              return renderRouteHtmlWithSeo(html, '/admin', siteOrigin);
+            }
+            return html;
+          },
+        },
+      },
       // Copies src/assets into dist/ so root-relative URLs like
       // "/src/assets/images/..." (e.g. generate_image output) still resolve
       // in production builds. Do not remove.

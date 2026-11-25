@@ -16,6 +16,9 @@ const VALID_ROUTES: PublicRoute[] = [
 
 export function normalizeRoute(pathname: string): PublicRoute {
   const cleaned = pathname.replace(/\/+$/, '') || '/';
+  if (cleaned === '/admin' || cleaned.startsWith('/admin/')) {
+    return '/admin';
+  }
   if ((VALID_ROUTES as string[]).includes(cleaned)) {
     return cleaned as PublicRoute;
   }

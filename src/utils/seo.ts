@@ -458,16 +458,16 @@ export function generateSitemapXml(siteOrigin: string, lastmod?: string): string
 }
 
 /**
- * Generates standards-compliant robots.txt allowing public pages and assets,
- * disallowing admin/internal function routes, and referencing the production sitemap.
+ * Generates standards-compliant robots.txt allowing crawlers to access public pages
+ * as well as /admin (so crawlers can read the meta robots + HTTP X-Robots-Tag noindex
+ * directives rather than being blocked from seeing them), while disallowing internal
+ * serverless function endpoints and declaring the production sitemap.
  */
 export function generateRobotsTxt(siteOrigin: string): string {
   const cleanOrigin = siteOrigin.replace(/\/+$/, '');
   return [
     'User-agent: *',
     'Allow: /',
-    'Disallow: /admin',
-    'Disallow: /admin/',
     'Disallow: /.netlify/functions/',
     '',
     `Sitemap: ${cleanOrigin}/sitemap.xml`,

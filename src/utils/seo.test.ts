@@ -17,6 +17,7 @@ import {
   resolveOgImageUrl,
   sanitizeSameAsUrl,
 } from './seo';
+import { normalizeRoute } from './router';
 
 test('all 8 public routes have unique titles and descriptions without duplication', () => {
   assert.equal(PUBLIC_SEO_ROUTES.length, 8);
@@ -116,15 +117,22 @@ test('generateSitemapXml includes all 8 public routes and strictly excludes /adm
   assert.equal(xml.includes('localhost'), false);
 });
 
-test('generateRobotsTxt allows public crawling, disallows /admin, and declares Sitemap', () => {
+test('generateRobotsTxt allows crawling /admin so crawlers can read noindex, disallows functions, and declares Sitemap', () => {
   const origin = 'https://osamanursamsil.netlify.app';
   const txt = generateRobotsTxt(origin);
 
   assert.ok(txt.includes('User-agent: *'));
   assert.ok(txt.includes('Allow: /'));
-  assert.ok(txt.includes('Disallow: /admin'));
+  assert.equal(txt.includes('Disallow: /admin'), false);
   assert.ok(txt.includes('Disallow: /.netlify/functions/'));
   assert.ok(txt.includes(`Sitemap: ${origin}/sitemap.xml`));
+});
+
+test('normalizeRoute handles /admin, /admin/, and /admin/* subpaths consistently', () => {
+  assert.equal(normalizeRoute('/admin'), '/admin');
+  assert.equal(normalizeRoute('/admin/'), '/admin');
+  assert.equal(normalizeRoute('/admin///'), '/admin');
+  assert.equal(normalizeRoute('/admin/login'), '/admin');
 });
 
 test('buildStructuredDataGraph outputs valid Person + WebSite + WebPage JSON-LD with verified sameAs only', () => {
