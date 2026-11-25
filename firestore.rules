@@ -208,7 +208,7 @@ service cloud.firestore {
       return data.keys().hasAll(['institution', 'degree', 'fieldOfStudy', 'graduationYear', 'category', 'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'])
         && data.keys().hasOnly([
           'institution', 'degree', 'fieldOfStudy', 'graduationYear', 'period',
-          'location', 'description', 'category', 'imageUrls',
+          'location', 'description', 'category', 'imageUrls', 'primaryImageUrl',
           'status', 'isVisible', 'displayOrder', 'createdAt', 'updatedAt'
         ])
         && isBoundedString(data.institution, 1, 200)
@@ -219,7 +219,8 @@ service cloud.firestore {
         && (!('location' in data) || isBoundedString(data.location, 0, 160))
         && (!('description' in data) || isBoundedString(data.description, 0, 2500))
         && isBoundedString(data.category, 1, 80)
-        && (!('imageUrls' in data) || isBoundedStringList(data.imageUrls, 8))
+        && (!('imageUrls' in data) || isBoundedStringList(data.imageUrls, 20))
+        && (!('primaryImageUrl' in data) || isBoundedString(data.primaryImageUrl, 0, 2048))
         && isValidStatus(data.status)
         && data.isVisible is bool
         && data.displayOrder is int && data.displayOrder >= 0 && data.displayOrder <= 10000

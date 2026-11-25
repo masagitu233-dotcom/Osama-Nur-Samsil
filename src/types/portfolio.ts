@@ -112,6 +112,7 @@ export interface EducationItem extends BaseContentMeta {
   description: string;
   category: string;
   imageUrls?: string[];
+  primaryImageUrl?: string;
 }
 
 export interface CertificateItem extends BaseContentMeta {

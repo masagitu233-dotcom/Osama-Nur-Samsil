@@ -69,6 +69,7 @@ import {
   shouldSyncPublicProfile,
 } from '../utils/publicProfileSync';
 import { MAX_EXPERIENCE_PHOTOS, normalizeExperienceGallery } from '../utils/experienceGallery';
+import { MAX_EDUCATION_PHOTOS, normalizeEducationGallery } from '../utils/educationGallery';
 import { normalizeCertificateCategoryLabel } from '../utils/trainingClassification';
 
 const PUBLIC_PROFILE_SYNC_COLLECTIONS = new Set<ManagedCollectionName>([
@@ -430,6 +431,7 @@ function sanitizeEntityPayload(collectionName: ManagedCollectionName, raw: Recor
     }
     case 'education': {
       const r = raw as Partial<EducationItem>;
+      const gallery = normalizeEducationGallery(r.imageUrls, r.primaryImageUrl, MAX_EDUCATION_PHOTOS);
       return {
         ...common,
         institution: clampString(r.institution, 200),
@@ -440,7 +442,8 @@ function sanitizeEntityPayload(collectionName: ManagedCollectionName, raw: Recor
         location: clampString(r.location, 160),
         description: clampString(r.description, 2500),
         category: clampString(r.category || 'Pendidikan Tinggi', 80),
-        imageUrls: clampStringArray(r.imageUrls, 8, 2048),
+        imageUrls: gallery.imageUrls,
+        primaryImageUrl: gallery.primaryImageUrl,
       };
     }
     case 'certificates': {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Star, X } from 'lucide-react';
 import { SafeImage } from '../ui/SafeImage';
 import { getLightboxStep } from '../../utils/experienceGallery';
@@ -8,20 +8,25 @@ interface PhotoLightboxProps {
   activeIndex: number | null;
   primaryPhotoUrl?: string;
   title: string;
+  contextLabel?: string;
   onClose: () => void;
   onNavigate: (nextIndex: number) => void;
 }
+
+const SWIPE_THRESHOLD_PX = 44;
 
 export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
   photos,
   activeIndex,
   primaryPhotoUrl,
   title,
+  contextLabel = 'galeri',
   onClose,
   onNavigate,
 }) => {
   const isOpen = activeIndex !== null && activeIndex >= 0 && activeIndex < photos.length;
   const total = photos.length;
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     if (!isOpen || activeIndex === null) return;
@@ -41,10 +46,41 @@ export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, activeIndex, total, onClose, onNavigate]);
 
+  // Lock page vertical scroll while Lightbox is active
+  useEffect(() => {
+    if (!isOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
   if (!isOpen || activeIndex === null) return null;
 
   const activeUrl = photos[activeIndex];
   const isPrimary = Boolean(primaryPhotoUrl && activeUrl === primaryPhotoUrl);
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (total <= 1 || e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (total <= 1 || !touchStartRef.current || e.changedTouches.length === 0) {
+      touchStartRef.current = null;
+      return;
+    }
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - touchStartRef.current.x;
+    const dy = touch.clientY - touchStartRef.current.y;
+    touchStartRef.current = null;
+
+    if (Math.abs(dx) >= SWIPE_THRESHOLD_PX && Math.abs(dx) > Math.abs(dy) * 1.2) {
+      onNavigate(getLightboxStep(total, activeIndex, dx < 0 ? 1 : -1));
+    }
+  };
 
   return (
     <div
@@ -84,9 +120,11 @@ export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
         </button>
       </div>
 
-      {/* Main Uncropped Photo Stage (Preserves 100% Original Aspect Ratio) */}
+      {/* Main Uncropped Photo Stage (Preserves 100% Original Aspect Ratio + Touch Swipe) */}
       <div
-        className="flex-1 min-h-0 flex items-center justify-center py-4 relative"
+        className="flex-1 min-h-0 flex items-center justify-center py-4 relative touch-pan-y select-none"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
         onClick={(e) => {
           if (e.target === e.currentTarget) onClose();
         }}
@@ -109,6 +147,7 @@ export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
               alt={`Dokumentasi ${title} — Foto ${activeIndex + 1} dari ${total}`}
               fallbackLabel={title}
               priority
+              preferredWidth={2000}
               className="block max-w-[88vw] sm:max-w-[76vw] max-h-[72vh] w-auto h-auto object-contain mx-auto"
             />
           </div>
@@ -139,7 +178,7 @@ export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
               <span>Sebelumnya</span>
             </button>
             <span className="font-mono-num text-[11px] sm:text-xs text-[#F8F8E1]/80 hidden sm:inline">
-              Gunakan tombol panah kiri/kanan atau ESC untuk kembali ke galeri
+              Geser layar, gunakan panah kiri/kanan, atau tekan ESC untuk kembali ke {contextLabel}
             </span>
             <button
               type="button"
@@ -152,7 +191,7 @@ export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
           </>
         ) : (
           <p className="font-mono-num text-xs text-[#F8F8E1]/80 mx-auto">
-            Tekan Tutup atau ESC untuk kembali ke detail pengalaman
+            Tekan Tutup atau ESC untuk kembali ke {contextLabel}
           </p>
         )}
       </div>

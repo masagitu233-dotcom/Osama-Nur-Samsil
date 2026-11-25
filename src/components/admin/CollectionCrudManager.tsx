@@ -10,6 +10,7 @@ import type { BaseContentMeta } from '../../types/portfolio';
 import { Modal } from '../ui/Modal';
 import { MediaUploader } from './MediaUploader';
 import { ExperiencePhotoManager } from './ExperiencePhotoManager';
+import { EducationPhotoManager } from './EducationPhotoManager';
 import { extractGoogleDriveInfo } from '../../utils/googleDriveMedia';
 import {
   addExperiencePhotos,
@@ -18,6 +19,15 @@ import {
   reorderExperiencePhoto,
   selectPrimaryExperiencePhoto,
 } from '../../utils/experienceGallery';
+import {
+  addEducationAdditionalPhotos,
+  MAX_EDUCATION_PHOTOS,
+  promoteAdditionalToPrimary,
+  removeEducationAdditionalPhoto,
+  removeEducationPrimaryPhoto,
+  reorderEducationAdditionalPhoto,
+  replaceEducationPrimaryPhoto,
+} from '../../utils/educationGallery';
 
 import type { DriveUploadCategory } from '../../services/googleDriveUploadService';
 import { normalizeProjectCategory } from '../../utils/projectsCatalog';
@@ -27,7 +37,7 @@ import { getAosStaggerDelay } from '../../utils/aos';
 interface FieldSpec {
   key: string;
   label: string;
-  type: 'text' | 'textarea' | 'select' | 'checkbox' | 'stringList' | 'imageList' | 'experienceGallery' | 'imageSingle' | 'certFile';
+  type: 'text' | 'textarea' | 'select' | 'checkbox' | 'stringList' | 'imageList' | 'experienceGallery' | 'educationGallery' | 'imageSingle' | 'certFile';
   required?: boolean;
   placeholder?: string;
   options?: Array<{ value: string; label: string }>;
@@ -130,7 +140,7 @@ const COLLECTION_CONFIGS: Record<CrudCollectionName, CollectionConfig> = {
       { key: 'location', label: 'Lokasi', type: 'text' },
       { key: 'category', label: 'Kategori', type: 'text', required: true },
       { key: 'description', label: 'Deskripsi Akademik', type: 'textarea' },
-      { key: 'imageUrls', label: 'Foto Dokumentasi Pendidikan', type: 'imageList' },
+      { key: 'imageUrls', label: 'Foto Utama & Galeri Foto Tambahan', type: 'educationGallery' },
     ],
     defaultValues: {
       institution: '',
@@ -142,6 +152,7 @@ const COLLECTION_CONFIGS: Record<CrudCollectionName, CollectionConfig> = {
       category: 'Pendidikan Tinggi',
       description: '',
       imageUrls: [],
+      primaryImageUrl: '',
     },
   },
   certificates: {
@@ -510,7 +521,7 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     <span className="text-muted font-semibold">
                       &middot; {item.isVisible ? 'Tampil' : 'Disembunyikan'}
                     </span>
-                    {(collectionName === 'experiences' || collectionName === 'organizations') && (
+                    {(collectionName === 'experiences' || collectionName === 'organizations' || collectionName === 'education') && (
                       <span className="text-muted font-semibold">
                         &middot; {Array.isArray(item.imageUrls) ? item.imageUrls.length : 0} foto
                       </span>
@@ -734,6 +745,110 @@ export const CollectionCrudManager: React.FC<CollectionCrudManagerProps> = ({
                     setFormState((prev) => {
                       const prevUrls = Array.isArray(prev.imageUrls) ? (prev.imageUrls as string[]) : [];
                       const next = selectPrimaryExperiencePhoto(prevUrls, url);
+                      return {
+                        ...prev,
+                        imageUrls: next.imageUrls,
+                        primaryImageUrl: next.primaryImageUrl,
+                      };
+                    });
+                    onDirtyChange(true);
+                  }}
+                />
+              );
+            }
+
+            if (field.type === 'educationGallery') {
+              const urls = Array.isArray(formState.imageUrls) ? (formState.imageUrls as string[]) : [];
+              const primaryUrl = String(formState.primaryImageUrl ?? '');
+              const itemVisibility =
+                formState.status === 'published' && Boolean(formState.isVisible) ? 'public' : 'private';
+              return (
+                <EducationPhotoManager
+                  key={field.key}
+                  folder={config.uploadFolder || 'education'}
+                  imageUrls={urls}
+                  primaryImageUrl={primaryUrl}
+                  defaultVisibility={itemVisibility}
+                  onReplacePrimary={(res) => {
+                    setFormState((prev) => {
+                      const prevUrls = Array.isArray(prev.imageUrls) ? (prev.imageUrls as string[]) : [];
+                      const prevPrimary = String(prev.primaryImageUrl ?? '');
+                      const next = replaceEducationPrimaryPhoto(
+                        prevUrls,
+                        prevPrimary,
+                        res.fileUrl,
+                        MAX_EDUCATION_PHOTOS
+                      );
+                      return {
+                        ...prev,
+                        imageUrls: next.imageUrls,
+                        primaryImageUrl: next.primaryImageUrl,
+                      };
+                    });
+                    onDirtyChange(true);
+                  }}
+                  onRemovePrimary={() => {
+                    setFormState((prev) => {
+                      const prevUrls = Array.isArray(prev.imageUrls) ? (prev.imageUrls as string[]) : [];
+                      const prevPrimary = String(prev.primaryImageUrl ?? '');
+                      const next = removeEducationPrimaryPhoto(prevUrls, prevPrimary);
+                      return {
+                        ...prev,
+                        imageUrls: next.imageUrls,
+                        primaryImageUrl: next.primaryImageUrl,
+                      };
+                    });
+                    onDirtyChange(true);
+                  }}
+                  onAddAdditional={(res) => {
+                    setFormState((prev) => {
+                      const prevUrls = Array.isArray(prev.imageUrls) ? (prev.imageUrls as string[]) : [];
+                      const prevPrimary = String(prev.primaryImageUrl ?? '');
+                      const next = addEducationAdditionalPhotos(
+                        prevUrls,
+                        prevPrimary,
+                        [res.fileUrl],
+                        MAX_EDUCATION_PHOTOS
+                      );
+                      return {
+                        ...prev,
+                        imageUrls: next.imageUrls,
+                        primaryImageUrl: next.primaryImageUrl,
+                      };
+                    });
+                    onDirtyChange(true);
+                  }}
+                  onRemoveAdditional={(additionalIdx) => {
+                    setFormState((prev) => {
+                      const prevUrls = Array.isArray(prev.imageUrls) ? (prev.imageUrls as string[]) : [];
+                      const prevPrimary = String(prev.primaryImageUrl ?? '');
+                      const next = removeEducationAdditionalPhoto(prevUrls, prevPrimary, additionalIdx);
+                      return {
+                        ...prev,
+                        imageUrls: next.imageUrls,
+                        primaryImageUrl: next.primaryImageUrl,
+                      };
+                    });
+                    onDirtyChange(true);
+                  }}
+                  onReorderAdditional={(fromIdx, toIdx) => {
+                    setFormState((prev) => {
+                      const prevUrls = Array.isArray(prev.imageUrls) ? (prev.imageUrls as string[]) : [];
+                      const prevPrimary = String(prev.primaryImageUrl ?? '');
+                      const next = reorderEducationAdditionalPhoto(prevUrls, prevPrimary, fromIdx, toIdx);
+                      return {
+                        ...prev,
+                        imageUrls: next.imageUrls,
+                        primaryImageUrl: next.primaryImageUrl,
+                      };
+                    });
+                    onDirtyChange(true);
+                  }}
+                  onPromoteAdditional={(additionalIdx) => {
+                    setFormState((prev) => {
+                      const prevUrls = Array.isArray(prev.imageUrls) ? (prev.imageUrls as string[]) : [];
+                      const prevPrimary = String(prev.primaryImageUrl ?? '');
+                      const next = promoteAdditionalToPrimary(prevUrls, prevPrimary, additionalIdx);
                       return {
                         ...prev,
                         imageUrls: next.imageUrls,
