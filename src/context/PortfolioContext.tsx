@@ -278,21 +278,8 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     siteSettingsList,
   ]);
 
-  // Sync SEO meta tags dynamically from Firestore siteSettings
-  useEffect(() => {
-    const s = publicData.siteSettings;
-    if (!s) return;
-    document.title = s.siteTitle || 'Osama Nur Samsil — Personal Portfolio';
-    const setMeta = (selector: string, content: string) => {
-      const el = document.querySelector(selector);
-      if (el && content) el.setAttribute('content', content);
-    };
-    setMeta('meta[name="description"]', s.metaDescription);
-    setMeta('meta[property="og:title"]', s.ogTitle || s.siteTitle);
-    setMeta('meta[property="og:description"]', s.ogDescription || s.metaDescription);
-    setMeta('meta[name="twitter:title"]', s.ogTitle || s.siteTitle);
-    setMeta('meta[name="twitter:description"]', s.ogDescription || s.metaDescription);
-  }, [publicData.siteSettings]);
+  // Per-route SEO metadata, canonical URLs, robots directives, Open Graph, and JSON-LD
+  // are synchronized centrally by RouteSeoHead in App.tsx.
 
   const loginWithGoogle = async () => {
     setAuthError(null);

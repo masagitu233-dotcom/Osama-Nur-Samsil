@@ -185,14 +185,17 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
 
             {/* Action Controls */}
             <div className="mt-5 pt-4 border-t-2 border-brutal flex flex-wrap items-center gap-2.5">
-              <button
-                type="button"
-                onClick={() => onNavigate('/projects')}
+              <a
+                href="/projects"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onNavigate('/projects');
+                }}
                 className="brutal-btn brutal-btn-primary font-display font-bold text-xs sm:text-[13px] px-3.5 sm:px-4 py-2 inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
               >
                 <span>Explore Portfolio</span>
                 <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-              </button>
+              </a>
 
               <button
                 type="button"
@@ -203,13 +206,16 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                 <span>Download CV</span>
               </button>
 
-              <button
-                type="button"
-                onClick={() => onNavigate('/contact')}
+              <a
+                href="/contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onNavigate('/contact');
+                }}
                 className="brutal-btn brutal-btn-outline font-display font-bold text-xs sm:text-[13px] px-3.5 sm:px-4 py-2 inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
               >
                 <span>Contact Me</span>
-              </button>
+              </a>
 
               <button
                 type="button"
@@ -225,12 +231,15 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
 
           {/* Full-Width 4-Column Portfolio Index Strip */}
           <div className="mt-5 grid grid-cols-2 lg:grid-cols-4 gap-3.5">
-            <button
-              type="button"
-              onClick={() => onNavigate('/experience')}
+            <a
+              href="/experience"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate('/experience');
+              }}
               data-aos="fade-up"
               data-aos-delay="0"
-              className="text-left brutal-card brutal-card-interactive card-beige frame-midnight p-4 cursor-pointer"
+              className="block text-left brutal-card brutal-card-interactive card-beige frame-midnight p-4 cursor-pointer"
             >
               <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none">
                 {String(experiences.length + organizations.length).padStart(2, '0')}
@@ -239,14 +248,17 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               <p className="text-[11px] sm:text-xs text-muted mt-0.5">
                 Pembinaan, pengajaran &amp; kepanitiaan
               </p>
-            </button>
+            </a>
 
-            <button
-              type="button"
-              onClick={() => onNavigate('/projects')}
+            <a
+              href="/projects"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate('/projects');
+              }}
               data-aos="fade-up"
               data-aos-delay="100"
-              className="text-left brutal-card brutal-card-interactive card-blue frame-shadow-bordo p-4 cursor-pointer"
+              className="block text-left brutal-card brutal-card-interactive card-blue frame-shadow-bordo p-4 cursor-pointer"
             >
               <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none">
                 {String(Math.max(projects.length, websiteProjects.length)).padStart(2, '0')}
@@ -255,14 +267,17 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               <p className="text-[11px] sm:text-xs text-muted mt-0.5">
                 Termasuk Dars with Osama
               </p>
-            </button>
+            </a>
 
-            <button
-              type="button"
-              onClick={() => onNavigate('/skills')}
+            <a
+              href="/skills"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate('/skills');
+              }}
               data-aos="fade-up"
               data-aos-delay="200"
-              className="text-left brutal-card brutal-card-interactive card-green frame-midnight p-4 cursor-pointer"
+              className="block text-left brutal-card brutal-card-interactive card-green frame-midnight p-4 cursor-pointer"
             >
               <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none text-[#8ACCD5]">
                 {String(skills.length).padStart(2, '0')}
@@ -271,14 +286,17 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               <p className="text-[11px] sm:text-xs text-muted mt-0.5">
                 Bahasa, AI tools, web &amp; akademik
               </p>
-            </button>
+            </a>
 
-            <button
-              type="button"
-              onClick={() => onNavigate('/certificates')}
+            <a
+              href="/certificates"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate('/certificates');
+              }}
               data-aos="fade-up"
               data-aos-delay="300"
-              className="text-left brutal-card brutal-card-interactive card-bordo frame-midnight p-4 cursor-pointer"
+              className="block text-left brutal-card brutal-card-interactive card-bordo frame-midnight p-4 cursor-pointer"
             >
               <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none text-[#8ACCD5]">
                 {String(certificates.length).padStart(2, '0')}
@@ -287,7 +305,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               <p className="text-[11px] sm:text-xs text-muted mt-0.5">
                 Galeri dalam &amp; luar negeri
               </p>
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -301,14 +319,17 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               Kompetensi Lintas Keilmuan &amp; Digital
             </h2>
           </div>
-          <button
-            type="button"
-            onClick={() => onNavigate('/skills')}
+          <a
+            href="/skills"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigate('/skills');
+            }}
             className="text-xs sm:text-sm font-bold inline-flex items-center gap-1.5 hover:bg-[#8ACCD5] hover:text-[#013A42] px-2.5 py-1 border-2 border-transparent hover:border-[#013A42] cursor-pointer whitespace-nowrap shrink-0 transition-colors"
           >
             <span>Lihat Semua Keahlian, Minat &amp; Bakat</span>
             <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-          </button>
+          </a>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -368,14 +389,17 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                 ))}
               </div>
             </div>
-            <button
-              type="button"
-              onClick={() => onNavigate('/about')}
+            <a
+              href="/about"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate('/about');
+              }}
               className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[#8ACCD5] hover:text-[#F8F8E1] hover:underline cursor-pointer transition-colors"
             >
               <span>Baca profil lengkap &amp; visi misi</span>
               <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -390,20 +414,26 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
             </h2>
           </div>
           <div className="flex items-center gap-2 text-xs sm:text-sm font-bold">
-            <button
-              type="button"
-              onClick={() => onNavigate('/projects')}
+            <a
+              href="/projects"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate('/projects');
+              }}
               className="hover:bg-[#8ACCD5] hover:text-[#013A42] px-2.5 py-1 border-2 border-transparent hover:border-[#013A42] cursor-pointer whitespace-nowrap transition-colors"
             >
               Semua Proyek
-            </button>
-            <button
-              type="button"
-              onClick={() => onNavigate('/experience')}
+            </a>
+            <a
+              href="/experience"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate('/experience');
+              }}
               className="hover:bg-[#8ACCD5] hover:text-[#013A42] px-2.5 py-1 border-2 border-transparent hover:border-[#013A42] cursor-pointer whitespace-nowrap transition-colors"
             >
               Semua Pengalaman
-            </button>
+            </a>
           </div>
         </div>
 

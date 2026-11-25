@@ -3,9 +3,21 @@ import react from '@vitejs/plugin-react';
 import fs from 'fs';
 import path from 'path';
 import {defineConfig} from 'vite';
+import {
+  PUBLIC_SEO_ROUTES,
+  generateRobotsTxt,
+  generateSitemapXml,
+  renderRouteHtmlWithSeo,
+  resolveCanonicalOrigin,
+} from './src/utils/seo';
 
 export default defineConfig(() => {
+  const configuredBuildSiteUrl = process.env.VITE_SITE_URL || process.env.URL || '';
+
   return {
+    define: {
+      __NETLIFY_SITE_URL__: JSON.stringify(configuredBuildSiteUrl),
+    },
     plugins: [
       react(),
       tailwindcss(),
@@ -25,6 +37,64 @@ export default defineConfig(() => {
           if (fs.existsSync(distDir) && fs.existsSync(srcAssets)) {
             fs.cpSync(srcAssets, distAssets, {recursive: true, force: true});
           }
+        },
+      },
+      // Generates production sitemap.xml, robots.txt, and per-route static HTML files
+      // (including noindex protection on /admin) using VITE_SITE_URL or Netlify's built-in URL.
+      {
+        name: 'generate-seo-artifacts',
+        apply: 'build',
+        closeBundle(error?: Error): void {
+          if (error) {
+            return;
+          }
+          const distDir = path.resolve(__dirname, 'dist');
+          const indexHtmlPath = path.resolve(distDir, 'index.html');
+          if (!fs.existsSync(distDir) || !fs.existsSync(indexHtmlPath)) {
+            return;
+          }
+
+          const siteOrigin = resolveCanonicalOrigin(configuredBuildSiteUrl);
+          const buildDate = new Date().toISOString().slice(0, 10);
+
+          fs.writeFileSync(
+            path.resolve(distDir, 'sitemap.xml'),
+            generateSitemapXml(siteOrigin, buildDate),
+            'utf8'
+          );
+          fs.writeFileSync(
+            path.resolve(distDir, 'robots.txt'),
+            generateRobotsTxt(siteOrigin),
+            'utf8'
+          );
+
+          const baseHtml = fs.readFileSync(indexHtmlPath, 'utf8');
+          fs.writeFileSync(
+            indexHtmlPath,
+            renderRouteHtmlWithSeo(baseHtml, '/', siteOrigin),
+            'utf8'
+          );
+
+          for (const entry of PUBLIC_SEO_ROUTES) {
+            if (entry.route === '/') continue;
+            const slug = entry.route.replace(/^\/+/, '');
+            const routeDir = path.resolve(distDir, slug);
+            fs.mkdirSync(routeDir, {recursive: true});
+            fs.writeFileSync(
+              path.resolve(routeDir, 'index.html'),
+              renderRouteHtmlWithSeo(baseHtml, entry.route, siteOrigin),
+              'utf8'
+            );
+          }
+
+          // Emit /admin/index.html with explicit noindex, nofollow, noarchive metadata
+          const adminDir = path.resolve(distDir, 'admin');
+          fs.mkdirSync(adminDir, {recursive: true});
+          fs.writeFileSync(
+            path.resolve(adminDir, 'index.html'),
+            renderRouteHtmlWithSeo(baseHtml, '/admin', siteOrigin),
+            'utf8'
+          );
         },
       },
     ],

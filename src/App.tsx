@@ -11,6 +11,7 @@ import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { FloatingUtilityDock } from './components/layout/FloatingUtilityDock';
 import { ToastBanner } from './components/ui/ToastBanner';
+import { RouteSeoHead } from './components/seo/RouteSeoHead';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ExperiencePage } from './pages/ExperiencePage';
@@ -80,6 +81,7 @@ const AppShell: React.FC = () => {
   if (route === '/admin') {
     return (
       <>
+        <RouteSeoHead route={route} bundle={publicData} />
         <AdminPage onNavigate={navigate} />
         <ToastBanner />
       </>
@@ -88,6 +90,7 @@ const AppShell: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col surface-page">
+      <RouteSeoHead route={route} bundle={publicData} />
       <Navbar
         currentRoute={route}
         onNavigate={navigate}

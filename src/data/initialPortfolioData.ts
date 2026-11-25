@@ -421,13 +421,13 @@ export const INITIAL_PORTFOLIO_DATA: PortfolioBundle = {
   },
   siteSettings: {
     id: 'main',
-    siteTitle: 'Osama Nur Samsil — Personal Portfolio & Digital Educator',
+    siteTitle: 'Osama Nur Samsil | Personal Portfolio',
     metaDescription:
-      'Portofolio profesional Osama Nur Samsil: S1 Hukum Keluarga Unismuh Makassar (2026), pembinaan mahasiswa, Dars with Osama, sertifikat, dan keahlian.',
-    ogTitle: 'Osama Nur Samsil — Personal Portfolio',
+      'Website portofolio Osama Nur Samsil, Sarjana Hukum Keluarga Universitas Muhammadiyah Makassar. Menampilkan profil, pengalaman organisasi, pendidikan, pelatihan, penelitian, serta karya dan pengembangan media pendidikan digital.',
+    ogTitle: 'Osama Nur Samsil | Personal Portfolio',
     ogDescription:
-      'Pusat informasi profesional Osama Nur Samsil untuk kolaborasi, pekerjaan remote, freelance, dan full-time.',
-    ogImageUrl: ASSET_PATHS.heroPortrait,
+      'Website portofolio Osama Nur Samsil, Sarjana Hukum Keluarga Universitas Muhammadiyah Makassar. Menampilkan profil, pengalaman organisasi, pendidikan, pelatihan, penelitian, serta karya dan pengembangan media pendidikan digital.',
+    ogImageUrl: '/og-preview.jpg',
     status: 'published',
     isVisible: true,
   },

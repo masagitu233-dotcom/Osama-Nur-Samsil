@@ -217,14 +217,17 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
               Riwayat &amp; Perjalanan Pendidikan
             </h2>
           </div>
-          <button
-            type="button"
-            onClick={() => onNavigate('/education')}
+          <a
+            href="/education"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigate('/education');
+            }}
             className="text-xs sm:text-sm font-bold inline-flex items-center gap-1.5 hover:bg-[#8ACCD5] hover:text-[#013A42] px-3 py-1.5 border-2 border-transparent hover:border-[#013A42] cursor-pointer transition-colors whitespace-nowrap"
           >
             <span>Lihat Halaman Education &amp; Knowledge</span>
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
-          </button>
+          </a>
         </div>
 
         <ol className="space-y-4">

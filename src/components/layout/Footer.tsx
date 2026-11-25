@@ -120,6 +120,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onShareProfile }) =>
               <li className="pt-1">
                 <a
                   href="/admin"
+                  rel="nofollow"
                   onClick={(e) => handleNav(e, '/admin')}
                   className="inline-flex items-center gap-1.5 text-xs font-mono-num font-bold text-[#8ACCD5] hover:text-[#F8F8E1] transition-colors"
                 >
