@@ -78,7 +78,7 @@ export const Modal: React.FC<ModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-[#1B2A3D]/80"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-[#1B2A3D]/80 backdrop-blur-[2px]"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}

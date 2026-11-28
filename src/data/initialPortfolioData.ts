@@ -428,6 +428,7 @@ export const INITIAL_PORTFOLIO_DATA: PortfolioBundle = {
     ogDescription:
       'Website portofolio Osama Nur Samsil, Sarjana Hukum Keluarga Universitas Muhammadiyah Makassar. Menampilkan profil, pengalaman organisasi, pendidikan, pelatihan, penelitian, serta karya dan pengembangan media pendidikan digital.',
     ogImageUrl: '/og-preview.jpg',
+    designMode: 'minimalis_elegan',
     status: 'published',
     isVisible: true,
   },

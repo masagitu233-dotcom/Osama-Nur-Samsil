@@ -289,6 +289,7 @@
         "ogTitle": { "type": "string", "minLength": 1, "maxLength": 120 },
         "ogDescription": { "type": "string", "minLength": 1, "maxLength": 320 },
         "ogImageUrl": { "type": "string", "minLength": 0, "maxLength": 2048 },
+        "designMode": { "type": "string", "enum": ["minimalis_elegan", "neo_brutalist"] },
         "status": { "type": "string", "enum": ["draft", "published"] },
         "isVisible": { "type": "boolean" },
         "createdAt": { "type": "string", "format": "date-time" },

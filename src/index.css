@@ -653,3 +653,315 @@ body.surface-page {
   transform: translate(-2px, -2px);
   transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 160ms cubic-bezier(0.16, 1, 0.3, 1), background-color 160ms ease;
 }
+
+/* ==================================================
+   MODE A: MINIMALIS ELEGAN (EDITORIAL PORTFOLIO MODE)
+   Scoped strictly to html[data-design-mode="minimalis_elegan"].
+   Strictly preserves the 6 official colors & section color mapping:
+   #F8F8E1, #D9B44A, #6C151E, #0F3D3A, #1B2A3D, #001F24
+   ================================================== */
+
+html[data-design-mode="minimalis_elegan"] body::before {
+  opacity: 0;
+  background-image: none;
+}
+
+html[data-design-mode="minimalis_elegan"] {
+  --minimal-shadow-sm: 0 10px 28px -16px color-mix(in srgb, var(--color-ink-gold) 22%, transparent);
+  --minimal-shadow-md: 0 18px 42px -20px color-mix(in srgb, var(--color-ink-gold) 28%, transparent);
+  --minimal-shadow-lg: 0 26px 56px -22px color-mix(in srgb, var(--color-ink-gold) 36%, transparent);
+  --minimal-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Editorial Typographic Polish */
+html[data-design-mode="minimalis_elegan"] main h1 {
+  letter-spacing: -0.028em;
+  line-height: 1.06;
+}
+
+html[data-design-mode="minimalis_elegan"] main h2 {
+  letter-spacing: -0.022em;
+}
+
+html[data-design-mode="minimalis_elegan"] main h3 {
+  letter-spacing: -0.014em;
+}
+
+/* Soften heavy page & section header dividers into crisp editorial hairlines */
+html[data-design-mode="minimalis_elegan"] main header.border-b-2,
+html[data-design-mode="minimalis_elegan"] main section > div.border-b-2 {
+  border-bottom-width: 1px;
+  border-bottom-color: color-mix(in srgb, var(--color-navy) 18%, transparent);
+}
+
+html[data-design-mode="minimalis_elegan"] main .border-t-2.border-brutal {
+  border-top-width: 1px;
+  border-top-color: color-mix(in srgb, var(--color-navy) 18%, transparent);
+}
+
+/* Minimalist Editorial Cards: Soft Radius, Hairline Borders, Ambient Shadows */
+html[data-design-mode="minimalis_elegan"] .brutal-card,
+html[data-design-mode="minimalis_elegan"] .frame-navy,
+html[data-design-mode="minimalis_elegan"] .frame-bordo,
+html[data-design-mode="minimalis_elegan"] .frame-green,
+html[data-design-mode="minimalis_elegan"] .frame-gold,
+html[data-design-mode="minimalis_elegan"] .frame-shadow-bordo,
+html[data-design-mode="minimalis_elegan"] .frame-shadow-green,
+html[data-design-mode="minimalis_elegan"] .frame-shadow-gold {
+  border-radius: 1.125rem;
+  border-width: 1px;
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--color-beige) 16%, transparent);
+  box-shadow: var(--minimal-shadow-md);
+}
+
+html[data-design-mode="minimalis_elegan"] .card-gold.brutal-card,
+html[data-design-mode="minimalis_elegan"] .card-gold.frame-gold,
+html[data-design-mode="minimalis_elegan"] .surface-highlight.brutal-card {
+  border-color: color-mix(in srgb, var(--color-ink-gold) 16%, transparent);
+  box-shadow: var(--minimal-shadow-sm);
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-card:not([data-aos]) {
+  transition:
+    transform 300ms var(--minimal-ease),
+    box-shadow 300ms var(--minimal-ease),
+    border-color 240ms ease,
+    background-color 240ms ease;
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-card-interactive:hover,
+html[data-design-mode="minimalis_elegan"] .brutal-card-interactive[data-aos].aos-animate:hover,
+html[data-design-mode="minimalis_elegan"] .frame-navy.brutal-card-interactive:hover,
+html[data-design-mode="minimalis_elegan"] .frame-bordo.brutal-card-interactive:hover,
+html[data-design-mode="minimalis_elegan"] .frame-green.brutal-card-interactive:hover,
+html[data-design-mode="minimalis_elegan"] .frame-gold.brutal-card-interactive:hover,
+html[data-design-mode="minimalis_elegan"] .frame-shadow-bordo.brutal-card-interactive:hover,
+html[data-design-mode="minimalis_elegan"] .frame-shadow-green.brutal-card-interactive:hover,
+html[data-design-mode="minimalis_elegan"] .frame-shadow-gold.brutal-card-interactive:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--minimal-shadow-lg);
+  transition:
+    transform 300ms var(--minimal-ease),
+    box-shadow 300ms var(--minimal-ease),
+    border-color 240ms ease;
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-card-on-dark {
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--color-gold) 45%, transparent);
+  box-shadow: 0 28px 64px -20px color-mix(in srgb, var(--color-ink-gold) 55%, transparent);
+}
+
+/* Soften inner media borders inside cards to subtle hairlines */
+html[data-design-mode="minimalis_elegan"] .brutal-card .border-b-2 {
+  border-bottom-width: 1px;
+  border-bottom-color: color-mix(in srgb, var(--color-gold) 30%, transparent);
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-card .border-t-2 {
+  border-top-width: 1px;
+  border-top-color: color-mix(in srgb, var(--color-gold) 28%, transparent);
+}
+
+/* Minimalist Editorial Buttons: Refined Radius, Zero Hard Offset Shadows */
+html[data-design-mode="minimalis_elegan"] .brutal-btn,
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-green,
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-bordo,
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-navy,
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-gold,
+html[data-design-mode="minimalis_elegan"] .brutal-btn-on-dark,
+html[data-design-mode="minimalis_elegan"] .brutal-btn-on-dark-outline,
+html[data-design-mode="minimalis_elegan"] .brutal-btn-on-gold {
+  border-radius: 0.75rem;
+  border-width: 1px;
+  box-shadow: 0 4px 14px -6px color-mix(in srgb, var(--color-ink-gold) 28%, transparent);
+  transition:
+    transform 240ms var(--minimal-ease),
+    box-shadow 240ms var(--minimal-ease),
+    background-color 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease;
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-btn:hover:not(:disabled),
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-green:hover:not(:disabled),
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-bordo:hover:not(:disabled),
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-navy:hover:not(:disabled),
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-gold:hover:not(:disabled),
+html[data-design-mode="minimalis_elegan"] .brutal-btn-on-dark:hover:not(:disabled),
+html[data-design-mode="minimalis_elegan"] .brutal-btn-on-dark-outline:hover:not(:disabled),
+html[data-design-mode="minimalis_elegan"] .brutal-btn-on-gold:hover:not(:disabled) {
+  transform: translateY(-1.5px);
+  box-shadow: 0 12px 24px -10px color-mix(in srgb, var(--color-ink-gold) 36%, transparent);
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-btn:active:not(:disabled),
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-green:active:not(:disabled),
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-bordo:active:not(:disabled),
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-navy:active:not(:disabled),
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-gold:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px -4px color-mix(in srgb, var(--color-ink-gold) 25%, transparent);
+}
+
+/* Crisp Editorial Button Surfaces on Dark Cards (High Contrast, Calm Polish) */
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-green {
+  background-color: var(--color-beige);
+  color: var(--color-green);
+  border-color: color-mix(in srgb, var(--color-beige) 50%, transparent);
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-green:hover:not(:disabled) {
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
+  border-color: var(--color-gold);
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-bordo {
+  background-color: var(--color-beige);
+  color: var(--color-bordo);
+  border-color: color-mix(in srgb, var(--color-beige) 50%, transparent);
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-bordo:hover:not(:disabled) {
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
+  border-color: var(--color-gold);
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-navy {
+  background-color: var(--color-beige);
+  color: var(--color-navy);
+  border-color: color-mix(in srgb, var(--color-beige) 50%, transparent);
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-navy:hover:not(:disabled) {
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
+  border-color: var(--color-gold);
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-gold {
+  background-color: var(--color-ink-gold);
+  color: var(--color-beige);
+  border-color: var(--color-ink-gold);
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-btn-frame-gold:hover:not(:disabled) {
+  background-color: var(--color-navy);
+  color: var(--color-beige);
+  border-color: var(--color-navy);
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-btn-on-dark {
+  background-color: var(--color-gold);
+  color: var(--color-ink-gold);
+  border-color: var(--color-gold);
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-btn-on-dark:hover:not(:disabled) {
+  background-color: var(--color-beige);
+  color: var(--color-navy);
+  border-color: var(--color-beige);
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-btn-on-dark-outline {
+  background-color: color-mix(in srgb, var(--color-beige) 6%, transparent);
+  color: var(--color-beige);
+  border-color: color-mix(in srgb, var(--color-beige) 45%, transparent);
+  box-shadow: none;
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-btn-on-dark-outline:hover:not(:disabled) {
+  background-color: var(--color-beige);
+  color: var(--color-navy);
+  border-color: var(--color-beige);
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-btn-outline {
+  border-color: color-mix(in srgb, var(--color-navy) 26%, transparent);
+  box-shadow: none;
+}
+
+/* Minimalist Editorial Badges -> Quiet Refined Metadata Labels */
+html[data-design-mode="minimalis_elegan"] .brutal-badge,
+html[data-design-mode="minimalis_elegan"] .brutal-badge-bordo,
+html[data-design-mode="minimalis_elegan"] .brutal-badge-green,
+html[data-design-mode="minimalis_elegan"] .brutal-badge-beige,
+html[data-design-mode="minimalis_elegan"] .brutal-badge-navy,
+html[data-design-mode="minimalis_elegan"] .brutal-badge-inverse,
+html[data-design-mode="minimalis_elegan"] .brutal-badge-on-gold {
+  border-radius: 0.375rem;
+  border-width: 1px;
+  border-color: transparent;
+  padding: 0.2rem 0.6rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-badge-on-gold {
+  background-color: color-mix(in srgb, var(--color-ink-gold) 12%, transparent);
+  color: var(--color-ink-gold);
+  border-color: color-mix(in srgb, var(--color-ink-gold) 24%, transparent);
+}
+
+/* Minimalist Form Inputs */
+html[data-design-mode="minimalis_elegan"] .brutal-input {
+  border-radius: 0.75rem;
+  border-width: 1px;
+  border-color: color-mix(in srgb, var(--color-navy) 26%, transparent);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-input:focus {
+  border-color: var(--color-navy);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-gold) 48%, transparent);
+}
+
+/* Minimalist Filter Tabs across Experience, Projects, Skills, Publications */
+html[data-design-mode="minimalis_elegan"] [role="tablist"] button[role="tab"] {
+  border-radius: 0.625rem;
+  border-width: 1px;
+  box-shadow: none !important;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease, transform 200ms var(--minimal-ease);
+}
+
+html[data-design-mode="minimalis_elegan"] [role="tablist"] button[role="tab"][aria-selected="false"] {
+  border-color: color-mix(in srgb, var(--color-navy) 22%, transparent);
+}
+
+html[data-design-mode="minimalis_elegan"] .card-green [role="tablist"] button[role="tab"][aria-selected="false"] {
+  border-color: color-mix(in srgb, var(--color-beige) 35%, transparent);
+}
+
+/* Minimalist Education & Gallery Photo Frames (replaces hard offset shadows smoothly) */
+html[data-design-mode="minimalis_elegan"] .edu-photo-frame,
+html[data-design-mode="minimalis_elegan"] .edu-thumb-frame {
+  border-radius: 0.875rem;
+  border-width: 1px;
+  border-color: color-mix(in srgb, var(--color-gold) 45%, transparent);
+  box-shadow: 0 12px 28px -14px color-mix(in srgb, var(--color-ink-gold) 55%, transparent);
+}
+
+html[data-design-mode="minimalis_elegan"] .brutal-skeleton {
+  border-radius: 1rem;
+  border-width: 1px;
+  border-color: color-mix(in srgb, var(--color-gold) 40%, transparent);
+}
+
+/* Minimalis Elegan Hero Portrait Bottom Overlay Fade (sits ABOVE photo & yellow circle so clothing stays 100% opaque and fades smoothly into Hero Green #0F3D3A) */
+.hero-bottom-green-fade {
+  background: linear-gradient(
+    to top,
+    var(--color-green) 0%,
+    var(--color-green) 22%,
+    color-mix(in srgb, var(--color-green) 92%, transparent) 38%,
+    color-mix(in srgb, var(--color-green) 60%, transparent) 58%,
+    color-mix(in srgb, var(--color-green) 22%, transparent) 78%,
+    transparent 100%
+  );
+}
+

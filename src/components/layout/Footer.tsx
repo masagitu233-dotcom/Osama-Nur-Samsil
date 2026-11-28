@@ -20,8 +20,9 @@ const FOOTER_LINKS: Array<{ label: string; route: PublicRoute }> = [
 ];
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate, onShareProfile }) => {
-  const { publicData } = usePortfolio();
+  const { publicData, designMode } = usePortfolio();
   const { profile, contacts } = publicData;
+  const isMinimal = designMode === 'minimalis_elegan';
 
   const handleNav = (e: React.MouseEvent, route: PublicRoute) => {
     e.preventDefault();
@@ -29,8 +30,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onShareProfile }) =>
   };
 
   return (
-    <footer className="mt-14 sm:mt-16 border-t-[3px] border-[#001F24] bg-[#F8F8E1] text-[#1B2A3D]">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-9 sm:py-10">
+    <footer
+      className={
+        isMinimal
+          ? 'mt-16 sm:mt-20 border-t border-[#1B2A3D]/14 bg-[#F8F8E1] text-[#1B2A3D]'
+          : 'mt-14 sm:mt-16 border-t-[3px] border-[#001F24] bg-[#F8F8E1] text-[#1B2A3D]'
+      }
+    >
+      <div className={`max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 ${isMinimal ? 'py-12 sm:py-14' : 'py-9 sm:py-10'}`}>
         <div data-aos="fade-up" data-aos-offset="60" className="grid grid-cols-1 md:grid-cols-12 gap-8">
           {/* Brand & Summary */}
           <div className="md:col-span-5 space-y-3">
@@ -132,7 +139,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onShareProfile }) =>
           </div>
         </div>
 
-        <div className="mt-8 pt-4 border-t-2 border-[#1B2A3D]/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-[#1B2A3D]/85">
+        <div
+          className={`mt-8 pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-[#1B2A3D]/85 ${
+            isMinimal ? 'border-t border-[#1B2A3D]/12' : 'border-t-2 border-[#1B2A3D]/25'
+          }`}
+        >
           <p className="font-mono-num font-semibold">
             &copy; {new Date().getFullYear()} {profile.fullName}. Hak cipta dilindungi.
           </p>

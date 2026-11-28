@@ -7,6 +7,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { PortfolioProvider, usePortfolio } from './context/PortfolioContext';
 import { useRouter } from './utils/router';
 import { refreshAosAfterTransition, scrollToTopInstant, syncBodyAosAttributes } from './utils/aos';
+import { applyDocumentDesignMode, resolveEffectiveRouteDesignMode } from './utils/designMode';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { FloatingUtilityDock } from './components/layout/FloatingUtilityDock';
@@ -24,7 +25,7 @@ import { AdminPage } from './pages/AdminPage';
 
 const AppShell: React.FC = () => {
   const { route, navigate } = useRouter();
-  const { loading, publicData, showToast } = usePortfolio();
+  const { loading, publicData, designMode, showToast } = usePortfolio();
 
   const dataFingerprint = useMemo(
     () =>
@@ -41,6 +42,12 @@ const AppShell: React.FC = () => {
       ].join('|'),
     [publicData]
   );
+
+  // Commit active design mode to <html> before paint (public routes follow Admin setting; /admin stays structured)
+  useLayoutEffect(() => {
+    const effectiveMode = resolveEffectiveRouteDesignMode(designMode, route === '/admin');
+    applyDocumentDesignMode(effectiveMode);
+  }, [designMode, route]);
 
   // Ensure scroll is at y=0 and body AOS transition attributes are committed BEFORE paint
   useLayoutEffect(() => {

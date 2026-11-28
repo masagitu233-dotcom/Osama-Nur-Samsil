@@ -13,6 +13,7 @@ import {
   LogOut,
   Mail,
   Menu,
+  Palette,
   Settings,
   Sparkles,
   User,
@@ -23,6 +24,7 @@ import { usePortfolio } from '../context/PortfolioContext';
 import type { PublicRoute } from '../types/portfolio';
 import { AdminAuthGate } from '../components/admin/AdminAuthGate';
 import { AdminOverview } from '../components/admin/AdminOverview';
+import { AppearanceSettingsPanel } from '../components/admin/AppearanceSettingsPanel';
 import { ContactAndSeoEditor, ProfileEditor } from '../components/admin/ProfileSettingsEditor';
 import { CareerInterestsManager } from '../components/admin/CareerInterestsManager';
 import { CollectionCrudManager, type CrudCollectionName } from '../components/admin/CollectionCrudManager';
@@ -37,6 +39,7 @@ interface AdminPageProps {
 
 type AdminTab =
   | 'overview'
+  | 'appearance'
   | 'profile'
   | 'career_interests'
   | CrudCollectionName
@@ -47,6 +50,7 @@ type AdminTab =
 
 const SIDEBAR_ITEMS: Array<{ id: AdminTab; label: string; icon: React.ComponentType<{ className?: string }> }> = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+  { id: 'appearance', label: 'Pengaturan Tampilan', icon: Palette },
   { id: 'profile', label: 'Profil, Bio & CV', icon: User },
   { id: 'career_interests', label: '06. Bidang Pekerjaan', icon: Compass },
   { id: 'experiences', label: 'Pengalaman', icon: Briefcase },
@@ -204,6 +208,9 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
         <div key={activeTab}>
           {activeTab === 'overview' && (
             <AdminOverview onSelectTab={(tab) => requestTabChange(tab as AdminTab)} />
+          )}
+          {activeTab === 'appearance' && (
+            <AppearanceSettingsPanel onDirtyChange={setHasUnsavedChanges} />
           )}
           {activeTab === 'profile' && (
             <ProfileEditor

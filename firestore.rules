@@ -390,7 +390,7 @@ service cloud.firestore {
     function isValidSiteSettings(data) {
       return data.keys().hasAll(['siteTitle', 'metaDescription', 'ogTitle', 'ogDescription', 'status', 'isVisible', 'createdAt', 'updatedAt'])
         && data.keys().hasOnly([
-          'siteTitle', 'metaDescription', 'ogTitle', 'ogDescription', 'ogImageUrl',
+          'siteTitle', 'metaDescription', 'ogTitle', 'ogDescription', 'ogImageUrl', 'designMode',
           'status', 'isVisible', 'createdAt', 'updatedAt'
         ])
         && isBoundedString(data.siteTitle, 1, 120)
@@ -398,6 +398,7 @@ service cloud.firestore {
         && isBoundedString(data.ogTitle, 1, 120)
         && isBoundedString(data.ogDescription, 1, 320)
         && (!('ogImageUrl' in data) || isBoundedString(data.ogImageUrl, 0, 2048))
+        && (!('designMode' in data) || (data.designMode is string && data.designMode in ['minimalis_elegan', 'neo_brutalist']))
         && isValidStatus(data.status)
         && data.isVisible is bool
         && data.createdAt is timestamp

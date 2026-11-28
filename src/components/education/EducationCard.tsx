@@ -343,7 +343,7 @@ export const EducationCard: React.FC<EducationCardProps> = ({
                 type="button"
                 onClick={() => openPhotoAt(0)}
                 aria-label={`Lihat foto utama ${education.institution} dalam ukuran penuh`}
-                className="group relative block w-full border-2 border-[#D9B44A] bg-[#F8F8E1] p-1.5 shadow-[4px_4px_0_0_#6C151E] transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9B44A] cursor-pointer"
+                className="edu-photo-frame group relative block w-full border-2 border-[#D9B44A] bg-[#F8F8E1] p-1.5 shadow-[4px_4px_0_0_#6C151E] transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9B44A] cursor-pointer"
               >
                 <SafeImage
                   src={gallery.primaryPhoto}
@@ -373,7 +373,7 @@ export const EducationCard: React.FC<EducationCardProps> = ({
                 type="button"
                 onClick={() => openPhotoAt(0)}
                 aria-label={`Lihat foto utama ${education.institution} dalam ukuran penuh`}
-                className={`group relative inline-block border-2 border-[#D9B44A] bg-[#F8F8E1] p-1.5 shadow-[4px_4px_0_0_#6C151E] transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9B44A] cursor-pointer ${
+                className={`edu-photo-frame group relative inline-block border-2 border-[#D9B44A] bg-[#F8F8E1] p-1.5 shadow-[4px_4px_0_0_#6C151E] transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9B44A] cursor-pointer ${
                   isPortrait ? 'max-w-[260px] sm:max-w-[280px]' : 'max-w-full'
                 }`}
               >
@@ -456,7 +456,7 @@ export const EducationCard: React.FC<EducationCardProps> = ({
                   type="button"
                   onClick={() => handleThumbnailClick(addIdx)}
                   aria-label={`Buka foto dokumentasi tambahan ${addIdx + 1} dari ${education.institution}`}
-                  className="group relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 aspect-square shrink-0 rounded-xl overflow-hidden border-2 border-[#D9B44A] bg-[#F8F8E1] shadow-[3px_3px_0_0_#6C151E] transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9B44A] cursor-pointer"
+                  className="edu-thumb-frame group relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 aspect-square shrink-0 rounded-xl overflow-hidden border-2 border-[#D9B44A] bg-[#F8F8E1] shadow-[3px_3px_0_0_#6C151E] transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9B44A] cursor-pointer"
                 >
                   <SafeImage
                     src={photoUrl}

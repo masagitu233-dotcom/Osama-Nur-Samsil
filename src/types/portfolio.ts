@@ -222,6 +222,8 @@ export interface ContactMessageItem {
   updatedAt?: unknown;
 }
 
+export type DesignMode = 'minimalis_elegan' | 'neo_brutalist';
+
 export interface SiteSettingsData {
   id: string;
   siteTitle: string;
@@ -229,6 +231,7 @@ export interface SiteSettingsData {
   ogTitle: string;
   ogDescription: string;
   ogImageUrl: string;
+  designMode?: DesignMode;
   status: PublishStatus;
   isVisible: boolean;
   createdAt?: unknown;

@@ -71,6 +71,11 @@ import {
 import { MAX_EXPERIENCE_PHOTOS, normalizeExperienceGallery } from '../utils/experienceGallery';
 import { MAX_EDUCATION_PHOTOS, normalizeEducationGallery } from '../utils/educationGallery';
 import { normalizeCertificateCategoryLabel } from '../utils/trainingClassification';
+import {
+  DESIGN_MODE_DEFINITIONS,
+  normalizeDesignMode,
+  type DesignMode,
+} from '../utils/designMode';
 
 const PUBLIC_PROFILE_SYNC_COLLECTIONS = new Set<ManagedCollectionName>([
   'education',
@@ -367,12 +372,21 @@ export async function saveSiteSettings(
   const docRef = doc(db, 'siteSettings', 'main');
   try {
     const existingSnap = await getDoc(docRef);
+    const existingData = existingSnap.exists()
+      ? (existingSnap.data() as Partial<SiteSettingsData>)
+      : null;
+    const resolvedMode =
+      data.designMode !== undefined
+        ? normalizeDesignMode(data.designMode)
+        : normalizeDesignMode(existingData?.designMode);
+
     const payload = {
       siteTitle: clampString(data.siteTitle, 120),
       metaDescription: clampString(data.metaDescription, 320),
       ogTitle: clampString(data.ogTitle, 120),
       ogDescription: clampString(data.ogDescription, 320),
       ogImageUrl: clampString(data.ogImageUrl, 2048),
+      designMode: resolvedMode,
       status: data.status,
       isVisible: Boolean(data.isVisible),
       updatedAt: serverTimestamp(),
@@ -383,6 +397,44 @@ export async function saveSiteSettings(
       await setDoc(docRef, { ...payload, createdAt: serverTimestamp() });
     }
     await logAdminActivity('update', 'siteSettings', payload.siteTitle);
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, path);
+  }
+}
+
+export async function saveDesignMode(
+  designMode: DesignMode,
+  fallbackSettings: SiteSettingsData
+): Promise<void> {
+  const path = 'siteSettings/main';
+  const docRef = doc(db, 'siteSettings', 'main');
+  const normalizedMode = normalizeDesignMode(designMode);
+  try {
+    const existingSnap = await getDoc(docRef);
+    const base = existingSnap.exists()
+      ? (existingSnap.data() as Partial<SiteSettingsData>)
+      : fallbackSettings;
+
+    const payload = {
+      siteTitle: clampString(base.siteTitle || fallbackSettings.siteTitle, 120),
+      metaDescription: clampString(base.metaDescription || fallbackSettings.metaDescription, 320),
+      ogTitle: clampString(base.ogTitle || fallbackSettings.ogTitle, 120),
+      ogDescription: clampString(base.ogDescription || fallbackSettings.ogDescription, 320),
+      ogImageUrl: clampString(base.ogImageUrl ?? fallbackSettings.ogImageUrl ?? '', 2048),
+      designMode: normalizedMode,
+      status: base.status === 'draft' ? 'draft' : 'published',
+      isVisible: base.isVisible !== undefined ? Boolean(base.isVisible) : true,
+      updatedAt: serverTimestamp(),
+    };
+
+    if (existingSnap.exists()) {
+      await setDoc(docRef, { ...payload, createdAt: existingSnap.data().createdAt });
+    } else {
+      await setDoc(docRef, { ...payload, createdAt: serverTimestamp() });
+    }
+
+    const modeLabel = DESIGN_MODE_DEFINITIONS[normalizedMode].name;
+    await logAdminActivity('update', 'appearance', `Mode Desain -> ${modeLabel}`);
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, path);
   }

@@ -12,6 +12,7 @@ import type {
   CertificateItem,
   ContactInfoData,
   ContactMessageItem,
+  DesignMode,
   EducationItem,
   ExperienceItem,
   InterestItem,
@@ -26,6 +27,12 @@ import type {
   TrainingItem,
 } from '../types/portfolio';
 import { filterPublicItems, sortByDisplayOrder } from '../utils/portfolioLogic';
+import {
+  isDesignMode,
+  normalizeDesignMode,
+  readCachedDesignMode,
+  writeCachedDesignMode,
+} from '../utils/designMode';
 
 interface PortfolioContextValue {
   // Public resolved data (Firestore live data, with graceful fallback before first seed)
@@ -38,6 +45,7 @@ interface PortfolioContextValue {
   loading: boolean;
   isFirestoreSeeded: boolean;
   firestoreError: string | null;
+  designMode: DesignMode;
 
   // Auth & RBAC
   user: User | null;
@@ -84,6 +92,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [contactMessages, setContactMessages] = useState<ContactMessageItem[]>([]);
   const [activityLogs, setActivityLogs] = useState<ActivityLogItem[]>([]);
   const [mediaAssets, setMediaAssets] = useState<MediaAssetItem[]>([]);
+  const [cachedDesignMode] = useState<DesignMode>(() => readCachedDesignMode());
 
   // Toast
   const [toast, setToast] = useState<{ type: 'success' | 'error' | 'info'; message: string } | null>(null);
@@ -278,6 +287,25 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     siteSettingsList,
   ]);
 
+  // Resolve global design mode from live Firestore siteSettings (with cache fallback only while initial snapshot is loading)
+  const designMode: DesignMode = useMemo(() => {
+    const rawSettings = isAdmin ? adminData.siteSettings : publicData.siteSettings;
+    if (isDesignMode(rawSettings?.designMode)) {
+      return rawSettings.designMode;
+    }
+    if (siteSettingsList.length > 0) {
+      return normalizeDesignMode(rawSettings?.designMode);
+    }
+    return loading ? cachedDesignMode : normalizeDesignMode(rawSettings?.designMode);
+  }, [isAdmin, adminData.siteSettings, publicData.siteSettings, siteSettingsList.length, loading, cachedDesignMode]);
+
+  // Keep read-only local cache synced with live Firestore truth for zero-FOUC reload
+  useEffect(() => {
+    if (!loading) {
+      writeCachedDesignMode(designMode);
+    }
+  }, [designMode, loading]);
+
   // Per-route SEO metadata, canonical URLs, robots directives, Open Graph, and JSON-LD
   // are synchronized centrally by RouteSeoHead in App.tsx.
 
@@ -309,6 +337,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         loading,
         isFirestoreSeeded,
         firestoreError,
+        designMode,
         user,
         authReady,
         isAdmin,
