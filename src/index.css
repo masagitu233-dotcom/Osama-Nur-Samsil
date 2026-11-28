@@ -965,3 +965,341 @@ html[data-design-mode="minimalis_elegan"] .brutal-skeleton {
   );
 }
 
+/* About Unified Frame Portrait Bottom Overlay Fade (sits ABOVE photo & yellow circle so clothing stays 100% opaque and fades smoothly into Ink Navy #1B2A3D) */
+.about-bottom-navy-fade {
+  background: linear-gradient(
+    to top,
+    var(--color-navy) 0%,
+    var(--color-navy) 22%,
+    color-mix(in srgb, var(--color-navy) 92%, transparent) 38%,
+    color-mix(in srgb, var(--color-navy) 60%, transparent) 58%,
+    color-mix(in srgb, var(--color-navy) 22%, transparent) 78%,
+    transparent 100%
+  );
+}
+
+/* ==================================================
+   ADAPTIVE PROPORTION & SIZING SYSTEM (BOTH MODES)
+   Applies real CSS layout dimensions (max-width, padding,
+   gap, font-size, line-height, radius, aspect-ratio)
+   strictly on public routes (html[data-sizing-active="true"]).
+   Never uses CSS transform: scale().
+   ================================================== */
+
+html[data-sizing-active="true"] {
+  --sz-content-max-w: 1080px;
+  --sz-hero-max-w: 1080px;
+  --sz-pad-x: 24px;
+  --sz-pad-y: 28px;
+  --sz-section-gap: 40px;
+  --sz-section-min-h: auto;
+  --sz-frame-radius: 18px;
+  --sz-card-min-w: 270px;
+  --sz-card-min-h: auto;
+  --sz-card-pad: 18px;
+  --sz-card-gap: 18px;
+  --sz-card-radius: 14px;
+  --sz-border-w: 1px;
+  --sz-img-w: 100%;
+  --sz-img-max-h: 205px;
+  --sz-img-ratio: 16/9;
+  --sz-thumb-size: 84px;
+  --sz-img-radius: 10px;
+  --sz-img-pos: 50% 20%;
+  --sz-hero-title: 36px;
+  --sz-section-title: 22px;
+  --sz-card-title: 16px;
+  --sz-body-text: 14px;
+  --sz-meta-text: 11.5px;
+  --sz-line-height: 1.55;
+  --sz-heading-gap: 8px;
+  --sz-btn-h: 38px;
+  --sz-btn-px: 16px;
+  --sz-btn-text: 13px;
+  --sz-icon-size: 15px;
+  --sz-icon-gap: 7px;
+  --sz-btn-radius: 10px;
+  --sz-title-desc-gap: 8px;
+  --sz-comp-gap: 14px;
+  --sz-media-text-gap: 14px;
+  --sz-card-section-gap: 18px;
+  --sz-hero-pad-y: 28px;
+  --sz-hero-portrait-h: 336px;
+  --sz-hero-circle: 226px;
+  --sz-hero-ring: 258px;
+  --sz-hero-comp-title: 36px;
+  --sz-edu-pad: 20px;
+  --sz-edu-photo-h: 240px;
+  --sz-edu-thumb: 82px;
+  --sz-edu-title: 19px;
+  --sz-proj-pad: 18px;
+  --sz-proj-ratio: 16/9;
+  --sz-proj-img-h: 200px;
+  --sz-proj-title: 16px;
+  --sz-cert-pad: 16px;
+  --sz-cert-thumb-h: 175px;
+  --sz-cert-title: 15px;
+  --sz-exp-pad: 18px;
+  --sz-exp-img-h: 195px;
+  --sz-exp-title: 16px;
+  --sz-about-pad: 20px;
+  --sz-about-portrait-h: 285px;
+  --sz-about-body: 14.5px;
+}
+
+/* A. Layout, Container Max-Width & Section Rhythm */
+html[data-sizing-active="true"] header > .max-w-6xl,
+html[data-sizing-active="true"] footer > .max-w-6xl,
+html[data-sizing-active="true"] main .max-w-6xl {
+  max-width: var(--sz-content-max-w);
+  padding-left: var(--sz-pad-x);
+  padding-right: var(--sz-pad-x);
+}
+
+html[data-sizing-active="true"] main .sizing-hero-container {
+  max-width: var(--sz-hero-max-w);
+  padding-left: var(--sz-pad-x);
+  padding-right: var(--sz-pad-x);
+}
+
+html[data-sizing-active="true"] main .sizing-page-shell {
+  padding-top: var(--sz-pad-y);
+  padding-bottom: var(--sz-pad-y);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sz-section-gap);
+}
+
+html[data-sizing-active="true"] main .sizing-page-shell > * {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+html[data-sizing-active="true"] main .sizing-home-shell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sz-section-gap);
+  padding-bottom: var(--sz-pad-y);
+}
+
+html[data-sizing-active="true"] main .sizing-home-shell > section {
+  min-height: var(--sz-section-min-h);
+}
+
+html[data-sizing-active="true"] main .sizing-page-shell > section {
+  min-height: var(--sz-section-min-h);
+}
+
+/* Hero Frame Radius & Padding */
+html[data-sizing-active="true"] [data-testid="hero-minimalis-elegan"],
+html[data-sizing-active="true"] [data-testid="hero-neo-brutalist"] {
+  border-radius: var(--sz-frame-radius);
+  padding-top: var(--sz-hero-pad-y);
+  padding-bottom: var(--sz-hero-pad-y);
+}
+
+html[data-sizing-active="true"] [data-testid="hero-minimalis-elegan"] .hero-bg-clip {
+  border-radius: var(--sz-frame-radius);
+}
+
+/* B. Cards & Items */
+html[data-sizing-active="true"] main .brutal-card {
+  border-radius: var(--sz-card-radius);
+  border-width: var(--sz-border-w);
+  min-height: var(--sz-card-min-h);
+}
+
+html[data-sizing-active="true"] main .sizing-card-pad {
+  padding: var(--sz-card-pad);
+}
+
+html[data-sizing-active="true"] main .sizing-card-grid {
+  gap: var(--sz-card-gap);
+}
+
+/* C. Media & Thumbnails */
+html[data-sizing-active="true"] main .sizing-media-box {
+  width: var(--sz-img-w);
+  margin-left: auto;
+  margin-right: auto;
+  max-height: var(--sz-img-max-h);
+  aspect-ratio: var(--sz-img-ratio);
+  border-radius: var(--sz-img-radius) var(--sz-img-radius) 0 0;
+}
+
+html[data-sizing-active="true"] main .sizing-media-box img {
+  object-position: var(--sz-img-pos);
+}
+
+/* D. Typography Hierarchy */
+html[data-sizing-active="true"] main h1 {
+  font-size: var(--sz-hero-title);
+  line-height: 1.08;
+}
+
+html[data-sizing-active="true"] [data-sizing-scope="hero"] h1 {
+  font-size: var(--sz-hero-comp-title);
+}
+
+html[data-sizing-active="true"] main h2 {
+  font-size: var(--sz-section-title);
+  line-height: 1.2;
+}
+
+html[data-sizing-active="true"] main .brutal-card h2 {
+  font-size: calc(var(--sz-card-title) + 2px);
+  line-height: 1.25;
+}
+
+html[data-sizing-active="true"] main .brutal-card h3 {
+  font-size: var(--sz-card-title);
+  line-height: 1.3;
+}
+
+html[data-sizing-active="true"] main p {
+  line-height: var(--sz-line-height);
+}
+
+html[data-sizing-active="true"] main .sizing-body-copy {
+  font-size: var(--sz-body-text);
+  line-height: var(--sz-line-height);
+}
+
+html[data-sizing-active="true"] main .sizing-meta-copy {
+  font-size: var(--sz-meta-text);
+}
+
+html[data-sizing-active="true"] main header > h1 {
+  margin-top: var(--sz-heading-gap);
+}
+
+html[data-sizing-active="true"] main header > p {
+  margin-top: var(--sz-title-desc-gap);
+  font-size: var(--sz-body-text);
+}
+
+/* E. Buttons & Icons */
+html[data-sizing-active="true"] main .brutal-btn,
+html[data-sizing-active="true"] main .brutal-btn-frame-green,
+html[data-sizing-active="true"] main .brutal-btn-frame-bordo,
+html[data-sizing-active="true"] main .brutal-btn-frame-navy,
+html[data-sizing-active="true"] main .brutal-btn-frame-gold,
+html[data-sizing-active="true"] main .brutal-btn-on-dark,
+html[data-sizing-active="true"] main .brutal-btn-on-dark-outline,
+html[data-sizing-active="true"] main .brutal-btn-on-gold {
+  min-height: var(--sz-btn-h);
+  padding-left: var(--sz-btn-px);
+  padding-right: var(--sz-btn-px);
+  font-size: var(--sz-btn-text);
+  gap: var(--sz-icon-gap);
+  border-radius: var(--sz-btn-radius);
+}
+
+html[data-sizing-active="true"] main .brutal-btn svg,
+html[data-sizing-active="true"] main .brutal-btn-frame-green svg,
+html[data-sizing-active="true"] main .brutal-btn-frame-bordo svg,
+html[data-sizing-active="true"] main .brutal-btn-frame-navy svg,
+html[data-sizing-active="true"] main .brutal-btn-frame-gold svg,
+html[data-sizing-active="true"] main .brutal-btn-on-dark svg,
+html[data-sizing-active="true"] main .brutal-btn-on-dark-outline svg,
+html[data-sizing-active="true"] main .brutal-btn-on-gold svg {
+  width: var(--sz-icon-size);
+  height: var(--sz-icon-size);
+}
+
+/* F. Spacing Relationships */
+html[data-sizing-active="true"] main .sizing-section-header {
+  margin-bottom: var(--sz-card-section-gap);
+}
+
+html[data-sizing-active="true"] main .sizing-media-body {
+  padding: var(--sz-card-pad);
+  gap: var(--sz-media-text-gap);
+}
+
+/* PER-COMPONENT INDEPENDENT OVERRIDES */
+
+/* Education Scope */
+html[data-sizing-active="true"] [data-sizing-scope="education"] .brutal-card {
+  padding: var(--sz-edu-pad);
+}
+
+html[data-sizing-active="true"] [data-sizing-scope="education"] .brutal-card h3 {
+  font-size: var(--sz-edu-title);
+}
+
+html[data-sizing-active="true"] [data-sizing-scope="education"] .edu-photo-frame img {
+  max-height: var(--sz-edu-photo-h);
+}
+
+html[data-sizing-active="true"] [data-sizing-scope="education"] .edu-thumb-frame {
+  width: var(--sz-edu-thumb);
+  height: var(--sz-edu-thumb);
+  border-radius: var(--sz-img-radius);
+}
+
+/* Projects Scope */
+html[data-sizing-active="true"] [data-sizing-scope="projects"] .sizing-media-body {
+  padding: var(--sz-proj-pad);
+}
+
+html[data-sizing-active="true"] [data-sizing-scope="projects"] .sizing-media-box {
+  aspect-ratio: var(--sz-proj-ratio);
+  max-height: var(--sz-proj-img-h);
+}
+
+html[data-sizing-active="true"] [data-sizing-scope="projects"] .brutal-card h3,
+html[data-sizing-active="true"] [data-sizing-scope="projects"] .brutal-card h4 {
+  font-size: var(--sz-proj-title);
+}
+
+/* Certificates Scope */
+html[data-sizing-active="true"] [data-sizing-scope="certificates"] .sizing-card-pad,
+html[data-sizing-active="true"] [data-sizing-scope="certificates"] .sizing-media-body {
+  padding: var(--sz-cert-pad);
+}
+
+html[data-sizing-active="true"] [data-sizing-scope="certificates"] .sizing-cert-media {
+  max-height: var(--sz-cert-thumb-h);
+  border-radius: var(--sz-img-radius) var(--sz-img-radius) 0 0;
+}
+
+html[data-sizing-active="true"] [data-sizing-scope="certificates"] .brutal-card h3 {
+  font-size: var(--sz-cert-title);
+}
+
+/* Experience Scope */
+html[data-sizing-active="true"] [data-sizing-scope="experience"] .sizing-media-body,
+html[data-sizing-active="true"] [data-sizing-scope="experience"] .sizing-card-pad {
+  padding: var(--sz-exp-pad);
+}
+
+html[data-sizing-active="true"] [data-sizing-scope="experience"] .sizing-media-box {
+  max-height: var(--sz-exp-img-h);
+}
+
+html[data-sizing-active="true"] [data-sizing-scope="experience"] .brutal-card h2,
+html[data-sizing-active="true"] [data-sizing-scope="experience"] .brutal-card h3 {
+  font-size: var(--sz-exp-title);
+}
+
+/* About Scope */
+html[data-sizing-active="true"] [data-sizing-scope="about"] .sizing-about-card {
+  padding: var(--sz-about-pad);
+}
+
+html[data-sizing-active="true"] [data-sizing-scope="about"] .sizing-about-stack {
+  gap: var(--sz-card-gap);
+}
+
+html[data-sizing-active="true"] [data-sizing-scope="about"] .sizing-about-portrait {
+  width: 100%;
+  height: var(--sz-about-portrait-h);
+}
+
+html[data-sizing-active="true"] [data-sizing-scope="about"] .sizing-about-prose {
+  font-size: var(--sz-about-body);
+  line-height: var(--sz-line-height);
+}
+
+

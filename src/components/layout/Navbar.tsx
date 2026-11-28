@@ -50,11 +50,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRoute, onNavigate, onShar
           : 'sticky top-0 z-40 bg-[#F8F8E1] text-[#1B2A3D] border-b-2 border-[#001F24]'
       }
     >
-      <div
-        className={`max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 ${
-          isMinimal ? 'h-16' : 'h-14'
-        }`}
-      >
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 h-14">
         {/* Zone 1: Single-line portfolio brand wordmark (Ink Navy on Beige) */}
         <a
           href="/"

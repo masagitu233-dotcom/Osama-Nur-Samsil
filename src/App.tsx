@@ -8,6 +8,7 @@ import { PortfolioProvider, usePortfolio } from './context/PortfolioContext';
 import { useRouter } from './utils/router';
 import { refreshAosAfterTransition, scrollToTopInstant, syncBodyAosAttributes } from './utils/aos';
 import { applyDocumentDesignMode, resolveEffectiveRouteDesignMode } from './utils/designMode';
+import { applyDocumentLayoutSizing } from './utils/layoutSizing';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { FloatingUtilityDock } from './components/layout/FloatingUtilityDock';
@@ -25,7 +26,16 @@ import { AdminPage } from './pages/AdminPage';
 
 const AppShell: React.FC = () => {
   const { route, navigate } = useRouter();
-  const { loading, publicData, designMode, showToast } = usePortfolio();
+  const {
+    loading,
+    publicData,
+    designMode,
+    activeSizing,
+    isAdmin,
+    draftSizingPreview,
+    setDraftSizingPreview,
+    showToast,
+  } = usePortfolio();
 
   const dataFingerprint = useMemo(
     () =>
@@ -43,11 +53,13 @@ const AppShell: React.FC = () => {
     [publicData]
   );
 
-  // Commit active design mode to <html> before paint (public routes follow Admin setting; /admin stays structured)
+  // Commit active design mode & layout sizing CSS variables to <html> before paint
   useLayoutEffect(() => {
-    const effectiveMode = resolveEffectiveRouteDesignMode(designMode, route === '/admin');
+    const isAdminRoute = route === '/admin';
+    const effectiveMode = resolveEffectiveRouteDesignMode(designMode, isAdminRoute);
     applyDocumentDesignMode(effectiveMode);
-  }, [designMode, route]);
+    applyDocumentLayoutSizing(activeSizing, isAdminRoute);
+  }, [designMode, activeSizing, route]);
 
   // Ensure scroll is at y=0 and body AOS transition attributes are committed BEFORE paint
   useLayoutEffect(() => {
@@ -98,6 +110,35 @@ const AppShell: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col surface-page">
       <RouteSeoHead route={route} bundle={publicData} />
+      {isAdmin && draftSizingPreview && (
+        <div
+          role="status"
+          className="bg-[#D9B44A] text-[#001F24] border-b border-[#001F24] px-4 py-1.5 text-xs font-mono-num flex flex-wrap items-center justify-between gap-2"
+        >
+          <span className="font-bold">
+            Mode Pratinjau Draft Aktif (hanya terlihat oleh Admin — belum disimpan ke publik)
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => navigate('/admin')}
+              className="underline font-bold cursor-pointer"
+            >
+              Kembali ke Pengaturan
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setDraftSizingPreview(null);
+                showToast('info', 'Pratinjau draft ukuran dinonaktifkan.');
+              }}
+              className="px-2 py-0.5 bg-[#001F24] text-[#F8F8E1] font-bold cursor-pointer"
+            >
+              Tutup Pratinjau
+            </button>
+          </div>
+        </div>
+      )}
       <Navbar
         currentRoute={route}
         onNavigate={navigate}

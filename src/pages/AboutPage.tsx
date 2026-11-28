@@ -6,6 +6,10 @@ import { SafeImage } from '../components/ui/SafeImage';
 import { getSectionCardTone } from '../utils/cardVariants';
 import { getAosStaggerDelay } from '../utils/aos';
 import {
+  HERO_CUTOUT_ASSET_URL,
+  shouldUsePreprocessedHeroCutout,
+} from '../utils/designMode';
+import {
   extractCareerInterestItems,
   parseBiographyParagraphs,
   parseMissionPoints,
@@ -16,8 +20,10 @@ interface AboutPageProps {
 }
 
 export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
-  const { publicData } = usePortfolio();
+  const { publicData, designMode } = usePortfolio();
   const { profile, education, interests } = publicData;
+  const isMinimal = designMode === 'minimalis_elegan';
+  const useCutoutPortrait = shouldUsePreprocessedHeroCutout(profile.photoUrl);
 
   const biographyParagraphs = useMemo(
     () => parseBiographyParagraphs(profile.biography || profile.shortBio),
@@ -52,9 +58,12 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
   const careerOverview = (profile.careerInterestsOverview || '').trim();
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12 sm:space-y-14">
+    <div
+      data-sizing-scope="about"
+      className="sizing-page-shell max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10"
+    >
       {/* Page Masthead */}
-      <header data-aos="fade-up" className="border-b-2 border-brutal pb-6">
+      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5">
         <span className="brutal-badge-bordo">01. Tentang Saya</span>
         <h1 className="font-display text-2xl sm:text-3xl lg:text-[38px] font-extrabold mt-3 text-balance leading-[1.15]">
           Biografi, Visi &amp; Arah Profesional
@@ -64,105 +73,192 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
         </p>
       </header>
 
-      {/* Section A & B: Professional Biography + Collaboration & Career Focus (Ink Navy #1B2A3D + Beige #F8F8E1) */}
-      <section aria-labelledby="bio-heading" className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-7 items-start">
-        {/* Left: Portrait & Identity Card */}
-        <aside
+      {/* FRAME 1 (Unified Profile + Biography) & FRAME 2 (Full-Width Career Focus) */}
+      <section aria-labelledby="bio-heading" className="sizing-about-stack flex flex-col gap-5">
+        {/* FRAME 1: Single Unified Ink Navy (#1B2A3D) Container — Left Profile (33%) + Right Biography (67%) */}
+        <article
           data-aos="fade-up"
-          className="lg:col-span-4 max-w-sm mx-auto lg:max-w-none w-full brutal-card card-navy frame-navy overflow-hidden"
+          data-testid="about-unified-profile-bio-frame"
+          className="brutal-card card-navy frame-navy sizing-about-card relative overflow-hidden p-6 sm:p-7 lg:p-8"
         >
-          <div className="aspect-[4/4.4] bg-[#F8F8E1] overflow-hidden">
-            <SafeImage
-              src={profile.photoUrl}
-              alt={profile.fullName}
-              fallbackLabel={profile.fullName}
-              className="w-full h-full object-cover object-top"
-            />
-          </div>
-          <div className="p-5 sm:p-6 border-t-2 border-[#D9B44A] space-y-2.5">
-            <div>
-              <p className="font-display font-extrabold text-lg sm:text-xl text-[#F8F8E1] leading-snug">
-                {profile.fullName}
-              </p>
-              <p className="text-sm font-bold text-[#D9B44A] mt-0.5">
-                {profile.domicile}
-              </p>
+          {/* Layer 0: Subtle architectural geometric arcs clipped neatly inside the single Ink Navy frame */}
+          {isMinimal && (
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+            >
+              <div className="absolute -top-20 -left-20 w-56 h-56 rounded-full border border-[#D9B44A]/14" />
+              <div className="absolute -bottom-24 -right-20 w-64 h-64 rounded-full border border-[#F8F8E1]/8" />
             </div>
-            {education[0] && (
-              <div className="pt-3 border-t border-[var(--card-border-subtle)] space-y-1">
-                <p className="text-xs sm:text-[13px] font-bold text-[#F8F8E1] leading-snug">
-                  {education[0].degree}
-                </p>
-                <p className="font-mono-num text-xs text-muted leading-snug">
-                  {education[0].institution} ({education[0].graduationYear})
-                </p>
-              </div>
-            )}
-          </div>
-        </aside>
+          )}
 
-        {/* Right: Biography Prose + Career Focus */}
-        <div className="lg:col-span-8 space-y-5">
+          {/* Unified 2-Column Composition (No nested cards, no inner borders, single background) */}
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-7 lg:gap-9 items-center">
+            {/* LEFT COLUMN (33%): Transparent Cutout Portrait + Name, Domicile & Education */}
+            <div
+              data-testid="about-profile-column"
+              className="md:col-span-4 flex flex-col items-center text-center"
+            >
+              {/* Portrait Composition Stage — directly on Ink Navy surface (no extra card or square frame) */}
+              <div
+                data-testid="about-portrait-stage"
+                className="sizing-about-portrait relative isolate flex items-end justify-center w-full max-w-[260px] mx-auto"
+                style={{
+                  height: 'var(--sz-about-portrait-h, 250px)',
+                }}
+              >
+                {/* Layer 1 (z-10): Outer subtle geometric halo ring strictly BEHIND portrait */}
+                <div
+                  aria-hidden="true"
+                  data-testid="about-portrait-halo-ring"
+                  className="pointer-events-none absolute bottom-1.5 left-1/2 -translate-x-1/2 z-10 rounded-full border border-[#D9B44A]/35"
+                  style={{
+                    width: 'calc(var(--sz-about-portrait-h, 250px) * 0.8)',
+                    height: 'calc(var(--sz-about-portrait-h, 250px) * 0.8)',
+                  }}
+                />
+
+                {/* Layer 1 (z-10): Primary Muted Golden Yellow (#D9B44A) circle strictly BEHIND portrait */}
+                <div
+                  aria-hidden="true"
+                  data-testid="about-portrait-yellow-circle"
+                  className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 z-10 rounded-full bg-[#D9B44A] shadow-[0_12px_28px_-12px_rgba(0,31,36,0.5)]"
+                  style={{
+                    width: 'calc(var(--sz-about-portrait-h, 250px) * 0.7)',
+                    height: 'calc(var(--sz-about-portrait-h, 250px) * 0.7)',
+                  }}
+                />
+
+                {/* Layer 2 (z-20): 100% Opaque Cutout Portrait strictly IN FRONT of yellow circle */}
+                {useCutoutPortrait ? (
+                  <img
+                    src={HERO_CUTOUT_ASSET_URL}
+                    alt={profile.fullName}
+                    data-testid="about-cutout-portrait"
+                    loading="eager"
+                    decoding="async"
+                    className="relative z-20 h-full w-auto max-w-full object-contain object-bottom block opacity-100 select-none pointer-events-none drop-shadow-[0_10px_18px_rgba(0,31,36,0.3)]"
+                  />
+                ) : (
+                  <div
+                    data-testid="about-cutout-portrait"
+                    className="relative z-20 rounded-t-[999px] overflow-hidden"
+                    style={{
+                      width: 'calc(var(--sz-about-portrait-h, 250px) * 0.72)',
+                      height: 'calc(var(--sz-about-portrait-h, 250px) * 0.92)',
+                    }}
+                  >
+                    <SafeImage
+                      src={profile.photoUrl}
+                      alt={profile.fullName}
+                      fallbackLabel={profile.fullName}
+                      className="w-full h-full object-cover object-[50%_14%]"
+                    />
+                  </div>
+                )}
+
+                {/* Layer 3 (z-30): Smooth Ink Navy (#1B2A3D) bottom overlay ABOVE both photo & circle */}
+                <div
+                  aria-hidden="true"
+                  data-testid="about-portrait-bottom-fade"
+                  className="pointer-events-none absolute -inset-x-4 -bottom-px z-30 about-bottom-navy-fade"
+                  style={{
+                    height: 'calc(var(--sz-about-portrait-h, 250px) * 0.24)',
+                  }}
+                />
+              </div>
+
+              {/* Identity Details Directly Below Portrait */}
+              <div className="mt-3.5 w-full max-w-[260px] space-y-2.5">
+                <div>
+                  <p className="font-display font-extrabold text-lg sm:text-[20px] text-[#F8F8E1] leading-snug tracking-tight">
+                    {profile.fullName}
+                  </p>
+                  <p className="font-mono-num text-xs sm:text-[13px] font-bold text-[#D9B44A] mt-0.5 tracking-wide">
+                    {profile.domicile}
+                  </p>
+                </div>
+
+                {education[0] && (
+                  <div className="pt-2.5 border-t border-[#D9B44A]/30 space-y-0.5">
+                    <p className="text-xs sm:text-[13.5px] font-bold text-[#F8F8E1] leading-snug">
+                      {education[0].degree}
+                    </p>
+                    <p className="font-mono-num text-[11px] sm:text-xs text-[#F8F8E1]/80 leading-snug">
+                      {education[0].institution} ({education[0].graduationYear})
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* RIGHT COLUMN (67%): Biografi Profesional Directly Inside the Same Ink Navy Frame */}
+            <div data-testid="about-biography-column" className="md:col-span-8 min-w-0">
+              <span className="font-mono-num text-[11px] font-bold uppercase tracking-wider text-[#D9B44A]">
+                Profil &amp; Latar Belakang
+              </span>
+              <h2
+                id="bio-heading"
+                className="font-display text-xl sm:text-[22px] font-extrabold mt-1 leading-tight text-[#F8F8E1]"
+              >
+                Biografi Profesional
+              </h2>
+              <p className="text-sm sm:text-[15px] font-bold text-[#D9B44A] mt-1.5 pb-3.5 border-b border-[var(--card-border-subtle)] leading-snug">
+                {profile.headline}
+              </p>
+              <div className="sizing-about-prose mt-4 space-y-3.5 text-[15px] leading-[1.72] text-[#F8F8E1]/95">
+                {biographyParagraphs.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+              </div>
+            </div>
+          </div>
+        </article>
+
+        {/* FRAME 2: Standalone Full-Width Horizontal Ink Navy Frame — Fokus Kolaborasi & Karier */}
+        {profile.careerFocus && (
           <article
             data-aos="fade-up"
             data-aos-delay="100"
-            className="brutal-card card-navy frame-navy p-6 sm:p-8"
+            data-testid="about-career-focus-frame"
+            className="brutal-card card-navy frame-navy sizing-about-card w-full p-5 sm:p-6"
           >
-            <span className="font-mono-num text-[11px] font-bold uppercase tracking-wider text-[#D9B44A]">
-              Profil &amp; Latar Belakang
-            </span>
-            <h2 id="bio-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1 leading-tight text-[#F8F8E1]">
-              Biografi Profesional
-            </h2>
-            <p className="text-sm sm:text-[15px] font-bold text-[#D9B44A] mt-2 pb-4 border-b border-[var(--card-border-subtle)] leading-snug">
-              {profile.headline}
-            </p>
-            <div className="mt-4 space-y-4 text-[15px] sm:text-base leading-[1.8] text-[#F8F8E1]">
-              {biographyParagraphs.map((paragraph, index) => (
-                <p key={index}>{paragraph}</p>
-              ))}
+            <div className="flex flex-wrap items-center gap-2.5 pb-3 border-b border-[var(--card-border-subtle)]">
+              <span className="brutal-badge">Arah Karier</span>
+              <h2 className="font-display text-lg sm:text-[19px] font-extrabold leading-tight text-[#F8F8E1]">
+                Fokus Kolaborasi &amp; Karier
+              </h2>
             </div>
+            <p className="sizing-about-prose mt-3.5 text-[15px] leading-[1.7] font-normal text-[#F8F8E1]/95 max-w-5xl">
+              {profile.careerFocus}
+            </p>
           </article>
-
-          {profile.careerFocus && (
-            <article
-              data-aos="fade-up"
-              data-aos-delay="180"
-              className="brutal-card card-navy frame-navy p-5 sm:p-6"
-            >
-              <div className="flex flex-wrap items-center gap-2.5 mb-2.5">
-                <span className="brutal-badge">Arah Karier</span>
-                <h2 className="font-display text-lg sm:text-xl font-extrabold leading-tight text-[#F8F8E1]">
-                  Fokus Kolaborasi &amp; Karier
-                </h2>
-              </div>
-              <p className="text-[15px] sm:text-base leading-[1.75] font-normal text-[#F8F8E1]">
-                {profile.careerFocus}
-              </p>
-            </article>
-          )}
-        </div>
+        )}
       </section>
 
       {/* Section C: Vision & Mission (Uniform Green #0F3D3A + Beige #F8F8E1) */}
-      <section aria-labelledby="vision-mission-heading" className="space-y-5">
-        <div data-aos="fade-up">
+      <section aria-labelledby="vision-mission-heading" className="space-y-4">
+        <div data-aos="fade-up" className="pb-3 border-b-2 border-brutal">
           <span className="brutal-badge-green">02. Prinsip Kerja</span>
-          <h2 id="vision-mission-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-2 text-[#1B2A3D]">
+          <h2 id="vision-mission-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1.5 text-[#1B2A3D]">
             Visi &amp; Misi
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
+        <div className="sizing-card-grid grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
           <article
             data-aos="fade-up"
             data-aos-delay="0"
-            className="md:col-span-5 brutal-card card-green frame-green p-6 sm:p-7"
+            data-testid="about-vision-card"
+            className="md:col-span-5 brutal-card card-green frame-green sizing-about-card p-5 sm:p-6"
           >
-            <h3 className="font-display text-lg sm:text-xl font-extrabold text-[#D9B44A] pb-3 border-b border-[var(--card-border-subtle)]">
+            <span className="font-mono-num text-[10.5px] font-bold uppercase tracking-wider text-[#D9B44A]/90">
+              Arah Jangka Panjang
+            </span>
+            <h3 className="font-display text-lg sm:text-xl font-extrabold text-[#D9B44A] mt-0.5 pb-3 border-b border-[#D9B44A]/30">
               Visi
             </h3>
-            <p className="mt-4 text-[15px] sm:text-base leading-[1.8] text-[#F8F8E1] whitespace-pre-line">
+            <p className="sizing-about-prose mt-3.5 text-[15px] leading-[1.72] text-[#F8F8E1]/95 whitespace-pre-line">
               {profile.vision || 'Belum ditambahkan. Dapat diperbarui melalui Dashboard Admin.'}
             </p>
           </article>
@@ -170,29 +266,31 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
           <article
             data-aos="fade-up"
             data-aos-delay="100"
-            className="md:col-span-7 brutal-card card-green frame-green p-6 sm:p-7"
+            data-testid="about-mission-card"
+            className="md:col-span-7 brutal-card card-green frame-green sizing-about-card p-5 sm:p-6"
           >
-            <h3 className="font-display text-lg sm:text-xl font-extrabold text-[#D9B44A] pb-3 border-b border-[var(--card-border-subtle)]">
+            <span className="font-mono-num text-[10.5px] font-bold uppercase tracking-wider text-[#D9B44A]/90">
+              Langkah &amp; Komitmen
+            </span>
+            <h3 className="font-display text-lg sm:text-xl font-extrabold text-[#D9B44A] mt-0.5 pb-3 border-b border-[#D9B44A]/30">
               Misi
             </h3>
             {missionPoints.length === 0 ? (
-              <p className="mt-4 text-[15px] sm:text-base leading-[1.8] text-[#F8F8E1]">
+              <p className="sizing-about-prose mt-3.5 text-[15px] leading-[1.72] text-[#F8F8E1]/95">
                 Belum ditambahkan. Dapat diperbarui melalui Dashboard Admin.
               </p>
             ) : missionPoints.length === 1 && !missionPoints[0].indexLabel ? (
-              <p className="mt-4 text-[15px] sm:text-base leading-[1.8] text-[#F8F8E1]">
+              <p className="sizing-about-prose mt-3.5 text-[15px] leading-[1.72] text-[#F8F8E1]/95">
                 {missionPoints[0].text}
               </p>
             ) : (
-              <ol className="mt-4 space-y-3.5">
+              <ol className="mt-3.5 space-y-3">
                 {missionPoints.map((point, idx) => (
-                  <li key={idx} className="flex items-start gap-3.5">
-                    {point.indexLabel && (
-                      <span className="font-mono-num text-xs font-extrabold text-[#D9B44A] pt-1.5 shrink-0">
-                        {point.indexLabel}
-                      </span>
-                    )}
-                    <span className="text-[15px] sm:text-base leading-[1.75] text-[#F8F8E1]">
+                  <li key={idx} className="flex items-start gap-3">
+                    <span className="font-mono-num text-[11px] font-extrabold text-[#D9B44A] bg-[#D9B44A]/12 border border-[#D9B44A]/40 rounded px-1.5 py-0.5 mt-0.5 shrink-0 leading-none">
+                      {point.indexLabel || String(idx + 1).padStart(2, '0')}
+                    </span>
+                    <span className="sizing-about-prose text-[15px] leading-[1.68] text-[#F8F8E1]/95">
                       {point.text}
                     </span>
                   </li>
@@ -283,31 +381,31 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
       <section
         aria-label="Minat Profesional dan Akademik"
         data-testid="about-interests-grid"
-        className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+        className="sizing-card-grid grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
       >
         {/* 03. Minat Profesional */}
         <article
           data-aos="fade-up"
           data-testid="about-card-professional"
-          className="lg:col-span-5 self-start brutal-card card-navy frame-navy p-6 sm:p-7"
+          className="lg:col-span-5 self-start brutal-card card-navy frame-navy sizing-about-card p-6 sm:p-7"
         >
           <span className="brutal-badge">03.</span>
           <h2 className="font-display text-xl font-extrabold mt-2.5 pb-4 border-b border-[var(--card-border-subtle)] text-[#F8F8E1]">
             Minat Profesional
           </h2>
           {professionalInterests.length === 0 ? (
-            <p className="text-[15px] text-muted mt-4 leading-relaxed">
+            <p className="sizing-about-prose text-[15px] text-muted mt-4 leading-relaxed">
               Belum ada data dipublikasikan untuk bagian ini.
             </p>
           ) : (
             <ul className="mt-4 divide-y divide-[var(--card-border-subtle)]">
               {professionalInterests.map((item) => (
-                <li key={item.id} className="py-4 first:pt-0 last:pb-0">
+                <li key={item.id} className="py-3.5 first:pt-0 last:pb-0">
                   <h3 className="font-display font-extrabold text-base sm:text-[17px] leading-snug text-[#F8F8E1]">
                     {item.title}
                   </h3>
                   {item.description && (
-                    <p className="text-[15px] text-muted mt-2 leading-[1.75] whitespace-pre-line">
+                    <p className="sizing-about-prose text-[15px] text-muted mt-1.5 leading-[1.7] whitespace-pre-line">
                       {item.description}
                     </p>
                   )}
@@ -322,7 +420,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
           data-aos="fade-up"
           data-aos-delay="100"
           data-testid="about-card-academic"
-          className="lg:col-span-7 self-start brutal-card card-navy frame-navy p-6 sm:p-7"
+          className="lg:col-span-7 self-start brutal-card card-navy frame-navy sizing-about-card p-6 sm:p-7"
         >
           <span className="brutal-badge">04.</span>
           <h2 className="font-display text-xl font-extrabold mt-2.5 pb-4 border-b border-[var(--card-border-subtle)] text-[#F8F8E1]">
@@ -391,7 +489,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
             </div>
           </article>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
+          <div className="sizing-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
             {personalTalents.map((item, idx) => {
               const tone = getSectionCardTone('skills');
               return (
@@ -399,7 +497,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
                   key={item.id}
                   data-aos="fade-up"
                   data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
-                  className={`brutal-card p-6 ${tone.cardClass} ${tone.frameClass}`}
+                  className={`brutal-card sizing-about-card p-6 ${tone.cardClass} ${tone.frameClass}`}
                 >
                   <span className="font-mono-num text-xs font-extrabold text-[#001F24]">
                     {String(idx + 1).padStart(2, '0')}
@@ -408,7 +506,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
                     {item.title}
                   </h3>
                   {item.description && (
-                    <p className="text-[15px] text-[#001F24] mt-2.5 leading-[1.75] whitespace-pre-line">
+                    <p className="sizing-about-prose text-[15px] text-[#001F24] mt-2 leading-[1.7] whitespace-pre-line">
                       {item.description}
                     </p>
                   )}
@@ -440,9 +538,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
           <div
             data-aos="fade-up"
             data-testid="about-career-overview"
-            className="brutal-card card-green frame-green p-5 sm:p-6"
+            className="brutal-card card-green frame-green sizing-about-card p-5 sm:p-6"
           >
-            <p className="text-[15px] sm:text-base leading-[1.8] text-[#F8F8E1] whitespace-pre-line max-w-4xl">
+            <p className="sizing-about-prose text-[15px] sm:text-base leading-[1.75] text-[#F8F8E1] whitespace-pre-line max-w-4xl">
               {careerOverview}
             </p>
           </div>
@@ -452,14 +550,14 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
         {careerInterests.length > 0 ? (
           <div
             data-testid="about-career-grid"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start"
+            className="sizing-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start"
           >
             {careerInterests.map((item, idx) => (
               <article
                 key={item.id}
                 data-aos="fade-up"
                 data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
-                className="brutal-card card-green frame-green p-6"
+                className="brutal-card card-green frame-green sizing-about-card p-6"
               >
                 <span className="font-mono-num text-xs font-extrabold text-[#D9B44A]">
                   {String(idx + 1).padStart(2, '0')}
@@ -468,7 +566,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
                   {item.title}
                 </h3>
                 {item.description && (
-                  <p className="text-[15px] text-muted mt-2.5 leading-[1.75] whitespace-pre-line">
+                  <p className="sizing-about-prose text-[15px] text-muted mt-2 leading-[1.7] whitespace-pre-line">
                     {item.description}
                   </p>
                 )}

@@ -97,42 +97,60 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
   };
 
   return (
-    <div className={isMinimal ? 'space-y-16 sm:space-y-20 pb-10' : 'space-y-12 sm:space-y-14 pb-6'}>
+    <div className="sizing-home-shell">
       {/* HERO SECTION: Dual-Mode Composition (Mode A: Minimalis Elegan Editorial Cutout | Mode B: Neo-Brutalist Classic) */}
-      <section aria-label="Perkenalan utama" className={isMinimal ? 'pt-8 sm:pt-12 lg:pt-14' : 'pt-5 sm:pt-7'}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section
+        aria-label="Perkenalan utama"
+        data-sizing-scope="hero"
+        className={isMinimal ? 'pt-8 sm:pt-9 lg:pt-8' : 'pt-4 sm:pt-6'}
+      >
+        <div className="max-w-6xl sizing-hero-container mx-auto px-4 sm:px-6 lg:px-8">
           {isMinimal ? (
             /* MODE A — MINIMALIS ELEGAN EDITORIAL HERO */
             <div
               data-aos="fade-up"
               data-testid="hero-minimalis-elegan"
-              className="relative card-green rounded-3xl border border-[#D9B44A]/25 shadow-[0_28px_64px_-24px_rgba(0,31,36,0.45)] overflow-visible px-6 pt-8 pb-7 sm:px-10 sm:pt-10 sm:pb-9 lg:px-12 lg:pt-11 lg:pb-10"
+              className="relative card-green rounded-2xl border border-[#D9B44A]/25 shadow-[0_22px_52px_-22px_rgba(0,31,36,0.42)] overflow-visible px-5 py-6 sm:px-8 sm:py-7 lg:px-10 lg:py-7"
             >
               {/* Layer 0: Subtle architectural background ring clipped neatly inside the card surface */}
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-3xl"
+                className="hero-bg-clip pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-2xl"
               >
-                <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full border border-[#D9B44A]/15" />
-                <div className="absolute -bottom-32 -left-24 w-80 h-80 rounded-full border border-[#F8F8E1]/10" />
+                <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full border border-[#D9B44A]/15" />
+                <div className="absolute -bottom-28 -left-24 w-72 h-72 rounded-full border border-[#F8F8E1]/10" />
               </div>
 
-              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-end">
+              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-end">
                 {/* RIGHT on Desktop, TOP on Mobile: Dominant Transparent Cutout Portrait with Strict Layering */}
                 <div className="order-1 lg:order-2 lg:col-span-5 flex justify-center lg:justify-end overflow-visible">
-                  <div className="relative isolate w-[240px] sm:w-[290px] lg:w-[340px] h-[250px] sm:h-[300px] lg:h-[340px] flex items-end justify-center overflow-visible">
+                  <div
+                    className="relative isolate flex items-end justify-center overflow-visible"
+                    style={{
+                      width: 'calc(var(--sz-hero-ring, 258px) + 16px)',
+                      height: 'calc(var(--sz-hero-circle, 226px) + 46px)',
+                    }}
+                  >
                     {/* Layer 1 (z-10): Outer subtle editorial geometric halo ring strictly BEHIND the portrait */}
                     <div
                       aria-hidden="true"
                       data-testid="hero-minimal-halo-ring"
-                      className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 z-10 w-[236px] h-[236px] sm:w-[278px] sm:h-[278px] lg:w-[322px] lg:h-[322px] rounded-full border border-[#D9B44A]/35"
+                      className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 z-10 rounded-full border border-[#D9B44A]/35"
+                      style={{
+                        width: 'var(--sz-hero-ring, 258px)',
+                        height: 'var(--sz-hero-ring, 258px)',
+                      }}
                     />
 
                     {/* Layer 1 (z-10): Primary Geometric Circle Backdrop (#D9B44A) strictly BEHIND the portrait */}
                     <div
                       aria-hidden="true"
                       data-testid="hero-minimal-yellow-circle"
-                      className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 z-10 w-[206px] h-[206px] sm:w-[244px] sm:h-[244px] lg:w-[282px] lg:h-[282px] rounded-full bg-[#D9B44A] shadow-[0_18px_40px_-16px_rgba(0,31,36,0.45)]"
+                      className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 z-10 rounded-full bg-[#D9B44A] shadow-[0_14px_32px_-14px_rgba(0,31,36,0.42)]"
+                      style={{
+                        width: 'var(--sz-hero-circle, 226px)',
+                        height: 'var(--sz-hero-circle, 226px)',
+                      }}
                     />
 
                     {/* Layer 2 (z-20): 100% Opaque Cutout Portrait strictly IN FRONT of the yellow circle (no transparency mask on subject) */}
@@ -143,12 +161,22 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                         data-testid="hero-minimal-cutout-portrait"
                         loading="eager"
                         decoding="async"
-                        className="relative z-20 w-[224px] sm:w-[266px] lg:w-[318px] h-auto max-h-[310px] sm:max-h-[365px] lg:max-h-[430px] object-contain object-bottom -mt-10 sm:-mt-12 lg:-mt-24 select-none pointer-events-none drop-shadow-[0_14px_24px_rgba(0,31,36,0.28)]"
+                        className="relative z-20 w-auto object-contain object-bottom select-none pointer-events-none drop-shadow-[0_12px_20px_rgba(0,31,36,0.26)]"
+                        style={{
+                          height: 'var(--sz-hero-portrait-h, 336px)',
+                          maxWidth: 'calc(var(--sz-hero-ring, 258px) + 8px)',
+                          marginTop: 'calc((var(--sz-hero-portrait-h, 336px) - var(--sz-hero-circle, 226px)) * -0.52)',
+                        }}
                       />
                     ) : (
                       <div
                         data-testid="hero-minimal-cutout-portrait"
-                        className="relative z-20 w-[204px] sm:w-[242px] lg:w-[280px] h-[256px] sm:h-[304px] lg:h-[352px] -mt-6 sm:-mt-8 lg:-mt-16 rounded-t-[999px] overflow-hidden"
+                        className="relative z-20 rounded-t-[999px] overflow-hidden"
+                        style={{
+                          width: 'var(--sz-hero-circle, 226px)',
+                          height: 'calc(var(--sz-hero-portrait-h, 336px) * 0.88)',
+                          marginTop: '-24px',
+                        }}
                       >
                         <SafeImage
                           src={profile.photoUrl}
@@ -164,16 +192,19 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                     <div
                       aria-hidden="true"
                       data-testid="hero-minimal-bottom-fade"
-                      className="pointer-events-none absolute -inset-x-4 -bottom-px z-30 h-[108px] sm:h-[126px] lg:h-[146px] hero-bottom-green-fade"
+                      className="pointer-events-none absolute -inset-x-4 -bottom-px z-30 hero-bottom-green-fade"
+                      style={{
+                        height: 'calc(var(--sz-hero-portrait-h, 336px) * 0.34)',
+                      }}
                     />
                   </div>
                 </div>
 
                 {/* LEFT on Desktop, BELOW portrait on Mobile: Editorial Typography, Bio & Primary Actions */}
                 <div className="order-2 lg:order-1 lg:col-span-7 flex flex-col justify-center">
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-mono-num uppercase tracking-[0.14em] text-[#D9B44A] mb-3.5">
+                  <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 sizing-meta-copy font-mono-num uppercase tracking-[0.13em] text-[#D9B44A] mb-2.5">
                     <span className="inline-flex items-center gap-2 font-bold">
-                      <span className="w-5 h-[1.5px] bg-[#D9B44A] inline-block" aria-hidden="true" />
+                      <span className="w-4 h-[1.5px] bg-[#D9B44A] inline-block" aria-hidden="true" />
                       <span>{profile.domicile}</span>
                     </span>
                     <span className="text-[#F8F8E1]/35" aria-hidden="true">/</span>
@@ -184,36 +215,36 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                     </span>
                   </div>
 
-                  <h1 className="font-display text-3xl sm:text-4xl lg:text-[48px] font-extrabold tracking-[-0.03em] leading-[1.04] text-balance text-[#F8F8E1]">
+                  <h1 className="font-display font-extrabold tracking-[-0.026em] leading-[1.05] text-balance text-[#F8F8E1]">
                     {profile.fullName}
                   </h1>
 
-                  <p className="mt-3.5 sm:mt-4 font-display text-base sm:text-lg lg:text-[20px] font-semibold leading-snug text-[#D9B44A] max-w-2xl text-balance">
+                  <p className="mt-2.5 font-display text-sm sm:text-base lg:text-[17px] font-semibold leading-snug text-[#D9B44A] max-w-xl text-balance">
                     {profile.headline}
                   </p>
 
-                  <p className="mt-3.5 text-sm sm:text-[15px] font-normal leading-relaxed text-[#F8F8E1]/90 max-w-xl">
+                  <p className="mt-2.5 sizing-body-copy font-normal text-[#F8F8E1]/90 max-w-xl">
                     {profile.shortBio}
                   </p>
 
                   {/* Editorial Action Controls */}
-                  <div className="mt-6 sm:mt-7 flex flex-wrap items-center gap-3">
+                  <div className="mt-4 sm:mt-5 flex flex-wrap items-center gap-2.5">
                     <a
                       href="/projects"
                       onClick={(e) => {
                         e.preventDefault();
                         onNavigate('/projects');
                       }}
-                      className="brutal-btn-frame-green font-display font-bold text-xs sm:text-[13px] px-5 py-2.5 inline-flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                      className="brutal-btn-frame-green font-display font-bold inline-flex items-center cursor-pointer whitespace-nowrap"
                     >
                       <span>Explore Portfolio</span>
-                      <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                      <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
                     </a>
 
                     <button
                       type="button"
                       onClick={handleDownloadCv}
-                      className="brutal-btn-on-dark-outline font-display font-bold text-xs sm:text-[13px] px-4 py-2.5 inline-flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                      className="brutal-btn-on-dark-outline font-display font-bold inline-flex items-center cursor-pointer whitespace-nowrap"
                     >
                       <Download className="w-3.5 h-3.5" aria-hidden="true" />
                       <span>Download CV</span>
@@ -225,7 +256,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                         e.preventDefault();
                         onNavigate('/contact');
                       }}
-                      className="brutal-btn-on-dark font-display font-bold text-xs sm:text-[13px] px-4 py-2.5 inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+                      className="brutal-btn-on-dark font-display font-bold inline-flex items-center cursor-pointer whitespace-nowrap"
                     >
                       <span>Contact Me</span>
                     </a>
@@ -234,7 +265,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                       type="button"
                       onClick={onShareProfile}
                       aria-label="Bagikan tautan profil"
-                      className="px-2.5 py-2 text-xs font-mono-num font-semibold text-[#F8F8E1]/90 hover:text-[#D9B44A] inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap transition-colors"
+                      className="px-2 py-1.5 text-xs font-mono-num font-semibold text-[#F8F8E1]/90 hover:text-[#D9B44A] inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap transition-colors"
                     >
                       <Share2 className="w-3.5 h-3.5" aria-hidden="true" />
                       <span>Bagikan</span>
@@ -244,39 +275,39 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               </div>
 
               {/* Clean Editorial Key Facts Strip */}
-              <dl className="relative z-20 mt-7 sm:mt-8 pt-6 border-t border-[#F8F8E1]/16 grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6 text-xs">
+              <dl className="relative z-20 mt-5 pt-4 border-t border-[#F8F8E1]/16 grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-5 text-xs">
                 <div>
-                  <dt className="font-mono-num text-[10px] uppercase tracking-[0.14em] text-[#D9B44A] font-semibold">
+                  <dt className="font-mono-num text-[10px] uppercase tracking-[0.13em] text-[#D9B44A] font-semibold">
                     Pendidikan
                   </dt>
-                  <dd className="font-display font-bold text-sm mt-1 text-[#F8F8E1]">
+                  <dd className="font-display font-bold text-[13px] mt-0.5 text-[#F8F8E1]">
                     {education[0] ? `${education[0].fieldOfStudy}` : 'Hukum Keluarga'}
                   </dd>
-                  <dd className="font-normal text-[#F8F8E1]/80 mt-0.5">
+                  <dd className="font-normal text-[11px] text-[#F8F8E1]/80 mt-0.5">
                     {education[0] ? `${education[0].institution} (${education[0].graduationYear})` : 'Unismuh Makassar'}
                   </dd>
                 </div>
                 <div>
-                  <dt className="font-mono-num text-[10px] uppercase tracking-[0.14em] text-[#D9B44A] font-semibold">
+                  <dt className="font-mono-num text-[10px] uppercase tracking-[0.13em] text-[#D9B44A] font-semibold">
                     Inisiatif Digital
                   </dt>
-                  <dd className="font-display font-bold text-sm mt-1 text-[#F8F8E1]">
+                  <dd className="font-display font-bold text-[13px] mt-0.5 text-[#F8F8E1]">
                     {featuredProject ? featuredProject.title : 'Dars with Osama'}
                   </dd>
-                  <dd className="font-normal text-[#F8F8E1]/80 mt-0.5">
+                  <dd className="font-normal text-[11px] text-[#F8F8E1]/80 mt-0.5">
                     Pendidikan Islam &amp; Artikel Ilmiah
                   </dd>
                 </div>
                 <div>
-                  <dt className="font-mono-num text-[10px] uppercase tracking-[0.14em] text-[#D9B44A] font-semibold">
+                  <dt className="font-mono-num text-[10px] uppercase tracking-[0.13em] text-[#D9B44A] font-semibold">
                     Bahasa &amp; Ketersediaan
                   </dt>
-                  <dd className="font-display font-bold text-sm mt-1 text-[#F8F8E1]">
+                  <dd className="font-display font-bold text-[13px] mt-0.5 text-[#F8F8E1]">
                     {languageSkills.length > 0
                       ? languageSkills.map((l) => `${l.name.replace('Bahasa ', '')} (${l.proficiencyLabel})`).join(' · ')
                       : 'Arab (Menengah) · Inggris (Dasar)'}
                   </dd>
-                  <dd className="font-normal text-[#F8F8E1]/80 mt-0.5">
+                  <dd className="font-normal text-[11px] text-[#F8F8E1]/80 mt-0.5">
                     Open for Remote, Freelance &amp; Full-Time
                   </dd>
                 </div>
@@ -418,7 +449,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
           )}
 
           {/* Full-Width 4-Column Portfolio Index Strip (Each stat card matches its official category color) */}
-          <div className={isMinimal ? 'mt-6 sm:mt-7 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5' : 'mt-5 grid grid-cols-2 lg:grid-cols-4 gap-3.5'}>
+          <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 sizing-card-grid">
             <a
               href="/experience"
               onClick={(e) => {
@@ -427,13 +458,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               }}
               data-aos="fade-up"
               data-aos-delay="0"
-              className="block text-left brutal-card brutal-card-interactive card-bordo frame-bordo p-4 cursor-pointer"
+              className="block text-left brutal-card brutal-card-interactive card-bordo frame-bordo p-3.5 cursor-pointer"
             >
-              <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none text-[#D9B44A]">
+              <p className="font-mono-num text-lg sm:text-xl font-extrabold leading-none text-[#D9B44A]">
                 {String(experiences.length + organizations.length).padStart(2, '0')}
               </p>
-              <p className="font-display font-bold text-xs sm:text-sm mt-1.5 text-[#F8F8E1]">Pengalaman &amp; Organisasi</p>
-              <p className="text-[11px] sm:text-xs font-normal text-muted mt-0.5">
+              <p className="font-display font-bold text-xs sm:text-[13px] mt-1 text-[#F8F8E1]">Pengalaman &amp; Organisasi</p>
+              <p className="text-[11px] font-normal text-muted mt-0.5">
                 Pembinaan, pengajaran &amp; kepanitiaan
               </p>
             </a>
@@ -446,13 +477,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               }}
               data-aos="fade-up"
               data-aos-delay="100"
-              className="block text-left brutal-card brutal-card-interactive card-green frame-green p-4 cursor-pointer"
+              className="block text-left brutal-card brutal-card-interactive card-green frame-green p-3.5 cursor-pointer"
             >
-              <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none text-[#D9B44A]">
+              <p className="font-mono-num text-lg sm:text-xl font-extrabold leading-none text-[#D9B44A]">
                 {String(Math.max(projects.length, websiteProjects.length)).padStart(2, '0')}
               </p>
-              <p className="font-display font-bold text-xs sm:text-sm mt-1.5 text-[#F8F8E1]">Proyek &amp; Karya Digital</p>
-              <p className="text-[11px] sm:text-xs text-muted mt-0.5">
+              <p className="font-display font-bold text-xs sm:text-[13px] mt-1 text-[#F8F8E1]">Proyek &amp; Karya Digital</p>
+              <p className="text-[11px] text-muted mt-0.5">
                 Termasuk Dars with Osama
               </p>
             </a>
@@ -465,13 +496,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               }}
               data-aos="fade-up"
               data-aos-delay="200"
-              className="block text-left brutal-card brutal-card-interactive card-gold frame-gold p-4 cursor-pointer"
+              className="block text-left brutal-card brutal-card-interactive card-gold frame-gold p-3.5 cursor-pointer"
             >
-              <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none text-[#001F24]">
+              <p className="font-mono-num text-lg sm:text-xl font-extrabold leading-none text-[#001F24]">
                 {String(skills.length).padStart(2, '0')}
               </p>
-              <p className="font-display font-bold text-xs sm:text-sm mt-1.5 text-[#001F24]">Keahlian &amp; Perangkat</p>
-              <p className="text-[11px] sm:text-xs font-normal text-[#001F24] mt-0.5">
+              <p className="font-display font-bold text-xs sm:text-[13px] mt-1 text-[#001F24]">Keahlian &amp; Perangkat</p>
+              <p className="text-[11px] font-normal text-[#001F24] mt-0.5">
                 Bahasa, AI tools, web &amp; akademik
               </p>
             </a>
@@ -484,13 +515,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               }}
               data-aos="fade-up"
               data-aos-delay="300"
-              className="block text-left brutal-card brutal-card-interactive card-green frame-green p-4 cursor-pointer"
+              className="block text-left brutal-card brutal-card-interactive card-green frame-green p-3.5 cursor-pointer"
             >
-              <p className="font-mono-num text-xl sm:text-2xl font-extrabold leading-none text-[#D9B44A]">
+              <p className="font-mono-num text-lg sm:text-xl font-extrabold leading-none text-[#D9B44A]">
                 {String(certificates.length).padStart(2, '0')}
               </p>
-              <p className="font-display font-bold text-xs sm:text-sm mt-1.5 text-[#F8F8E1]">Sertifikat &amp; Pelatihan</p>
-              <p className="text-[11px] sm:text-xs text-muted mt-0.5">
+              <p className="font-display font-bold text-xs sm:text-[13px] mt-1 text-[#F8F8E1]">Sertifikat &amp; Pelatihan</p>
+              <p className="text-[11px] text-muted mt-0.5">
                 Galeri dalam &amp; luar negeri
               </p>
             </a>
@@ -499,11 +530,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
       </section>
 
       {/* SECTION 01: RINGKASAN BIDANG KEAHLIAN (Uniform Muted Golden Yellow #D9B44A + Deep Midnight Ink #001F24) */}
-      <section aria-labelledby="home-skills-heading" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div data-aos="fade-up" className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5 pb-3 border-b-2 border-brutal">
+      <section aria-labelledby="home-skills-heading" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div data-aos="fade-up" className="sizing-section-header flex flex-col sm:flex-row sm:items-end justify-between gap-2.5 pb-2.5 border-b-2 border-brutal">
           <div>
             <span className="brutal-badge">01. Bidang Keahlian</span>
-            <h2 id="home-skills-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1.5 text-balance text-[#1B2A3D]">
+            <h2 id="home-skills-heading" className="font-display font-extrabold mt-1.5 text-balance text-[#1B2A3D]">
               Kompetensi Lintas Keilmuan &amp; Digital
             </h2>
           </div>
@@ -520,54 +551,54 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
           </a>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <div data-aos="fade-up" data-aos-delay="0" className="brutal-card card-gold frame-gold p-5 flex flex-col justify-between">
+        <div className="grid grid-cols-1 md:grid-cols-3 sizing-card-grid">
+          <div data-aos="fade-up" data-aos-delay="0" className="brutal-card card-gold frame-gold sizing-card-pad flex flex-col justify-between">
             <div>
               <p className="font-mono-num text-[11px] font-bold text-[#001F24] uppercase">
                 Akademik &amp; Pembinaan
               </p>
-              <h3 className="font-display text-lg font-extrabold mt-1.5 text-[#001F24]">
+              <h3 className="font-display font-extrabold mt-1.5 text-[#001F24]">
                 Hukum Keluarga &amp; Pengajaran
               </h3>
-              <p className="text-sm font-normal text-[#001F24] mt-2 leading-relaxed">
+              <p className="sizing-body-copy font-normal text-[#001F24] mt-1.5">
                 S1 Hukum Keluarga (Ahwal Syakhsiyah) Unismuh Makassar, berpengalaman membina kedisiplinan, administrasi, dan tradisi keilmuan mahasiswa serta mengajar di rumah tahfidz.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-subtle text-xs font-bold text-[#001F24]">
+            <div className="mt-3 pt-2.5 border-t border-subtle text-xs font-bold text-[#001F24]">
               Fikih &middot; Akidah &middot; Tafsir &middot; Tajwid &middot; Pendidikan Islam
             </div>
           </div>
 
-          <div data-aos="fade-up" data-aos-delay="100" className="brutal-card card-gold frame-gold p-5 flex flex-col justify-between">
+          <div data-aos="fade-up" data-aos-delay="100" className="brutal-card card-gold frame-gold sizing-card-pad flex flex-col justify-between">
             <div>
               <p className="font-mono-num text-[11px] font-bold text-[#001F24] uppercase">
                 Teknologi &amp; Perangkat Digital
               </p>
-              <h3 className="font-display text-lg font-extrabold mt-1.5 text-[#001F24]">
+              <h3 className="font-display font-extrabold mt-1.5 text-[#001F24]">
                 AI Tools, Web &amp; Media IT
               </h3>
-              <p className="text-sm font-normal text-[#001F24] mt-2 leading-relaxed">
+              <p className="sizing-body-copy font-normal text-[#001F24] mt-1.5">
                 Terbiasa mengelola publikasi web, dokumentasi digital, desain edukatif, dan pemanfaatan perangkat AI modern untuk riset serta pembelajaran.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-subtle text-xs font-bold text-[#001F24]">
+            <div className="mt-3 pt-2.5 border-t border-subtle text-xs font-bold text-[#001F24]">
               {toolSkills.slice(0, 6).map((s) => s.name).join(' · ') || 'ChatGPT · Google AI Studio · Netlify · Firebase'}
             </div>
           </div>
 
-          <div data-aos="fade-up" data-aos-delay="200" className="brutal-card card-gold frame-gold p-5 flex flex-col justify-between">
+          <div data-aos="fade-up" data-aos-delay="200" className="brutal-card card-gold frame-gold sizing-card-pad flex flex-col justify-between">
             <div>
               <p className="font-mono-num text-[11px] font-bold text-[#001F24] uppercase">
                 Bahasa &amp; Komunikasi
               </p>
-              <h3 className="font-display text-lg font-extrabold mt-1.5 text-[#001F24]">
+              <h3 className="font-display font-extrabold mt-1.5 text-[#001F24]">
                 Penguasaan Bahasa &amp; Kolaborasi
               </h3>
-              <div className="mt-3 space-y-2.5">
+              <div className="mt-2.5 space-y-2">
                 {languageSkills.map((lang) => (
                   <div
                     key={lang.id}
-                    className="flex items-baseline justify-between gap-3 pb-2 border-b border-subtle last:border-b-0"
+                    className="flex items-baseline justify-between gap-3 pb-1.5 border-b border-subtle last:border-b-0"
                   >
                     <span className="font-bold text-sm text-[#001F24]">{lang.name}</span>
                     <span className="font-mono-num text-xs font-bold text-[#001F24]">
@@ -583,7 +614,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                 e.preventDefault();
                 onNavigate('/about');
               }}
-              className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[#001F24] hover:underline decoration-2 underline-offset-4 cursor-pointer transition-colors"
+              className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-[#001F24] hover:underline decoration-2 underline-offset-4 cursor-pointer transition-colors"
             >
               <span>Baca profil lengkap &amp; visi misi</span>
               <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
@@ -593,11 +624,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
       </section>
 
       {/* SECTION 02: PROYEK & PENGALAMAN UNGGULAN (Each card follows its official category color) */}
-      <section aria-labelledby="home-featured-heading" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div data-aos="fade-up" className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5 pb-3 border-b-2 border-brutal">
+      <section aria-labelledby="home-featured-heading" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div data-aos="fade-up" className="sizing-section-header flex flex-col sm:flex-row sm:items-end justify-between gap-2.5 pb-2.5 border-b-2 border-brutal">
           <div>
             <span className="brutal-badge-green">02. Sorotan Utama</span>
-            <h2 id="home-featured-heading" className="font-display text-xl sm:text-2xl font-extrabold mt-1.5 text-balance text-[#1B2A3D]">
+            <h2 id="home-featured-heading" className="font-display font-extrabold mt-1.5 text-balance text-[#1B2A3D]">
               Proyek &amp; Pengalaman Pilihan
             </h2>
           </div>
@@ -628,8 +659,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
         <div
           className={
             isMinimal
-              ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 items-stretch'
-              : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch'
+              ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 sizing-card-grid items-stretch'
+              : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 sizing-card-grid items-stretch'
           }
         >
           {/* Featured Project Card (Origin: Proyek & Karya Digital -> Green #0F3D3A + Beige #F8F8E1) */}
@@ -646,22 +677,23 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                 <article
                   key={featuredProject.id}
                   data-testid="home-featured-project"
+                  data-sizing-scope="projects"
                   data-aos="fade-up"
                   data-aos-delay={getAosStaggerDelay(0, 100, 3)}
                   className={`brutal-card brutal-card-interactive overflow-hidden md:col-span-2 lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 ${projectTone.cardClass} ${projectTone.frameClass}`}
                 >
-                  <div className={`lg:col-span-6 aspect-[16/10] lg:aspect-auto lg:min-h-[300px] w-full border-b lg:border-b-0 lg:border-r border-[#D9B44A]/30 overflow-hidden shrink-0`}>
+                  <div className="lg:col-span-5 aspect-[16/10] lg:aspect-auto lg:min-h-[215px] w-full border-b lg:border-b-0 lg:border-r border-[#D9B44A]/30 overflow-hidden shrink-0">
                     {isDars && !useCustomAsset ? (
-                      <div className="w-full h-full bg-[#F4F4F0] flex items-center justify-center p-6">
-                        <DarsLogo className="w-full h-full max-h-[240px] object-contain" />
+                      <div className="w-full h-full bg-[#F4F4F0] flex items-center justify-center p-4">
+                        <DarsLogo className="w-full h-full max-h-[175px] object-contain" />
                       </div>
                     ) : isDars ? (
-                      <div className="w-full h-full bg-[#F4F4F0] flex items-center justify-center p-6">
+                      <div className="w-full h-full bg-[#F4F4F0] flex items-center justify-center p-4">
                         <SafeImage
                           src={primaryProjectPhoto}
                           alt={featuredProject.title}
                           fallbackLabel={featuredProject.title}
-                          className="w-full h-full max-h-[240px] object-contain"
+                          className="w-full h-full max-h-[175px] object-contain"
                         />
                       </div>
                     ) : (
@@ -676,29 +708,29 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                     )}
                   </div>
 
-                  <div className="lg:col-span-6 p-6 sm:p-8 flex flex-col justify-between gap-5">
-                    <div className="space-y-3">
+                  <div className="lg:col-span-7 sizing-media-body flex flex-col justify-between">
+                    <div className="space-y-2">
                       <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono-num">
                         <span className={projectTone.badgeClass}>{projectCategoryLabel}</span>
                         {featuredProject.period && (
                           <span className="font-bold text-[#D9B44A]">{featuredProject.period}</span>
                         )}
                       </div>
-                      <h3 className="font-display text-2xl sm:text-3xl font-extrabold leading-tight text-[#F8F8E1]">
+                      <h3 className="font-display font-extrabold leading-tight text-[#F8F8E1]">
                         {featuredProject.title}
                       </h3>
                       {featuredProject.description && (
-                        <p className="text-sm sm:text-[15px] leading-relaxed text-[#F8F8E1]/85 line-clamp-3">
+                        <p className="sizing-body-copy text-[#F8F8E1]/85 line-clamp-3">
                           {featuredProject.description}
                         </p>
                       )}
                     </div>
 
-                    <div className="pt-4 border-t border-subtle flex items-center justify-between gap-4">
+                    <div className="pt-3 border-t border-subtle flex items-center justify-between gap-3">
                       <button
                         type="button"
                         onClick={() => setSelectedProject(featuredProject)}
-                        className={`${projectTone.buttonClass} px-5 py-2.5 text-xs sm:text-sm font-bold cursor-pointer inline-flex items-center gap-2`}
+                        className={`${projectTone.buttonClass} font-bold cursor-pointer inline-flex items-center`}
                       >
                         <span>Lihat Detail Proyek</span>
                         <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
@@ -787,11 +819,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
               <article
                 key={exp.id}
                 data-testid={`home-featured-exp-${idx}`}
+                data-sizing-scope="experience"
                 data-aos="fade-up"
                 data-aos-delay={getAosStaggerDelay(cardIndex, 100, 3)}
                 className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass} ${minimalSpanClass}`}
               >
-                <div className={`aspect-[16/9] w-full overflow-hidden border-b-2 ${tone.mediaBorderClass} bg-[#F8F8E1] shrink-0`}>
+                <div className={`sizing-media-box w-full overflow-hidden border-b-2 ${tone.mediaBorderClass} bg-[#F8F8E1] shrink-0`}>
                   <SafeImage
                     src={primaryPhoto}
                     alt={`Foto utama ${exp.institution}`}
@@ -800,8 +833,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                   />
                 </div>
 
-                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
-                  <div className="flex-1 flex flex-col gap-2">
+                <div className="sizing-media-body flex-1 flex flex-col justify-between">
+                  <div className="flex-1 flex flex-col gap-1.5">
                     <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono-num">
                       <span className={tone.badgeClass}>
                         {getExperienceCategoryLabel(exp.category)}
@@ -810,16 +843,16 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onShareProfile }
                         <span className="font-semibold text-[#D9B44A]">{exp.period}</span>
                       )}
                     </div>
-                    <h3 className="font-display text-base sm:text-[17px] font-bold leading-snug line-clamp-2 min-h-[2.75rem] text-[#F8F8E1]">
+                    <h3 className="font-display font-bold leading-snug line-clamp-2 min-h-[2.5rem] text-[#F8F8E1]">
                       {exp.institution}
                     </h3>
                   </div>
 
-                  <div className="mt-auto pt-3 border-t border-subtle">
+                  <div className="mt-auto pt-2.5 border-t border-subtle">
                     <button
                       type="button"
                       onClick={() => setSelectedExperience(toExperienceDetail(exp))}
-                      className={`${tone.buttonClass} w-full py-2 px-3.5 text-xs font-bold cursor-pointer`}
+                      className={`${tone.buttonClass} w-full font-bold cursor-pointer`}
                     >
                       Lihat Detail
                     </button>

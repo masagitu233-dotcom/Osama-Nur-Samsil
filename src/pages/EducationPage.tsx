@@ -17,8 +17,8 @@ export const EducationPage: React.FC = () => {
   const [lightbox, setLightbox] = useState<EducationLightboxState | null>(null);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10">
-      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5 sm:pb-6">
+    <div className="sizing-page-shell max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5">
         <span className="brutal-badge">03. Pendidikan &amp; Publikasi</span>
         <h1 className="font-display text-2xl sm:text-3xl lg:text-[34px] font-extrabold mt-2.5 text-balance leading-tight">
           Riwayat Pendidikan &amp; Publikasi Karya Tulis
@@ -29,8 +29,8 @@ export const EducationPage: React.FC = () => {
       </header>
 
       {/* Formal Education */}
-      <section aria-labelledby="formal-edu-heading">
-        <h2 id="formal-edu-heading" data-aos="fade-up" className="font-display text-xl sm:text-2xl font-extrabold mb-4">
+      <section aria-labelledby="formal-edu-heading" data-sizing-scope="education">
+        <h2 id="formal-edu-heading" data-aos="fade-up" className="sizing-section-header font-display text-xl sm:text-2xl font-extrabold mb-4">
           01. Riwayat Pendidikan Formal
         </h2>
 
@@ -39,7 +39,7 @@ export const EducationPage: React.FC = () => {
             Belum ada riwayat pendidikan yang dipublikasikan.
           </div>
         ) : (
-          <div className="space-y-5">
+          <div className="sizing-card-grid flex flex-col gap-5">
             {education.map((edu, idx) => (
               <EducationCard
                 key={edu.id}

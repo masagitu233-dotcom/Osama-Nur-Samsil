@@ -7,6 +7,7 @@ import {
   RotateCcw,
   Save,
   ShieldCheck,
+  Sliders,
   Sparkles,
 } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
@@ -21,10 +22,13 @@ import {
   type DesignMode,
 } from '../../utils/designMode';
 import { SafeImage } from '../ui/SafeImage';
+import { LayoutSizingPanel } from './LayoutSizingPanel';
 
 interface AppearanceSettingsPanelProps {
   onDirtyChange: (dirty: boolean) => void;
 }
+
+type AppearanceSubTab = 'design_mode' | 'layout_sizing';
 
 export const AppearanceSettingsPanel: React.FC<AppearanceSettingsPanelProps> = ({
   onDirtyChange,
@@ -32,14 +36,17 @@ export const AppearanceSettingsPanel: React.FC<AppearanceSettingsPanelProps> = (
   const { adminData, designMode, showToast } = usePortfolio();
   const activeSavedMode = normalizeDesignMode(adminData.siteSettings?.designMode ?? designMode);
 
+  const [subTab, setSubTab] = useState<AppearanceSubTab>('design_mode');
   const [selectedMode, setSelectedMode] = useState<DesignMode>(activeSavedMode);
   const [saving, setSaving] = useState(false);
 
   // Sync local selection when Firestore snapshot updates
   useEffect(() => {
     setSelectedMode(activeSavedMode);
-    onDirtyChange(false);
-  }, [activeSavedMode, onDirtyChange]);
+    if (subTab === 'design_mode') {
+      onDirtyChange(false);
+    }
+  }, [activeSavedMode, onDirtyChange, subTab]);
 
   const hasChanges = selectedMode !== activeSavedMode;
   const activeMeta = DESIGN_MODE_DEFINITIONS[activeSavedMode];
@@ -86,11 +93,21 @@ export const AppearanceSettingsPanel: React.FC<AppearanceSettingsPanelProps> = (
         <div>
           <span className="brutal-badge">Pengaturan Tampilan Global</span>
           <h1 className="font-display text-2xl sm:text-3xl font-extrabold mt-2 text-[#1B2A3D]">
-            Mode Desain Website Portofolio
+            {subTab === 'design_mode'
+              ? 'Mode Desain Website Portofolio'
+              : 'Ukuran dan Proporsi Tampilan'}
           </h1>
           <p className="text-xs sm:text-sm text-muted mt-1 max-w-2xl leading-relaxed">
-            Pilih gaya tampilan visual publik antara <strong>Minimalis Elegan</strong> dan{' '}
-            <strong>Neo-Brutalist</strong>. Seluruh konten, foto asli, data Firestore, dan palet 6 warna resmi tetap utuh tanpa duplikasi.
+            {subTab === 'design_mode' ? (
+              <>
+                Pilih gaya tampilan visual publik antara <strong>Minimalis Elegan</strong> dan{' '}
+                <strong>Neo-Brutalist</strong>. Seluruh konten, foto asli, data Firestore, dan palet 6 warna resmi tetap utuh tanpa duplikasi.
+              </>
+            ) : (
+              <>
+                Atur proporsi keseluruhan (Compact, Normal, Spacious), dimensi elemen (frame, kartu, gambar, tipografi, tombol, spacing), pengaturan per komponen, serta responsivitas Desktop, Tablet, dan Mobile.
+              </>
+            )}
           </p>
         </div>
 
@@ -108,6 +125,49 @@ export const AppearanceSettingsPanel: React.FC<AppearanceSettingsPanelProps> = (
         </div>
       </div>
 
+      {/* Appearance Sub-Section Switcher */}
+      <div
+        role="tablist"
+        aria-label="Sub-menu Pengaturan Tampilan"
+        className="flex flex-wrap gap-2"
+      >
+        <button
+          type="button"
+          role="tab"
+          aria-selected={subTab === 'design_mode'}
+          data-testid="appearance-subtab-design-mode"
+          onClick={() => setSubTab('design_mode')}
+          className={`px-4 py-2 text-xs sm:text-sm font-display font-bold border-2 border-[#001F24] inline-flex items-center gap-2 cursor-pointer transition-colors ${
+            subTab === 'design_mode'
+              ? 'bg-[#0F3D3A] text-[#F8F8E1] shadow-[2.5px_2.5px_0_0_#001F24]'
+              : 'bg-[#F8F8E1] text-[#1B2A3D] hover:bg-[#D9B44A] hover:text-[#001F24]'
+          }`}
+        >
+          <Palette className="w-4 h-4" aria-hidden="true" />
+          <span>Mode Desain</span>
+        </button>
+
+        <button
+          type="button"
+          role="tab"
+          aria-selected={subTab === 'layout_sizing'}
+          data-testid="appearance-subtab-layout-sizing"
+          onClick={() => setSubTab('layout_sizing')}
+          className={`px-4 py-2 text-xs sm:text-sm font-display font-bold border-2 border-[#001F24] inline-flex items-center gap-2 cursor-pointer transition-colors ${
+            subTab === 'layout_sizing'
+              ? 'bg-[#0F3D3A] text-[#F8F8E1] shadow-[2.5px_2.5px_0_0_#001F24]'
+              : 'bg-[#F8F8E1] text-[#1B2A3D] hover:bg-[#D9B44A] hover:text-[#001F24]'
+          }`}
+        >
+          <Sliders className="w-4 h-4" aria-hidden="true" />
+          <span>Ukuran dan Proporsi</span>
+        </button>
+      </div>
+
+      {subTab === 'layout_sizing' ? (
+        <LayoutSizingPanel onDirtyChange={onDirtyChange} />
+      ) : (
+        <>
       {/* Mode Selection Cards */}
       <section aria-labelledby="mode-selector-heading" className="space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -309,18 +369,17 @@ export const AppearanceSettingsPanel: React.FC<AppearanceSettingsPanelProps> = (
                     </div>
 
                     <div className="sm:col-span-5 flex justify-center sm:justify-end overflow-visible">
-                      <div className="relative w-36 h-36 sm:w-44 sm:h-44 flex items-end justify-center overflow-visible">
-                        <div className="absolute bottom-2 w-32 h-32 sm:w-36 sm:h-36 rounded-full border border-[#D9B44A]/40" />
-                        <div className="absolute bottom-3 w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-[#D9B44A]" />
-                        <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-[#0F3D3A] via-[#0F3D3A]/85 to-transparent z-10" />
+                      <div className="relative isolate w-36 h-36 sm:w-44 sm:h-44 flex items-end justify-center overflow-visible">
+                        <div className="absolute bottom-2 w-32 h-32 sm:w-36 sm:h-36 rounded-full border border-[#D9B44A]/40 z-10 pointer-events-none" />
+                        <div className="absolute bottom-3 w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-[#D9B44A] z-10 pointer-events-none" />
                         {useCutoutPreview ? (
                           <img
                             src={HERO_CUTOUT_ASSET_URL}
                             alt="Pratinjau potret transparan Minimalis Elegan"
-                            className="relative z-20 w-32 sm:w-36 h-auto max-h-48 object-contain object-bottom -mt-8 hero-cutout-fade-mask"
+                            className="relative z-20 w-32 sm:w-36 h-auto max-h-48 object-contain object-bottom -mt-8 block opacity-100"
                           />
                         ) : (
-                          <div className="relative z-20 w-28 h-36 -mt-4 rounded-t-full overflow-hidden hero-cutout-fade-mask">
+                          <div className="relative z-20 w-28 h-36 -mt-4 rounded-t-full overflow-hidden">
                             <SafeImage
                               src={adminData.profile.photoUrl}
                               alt="Pratinjau potret profil"
@@ -328,6 +387,10 @@ export const AppearanceSettingsPanel: React.FC<AppearanceSettingsPanelProps> = (
                             />
                           </div>
                         )}
+                        <div
+                          aria-hidden="true"
+                          className="hero-bottom-green-fade absolute inset-x-0 bottom-0 h-10 z-30 pointer-events-none"
+                        />
                       </div>
                     </div>
                   </div>
@@ -455,6 +518,8 @@ export const AppearanceSettingsPanel: React.FC<AppearanceSettingsPanelProps> = (
           </button>
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 };

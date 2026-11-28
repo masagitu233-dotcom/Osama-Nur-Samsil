@@ -57,8 +57,11 @@ export const CertificatesPage: React.FC = () => {
   }, [query, category, field, year]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10">
-      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5 sm:pb-6">
+    <div
+      data-sizing-scope="certificates"
+      className="sizing-page-shell max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10"
+    >
+      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5">
         <span className="brutal-badge-bordo">04. Pengembangan Kompetensi</span>
         <h1 className="font-display text-2xl sm:text-3xl lg:text-[34px] font-extrabold mt-2.5 text-balance leading-tight">
           Sertifikat &amp; Riwayat Pelatihan
@@ -79,13 +82,13 @@ export const CertificatesPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
+        <div className="sizing-card-grid grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
           {/* Domestic: Uniform Green Card (#0F3D3A) with Beige Text & Gold Accents */}
           <div
             data-testid="training-card-domestic"
             data-aos="fade-up"
             data-aos-delay="0"
-            className="brutal-card card-green frame-green p-5 flex flex-col justify-between gap-4"
+            className="brutal-card card-green frame-green sizing-card-pad p-5 flex flex-col justify-between gap-4"
           >
             <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b-2 border-[#D9B44A]/45">
               <h3 className="font-display text-lg font-extrabold text-[#F8F8E1]">
@@ -112,7 +115,7 @@ export const CertificatesPage: React.FC = () => {
             data-testid="training-card-international"
             data-aos="fade-up"
             data-aos-delay="100"
-            className="brutal-card card-green frame-green p-5 flex flex-col justify-between gap-4"
+            className="brutal-card card-green frame-green sizing-card-pad p-5 flex flex-col justify-between gap-4"
           >
             <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b-2 border-[#D9B44A]/45">
               <h3 className="font-display text-lg font-extrabold text-[#F8F8E1]">
@@ -245,7 +248,7 @@ export const CertificatesPage: React.FC = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="sizing-card-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredCertificates.map((cert, idx) => {
               const tone = getSectionCardTone('certificates');
               return (
@@ -256,7 +259,7 @@ export const CertificatesPage: React.FC = () => {
                   className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col ${tone.cardClass} ${tone.frameClass}`}
                 >
                   {/* Certificate original document frame */}
-                  <div className={`aspect-[16/10] border-b-2 ${tone.mediaBorderClass} bg-[#F8F8E1] overflow-hidden relative`}>
+                  <div className={`sizing-cert-media aspect-[16/10] border-b-2 ${tone.mediaBorderClass} bg-[#F8F8E1] overflow-hidden relative`}>
                     {cert.fileType === 'pdf' && !cert.thumbnailUrl ? (
                       <div className="w-full h-full flex flex-col items-center justify-center p-5 text-center card-gold">
                         <div className="w-12 h-12 border-2 border-[#001F24] bg-[#6C151E] text-[#F8F8E1] flex items-center justify-center mb-2.5">
@@ -277,7 +280,7 @@ export const CertificatesPage: React.FC = () => {
                     )}
                   </div>
 
-                  <div className="p-4 flex-1 flex flex-col justify-between">
+                  <div className="sizing-media-body p-4 flex-1 flex flex-col justify-between">
                     <div>
                       <div className="flex items-center justify-between gap-2 text-[11px] font-mono-num">
                         <span className="truncate text-[#D9B44A] font-bold">

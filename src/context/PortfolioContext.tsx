@@ -33,6 +33,13 @@ import {
   readCachedDesignMode,
   writeCachedDesignMode,
 } from '../utils/designMode';
+import {
+  normalizeLayoutSizingSettings,
+  readCachedLayoutSizing,
+  writeCachedLayoutSizing,
+  type LayoutSizingSettings,
+  type ModeSizingConfig,
+} from '../utils/layoutSizing';
 
 interface PortfolioContextValue {
   // Public resolved data (Firestore live data, with graceful fallback before first seed)
@@ -46,6 +53,10 @@ interface PortfolioContextValue {
   isFirestoreSeeded: boolean;
   firestoreError: string | null;
   designMode: DesignMode;
+  layoutSizing: LayoutSizingSettings;
+  activeSizing: ModeSizingConfig;
+  draftSizingPreview: LayoutSizingSettings | null;
+  setDraftSizingPreview: (draft: LayoutSizingSettings | null) => void;
 
   // Auth & RBAC
   user: User | null;
@@ -93,6 +104,8 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [activityLogs, setActivityLogs] = useState<ActivityLogItem[]>([]);
   const [mediaAssets, setMediaAssets] = useState<MediaAssetItem[]>([]);
   const [cachedDesignMode] = useState<DesignMode>(() => readCachedDesignMode());
+  const [cachedLayoutSizing] = useState<LayoutSizingSettings>(() => readCachedLayoutSizing());
+  const [draftSizingPreview, setDraftSizingPreview] = useState<LayoutSizingSettings | null>(null);
 
   // Toast
   const [toast, setToast] = useState<{ type: 'success' | 'error' | 'info'; message: string } | null>(null);
@@ -299,12 +312,28 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     return loading ? cachedDesignMode : normalizeDesignMode(rawSettings?.designMode);
   }, [isAdmin, adminData.siteSettings, publicData.siteSettings, siteSettingsList.length, loading, cachedDesignMode]);
 
-  // Keep read-only local cache synced with live Firestore truth for zero-FOUC reload
+  // Resolve global layout sizing from live Firestore siteSettings (per-mode independent settings)
+  const layoutSizing: LayoutSizingSettings = useMemo(() => {
+    const rawSettings = isAdmin ? adminData.siteSettings : publicData.siteSettings;
+    if (rawSettings?.layoutSizing) {
+      return normalizeLayoutSizingSettings(rawSettings.layoutSizing);
+    }
+    if (siteSettingsList.length > 0) {
+      return normalizeLayoutSizingSettings(rawSettings?.layoutSizing);
+    }
+    return loading ? cachedLayoutSizing : normalizeLayoutSizingSettings(rawSettings?.layoutSizing);
+  }, [isAdmin, adminData.siteSettings, publicData.siteSettings, siteSettingsList.length, loading, cachedLayoutSizing]);
+
+  const effectiveLayoutSizing = isAdmin && draftSizingPreview ? draftSizingPreview : layoutSizing;
+  const activeSizing: ModeSizingConfig = effectiveLayoutSizing[designMode];
+
+  // Keep read-only local caches synced with live Firestore truth for zero-FOUC reload
   useEffect(() => {
     if (!loading) {
       writeCachedDesignMode(designMode);
+      writeCachedLayoutSizing(layoutSizing);
     }
-  }, [designMode, loading]);
+  }, [designMode, layoutSizing, loading]);
 
   // Per-route SEO metadata, canonical URLs, robots directives, Open Graph, and JSON-LD
   // are synchronized centrally by RouteSeoHead in App.tsx.
@@ -338,6 +367,10 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         isFirestoreSeeded,
         firestoreError,
         designMode,
+        layoutSizing,
+        activeSizing,
+        draftSizingPreview,
+        setDraftSizingPreview,
         user,
         authReady,
         isAdmin,

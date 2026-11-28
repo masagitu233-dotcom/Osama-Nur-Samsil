@@ -51,8 +51,8 @@ export const ContactPage: React.FC = () => {
   const waUrl = formatWhatsAppLink(contacts.whatsapp);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10">
-      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5 sm:pb-6">
+    <div className="sizing-page-shell max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5">
         <span className="brutal-badge">07. Hubungi Saya</span>
         <h1 className="font-display text-2xl sm:text-3xl lg:text-[34px] font-extrabold mt-2.5 text-balance leading-tight">
           Kolaborasi, Rekrutmen &amp; Diskusi Profesional
@@ -62,10 +62,10 @@ export const ContactPage: React.FC = () => {
         </p>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="sizing-card-grid grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left: Editable Contact Channels (Bordo #6C151E + Beige #F8F8E1) */}
         <aside className="lg:col-span-5 space-y-4">
-          <div data-aos="fade-up" data-aos-delay="0" className="brutal-card card-bordo frame-bordo p-5 space-y-3.5">
+          <div data-aos="fade-up" data-aos-delay="0" className="brutal-card card-bordo frame-bordo sizing-card-pad p-5 space-y-3.5">
             <h2 className="font-display text-lg sm:text-xl font-extrabold text-[#F8F8E1]">Saluran Kontak Resmi</h2>
 
             <div className="divide-y divide-[var(--card-border-subtle)] text-sm">
@@ -112,7 +112,7 @@ export const ContactPage: React.FC = () => {
           </div>
 
           {/* Professional Links */}
-          <div data-aos="fade-up" data-aos-delay="100" className="brutal-card card-bordo frame-bordo p-5 space-y-3">
+          <div data-aos="fade-up" data-aos-delay="100" className="brutal-card card-bordo frame-bordo sizing-card-pad p-5 space-y-3">
             <span className="brutal-badge">Jejaring Digital</span>
             <h2 className="font-display text-lg font-extrabold text-[#F8F8E1]">Media Sosial &amp; Tautan Profesional</h2>
             <div className="flex flex-col gap-1.5 text-sm font-bold">
@@ -177,7 +177,7 @@ export const ContactPage: React.FC = () => {
           aria-labelledby="contact-form-heading"
           data-aos="fade-up"
           data-aos-delay="100"
-          className="lg:col-span-7 brutal-card card-bordo frame-bordo p-5 sm:p-6"
+          className="lg:col-span-7 brutal-card card-bordo frame-bordo sizing-card-pad p-5 sm:p-6"
         >
           <h2 id="contact-form-heading" className="font-display text-lg sm:text-xl font-extrabold mb-1.5 text-[#F8F8E1]">
             Kirim Pesan Langsung

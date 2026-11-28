@@ -76,6 +76,11 @@ import {
   normalizeDesignMode,
   type DesignMode,
 } from '../utils/designMode';
+import {
+  normalizeLayoutSizingSettings,
+  SCALE_PRESET_DEFINITIONS,
+  type LayoutSizingSettings,
+} from '../utils/layoutSizing';
 
 const PUBLIC_PROFILE_SYNC_COLLECTIONS = new Set<ManagedCollectionName>([
   'education',
@@ -379,8 +384,14 @@ export async function saveSiteSettings(
       data.designMode !== undefined
         ? normalizeDesignMode(data.designMode)
         : normalizeDesignMode(existingData?.designMode);
+    const resolvedSizing =
+      data.layoutSizing !== undefined
+        ? normalizeLayoutSizingSettings(data.layoutSizing)
+        : existingData?.layoutSizing !== undefined
+          ? normalizeLayoutSizingSettings(existingData.layoutSizing)
+          : undefined;
 
-    const payload = {
+    const payload: Record<string, unknown> = {
       siteTitle: clampString(data.siteTitle, 120),
       metaDescription: clampString(data.metaDescription, 320),
       ogTitle: clampString(data.ogTitle, 120),
@@ -391,12 +402,15 @@ export async function saveSiteSettings(
       isVisible: Boolean(data.isVisible),
       updatedAt: serverTimestamp(),
     };
+    if (resolvedSizing) {
+      payload.layoutSizing = resolvedSizing;
+    }
     if (existingSnap.exists()) {
       await setDoc(docRef, { ...payload, createdAt: existingSnap.data().createdAt });
     } else {
       await setDoc(docRef, { ...payload, createdAt: serverTimestamp() });
     }
-    await logAdminActivity('update', 'siteSettings', payload.siteTitle);
+    await logAdminActivity('update', 'siteSettings', String(payload.siteTitle));
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, path);
   }
@@ -415,13 +429,56 @@ export async function saveDesignMode(
       ? (existingSnap.data() as Partial<SiteSettingsData>)
       : fallbackSettings;
 
-    const payload = {
+    const payload: Record<string, unknown> = {
       siteTitle: clampString(base.siteTitle || fallbackSettings.siteTitle, 120),
       metaDescription: clampString(base.metaDescription || fallbackSettings.metaDescription, 320),
       ogTitle: clampString(base.ogTitle || fallbackSettings.ogTitle, 120),
       ogDescription: clampString(base.ogDescription || fallbackSettings.ogDescription, 320),
       ogImageUrl: clampString(base.ogImageUrl ?? fallbackSettings.ogImageUrl ?? '', 2048),
       designMode: normalizedMode,
+      status: base.status === 'draft' ? 'draft' : 'published',
+      isVisible: base.isVisible !== undefined ? Boolean(base.isVisible) : true,
+      updatedAt: serverTimestamp(),
+    };
+    if (base.layoutSizing !== undefined) {
+      payload.layoutSizing = normalizeLayoutSizingSettings(base.layoutSizing);
+    }
+
+    if (existingSnap.exists()) {
+      await setDoc(docRef, { ...payload, createdAt: existingSnap.data().createdAt });
+    } else {
+      await setDoc(docRef, { ...payload, createdAt: serverTimestamp() });
+    }
+
+    const modeLabel = DESIGN_MODE_DEFINITIONS[normalizedMode].name;
+    await logAdminActivity('update', 'appearance', `Mode Desain -> ${modeLabel}`);
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, path);
+  }
+}
+
+export async function saveLayoutSizing(
+  layoutSizing: LayoutSizingSettings,
+  fallbackSettings: SiteSettingsData,
+  targetMode: DesignMode
+): Promise<void> {
+  const path = 'siteSettings/main';
+  const docRef = doc(db, 'siteSettings', 'main');
+  const normalizedSizing = normalizeLayoutSizingSettings(layoutSizing);
+  try {
+    const existingSnap = await getDoc(docRef);
+    const base = existingSnap.exists()
+      ? (existingSnap.data() as Partial<SiteSettingsData>)
+      : fallbackSettings;
+
+    const payload = {
+      siteTitle: clampString(base.siteTitle || fallbackSettings.siteTitle, 120),
+      metaDescription: clampString(base.metaDescription || fallbackSettings.metaDescription, 320),
+      ogTitle: clampString(base.ogTitle || fallbackSettings.ogTitle, 120),
+      ogDescription: clampString(base.ogDescription || fallbackSettings.ogDescription, 320),
+      ogImageUrl: clampString(base.ogImageUrl ?? fallbackSettings.ogImageUrl ?? '', 2048),
+      designMode: normalizeDesignMode(base.designMode ?? fallbackSettings.designMode),
+      layoutSizing: normalizedSizing,
       status: base.status === 'draft' ? 'draft' : 'published',
       isVisible: base.isVisible !== undefined ? Boolean(base.isVisible) : true,
       updatedAt: serverTimestamp(),
@@ -433,8 +490,9 @@ export async function saveDesignMode(
       await setDoc(docRef, { ...payload, createdAt: serverTimestamp() });
     }
 
-    const modeLabel = DESIGN_MODE_DEFINITIONS[normalizedMode].name;
-    await logAdminActivity('update', 'appearance', `Mode Desain -> ${modeLabel}`);
+    const modeLabel = DESIGN_MODE_DEFINITIONS[targetMode].name;
+    const presetLabel = SCALE_PRESET_DEFINITIONS[normalizedSizing[targetMode].preset].name;
+    await logAdminActivity('update', 'appearance', `Ukuran & Proporsi (${modeLabel} · ${presetLabel})`);
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, path);
   }

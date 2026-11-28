@@ -82,8 +82,11 @@ export const ExperiencePage: React.FC = () => {
   }, [category, query, viewMode]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10">
-      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5 sm:pb-6">
+    <div
+      data-sizing-scope="experience"
+      className="sizing-page-shell max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10"
+    >
+      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5">
         <span className="brutal-badge-green">02. Rekam Jejak &amp; Dedikasi</span>
         <h1 className="font-display text-2xl sm:text-3xl lg:text-[34px] font-extrabold mt-2.5 text-balance leading-tight">
           Pengalaman Pembinaan, Mengajar, Organisasi &amp; Kepanitiaan
@@ -178,7 +181,7 @@ export const ExperiencePage: React.FC = () => {
           </button>
         </div>
       ) : viewMode === 'cards' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
+        <div className="sizing-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
           {filteredExperiences.map((exp, idx) => {
             const tone = getSectionCardTone('experience');
             const primaryPhoto = resolveExperiencePrimaryPhoto(exp.imageUrls, exp.primaryImageUrl);
@@ -190,7 +193,7 @@ export const ExperiencePage: React.FC = () => {
                 data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
                 className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
               >
-                <div className={`aspect-[16/9] w-full overflow-hidden border-b-2 ${tone.mediaBorderClass} bg-[#F8F8E1] shrink-0`}>
+                <div className={`sizing-media-box aspect-[16/9] w-full overflow-hidden border-b-2 ${tone.mediaBorderClass} bg-[#F8F8E1] shrink-0`}>
                   <SafeImage
                     src={primaryPhoto}
                     alt={`Foto utama ${exp.institution}`}
@@ -199,7 +202,7 @@ export const ExperiencePage: React.FC = () => {
                   />
                 </div>
 
-                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
+                <div className="sizing-media-body p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
                   <div className="flex-1 flex flex-col gap-2">
                     <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono-num">
                       <span className={tone.badgeClass}>
@@ -209,7 +212,7 @@ export const ExperiencePage: React.FC = () => {
                         <span className="font-semibold text-[#D9B44A]">{exp.period}</span>
                       )}
                     </div>
-                    <h2 className="font-display text-base sm:text-[17px] font-extrabold leading-snug line-clamp-2 min-h-[2.75rem] text-[#F8F8E1]">
+                    <h2 className="font-display text-base sm:text-[17px] font-extrabold leading-snug line-clamp-2 min-h-[2.5rem] text-[#F8F8E1]">
                       {exp.institution}
                     </h2>
                   </div>
@@ -229,7 +232,7 @@ export const ExperiencePage: React.FC = () => {
           })}
         </div>
       ) : (
-        <ol className="space-y-4">
+        <ol className="sizing-card-grid flex flex-col gap-4">
           {filteredExperiences.map((exp, idx) => {
             const tone = getSectionCardTone('experience');
             const primaryPhoto = resolveExperiencePrimaryPhoto(exp.imageUrls, exp.primaryImageUrl);
@@ -238,9 +241,9 @@ export const ExperiencePage: React.FC = () => {
                 key={exp.id}
                 data-aos="fade-up"
                 data-aos-delay={getAosStaggerDelay(idx, 100, 2)}
-                className={`brutal-card p-4 sm:p-5 grid grid-cols-1 md:grid-cols-12 gap-4 items-center ${tone.cardClass} ${tone.frameClass}`}
+                className={`brutal-card sizing-card-pad p-4 sm:p-5 grid grid-cols-1 md:grid-cols-12 gap-4 items-center ${tone.cardClass} ${tone.frameClass}`}
               >
-                <div className={`md:col-span-4 aspect-[16/9] w-full border-2 ${tone.mediaBorderClass} bg-[#F8F8E1] overflow-hidden`}>
+                <div className={`md:col-span-4 sizing-media-box aspect-[16/9] w-full border-2 ${tone.mediaBorderClass} bg-[#F8F8E1] overflow-hidden`}>
                   <SafeImage
                     src={primaryPhoto}
                     alt={`Foto utama ${exp.institution}`}
@@ -283,7 +286,7 @@ export const ExperiencePage: React.FC = () => {
             Belum ada data organisasi yang dipublikasikan.
           </p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
+          <div className="sizing-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
             {publicData.organizations.map((org, idx) => {
               const tone = getSectionCardTone('experience');
               const primaryPhoto = resolveExperiencePrimaryPhoto(org.imageUrls, org.primaryImageUrl);
@@ -295,7 +298,7 @@ export const ExperiencePage: React.FC = () => {
                   data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
                   className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                 >
-                  <div className={`aspect-[16/9] w-full overflow-hidden border-b-2 ${tone.mediaBorderClass} bg-[#F8F8E1] shrink-0`}>
+                  <div className={`sizing-media-box aspect-[16/9] w-full overflow-hidden border-b-2 ${tone.mediaBorderClass} bg-[#F8F8E1] shrink-0`}>
                     <SafeImage
                       src={primaryPhoto}
                       alt={`Foto utama ${org.organizationName}`}
@@ -304,12 +307,12 @@ export const ExperiencePage: React.FC = () => {
                     />
                   </div>
 
-                  <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
+                  <div className="sizing-media-body p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
                     <div className="flex-1 flex flex-col items-start gap-2">
                       <span className={tone.badgeClass}>
                         {org.category || 'Organisasi'}
                       </span>
-                      <h3 className="font-display text-base sm:text-[17px] font-extrabold leading-snug min-h-[2.75rem] text-[#F8F8E1]">
+                      <h3 className="font-display text-base sm:text-[17px] font-extrabold leading-snug min-h-[2.5rem] text-[#F8F8E1]">
                         {org.organizationName}
                       </h3>
                     </div>

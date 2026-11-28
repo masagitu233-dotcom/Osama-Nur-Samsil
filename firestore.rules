@@ -387,10 +387,41 @@ service cloud.firestore {
         && data.updatedAt is timestamp;
     }
 
+    function isValidModeSizing(cfg) {
+      return cfg is map
+        && cfg.keys().hasAll(['preset', 'layout', 'cards', 'images', 'typography', 'buttons', 'spacing', 'components', 'responsive'])
+        && cfg.keys().hasOnly(['preset', 'layout', 'cards', 'images', 'typography', 'buttons', 'spacing', 'components', 'responsive'])
+        && cfg.preset is string && cfg.preset in ['compact', 'normal', 'spacious']
+        && cfg.layout is map
+        && cfg.layout.keys().hasOnly(['contentMaxWidth', 'heroMaxWidth', 'paddingX', 'paddingY', 'sectionGap', 'sectionMinHeight', 'frameRadius'])
+        && cfg.cards is map
+        && cfg.cards.keys().hasOnly(['cardMinWidth', 'cardMinHeight', 'cardPadding', 'cardGap', 'cardRadius', 'borderWidth'])
+        && cfg.images is map
+        && cfg.images.keys().hasOnly(['imageWidthPct', 'imageMaxHeight', 'imageRatio', 'thumbnailSize', 'imageRadius', 'imagePosition'])
+        && cfg.typography is map
+        && cfg.typography.keys().hasOnly(['heroTitleSize', 'sectionTitleSize', 'cardTitleSize', 'bodyTextSize', 'metaTextSize', 'lineHeight', 'headingGap'])
+        && cfg.buttons is map
+        && cfg.buttons.keys().hasOnly(['buttonHeight', 'buttonPaddingX', 'buttonTextSize', 'iconSize', 'iconGap', 'buttonRadius'])
+        && cfg.spacing is map
+        && cfg.spacing.keys().hasOnly(['titleDescGap', 'componentGap', 'mediaTextGap', 'cardSectionGap'])
+        && cfg.components is map
+        && cfg.components.keys().hasOnly(['hero', 'education', 'projects', 'certificates', 'experience', 'about'])
+        && cfg.responsive is map
+        && cfg.responsive.keys().hasOnly(['desktop', 'tablet', 'mobile']);
+    }
+
+    function isValidLayoutSizing(ls) {
+      return ls is map
+        && ls.keys().hasAll(['minimalis_elegan', 'neo_brutalist'])
+        && ls.keys().hasOnly(['minimalis_elegan', 'neo_brutalist'])
+        && isValidModeSizing(ls.minimalis_elegan)
+        && isValidModeSizing(ls.neo_brutalist);
+    }
+
     function isValidSiteSettings(data) {
       return data.keys().hasAll(['siteTitle', 'metaDescription', 'ogTitle', 'ogDescription', 'status', 'isVisible', 'createdAt', 'updatedAt'])
         && data.keys().hasOnly([
-          'siteTitle', 'metaDescription', 'ogTitle', 'ogDescription', 'ogImageUrl', 'designMode',
+          'siteTitle', 'metaDescription', 'ogTitle', 'ogDescription', 'ogImageUrl', 'designMode', 'layoutSizing',
           'status', 'isVisible', 'createdAt', 'updatedAt'
         ])
         && isBoundedString(data.siteTitle, 1, 120)
@@ -399,6 +430,7 @@ service cloud.firestore {
         && isBoundedString(data.ogDescription, 1, 320)
         && (!('ogImageUrl' in data) || isBoundedString(data.ogImageUrl, 0, 2048))
         && (!('designMode' in data) || (data.designMode is string && data.designMode in ['minimalis_elegan', 'neo_brutalist']))
+        && (!('layoutSizing' in data) || isValidLayoutSizing(data.layoutSizing))
         && isValidStatus(data.status)
         && data.isVisible is bool
         && data.createdAt is timestamp

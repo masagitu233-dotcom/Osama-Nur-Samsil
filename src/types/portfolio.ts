@@ -1,3 +1,5 @@
+import type { LayoutSizingSettings } from '../utils/layoutSizing';
+
 export type PublishStatus = 'draft' | 'published';
 
 export interface BaseContentMeta {
@@ -232,6 +234,7 @@ export interface SiteSettingsData {
   ogDescription: string;
   ogImageUrl: string;
   designMode?: DesignMode;
+  layoutSizing?: LayoutSizingSettings;
   status: PublishStatus;
   isVisible: boolean;
   createdAt?: unknown;

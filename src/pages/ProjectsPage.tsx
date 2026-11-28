@@ -50,8 +50,11 @@ export const ProjectsPage: React.FC = () => {
   }, [category, query]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-9">
-      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5 sm:pb-6">
+    <div
+      data-sizing-scope="projects"
+      className="sizing-page-shell max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10"
+    >
+      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5">
         <span className="brutal-badge-bordo">06. Karya &amp; Inisiatif Digital</span>
         <h1 className="font-display text-2xl sm:text-3xl lg:text-[34px] font-extrabold mt-2.5 text-balance leading-tight">
           Projects &amp; Works
@@ -130,7 +133,7 @@ export const ProjectsPage: React.FC = () => {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
+            <div className="sizing-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
               {filteredWebsiteProjects.map((proj, idx) => {
                 const isDars = isDarsPlatformProject(proj);
                 const useCustomAsset = hasCustomUploadedDarsAsset(proj);
@@ -145,7 +148,7 @@ export const ProjectsPage: React.FC = () => {
                     data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
                     className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                   >
-                    <div className={`aspect-[16/9] w-full border-b-2 ${tone.mediaBorderClass} overflow-hidden shrink-0`}>
+                    <div className={`sizing-media-box aspect-[16/9] w-full border-b-2 ${tone.mediaBorderClass} overflow-hidden shrink-0`}>
                       {isDars && !useCustomAsset ? (
                         <div className="w-full h-full bg-[#F4F4F0] flex items-center justify-center p-3">
                           <DarsLogo className="w-full h-full object-contain" />
@@ -171,7 +174,7 @@ export const ProjectsPage: React.FC = () => {
                       )}
                     </div>
 
-                    <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
+                    <div className="sizing-media-body p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
                       <div className="flex-1 flex flex-col gap-2">
                         <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono-num">
                           <span className={tone.badgeClass}>{catLabel}</span>
@@ -179,7 +182,7 @@ export const ProjectsPage: React.FC = () => {
                             <span className="font-bold text-muted">{proj.period}</span>
                           )}
                         </div>
-                        <h3 className="font-display text-base sm:text-[17px] font-extrabold leading-snug line-clamp-2 min-h-[2.75rem]">
+                        <h3 className="font-display text-base sm:text-[17px] font-extrabold leading-snug line-clamp-2 min-h-[2.5rem]">
                           {proj.title}
                         </h3>
                       </div>
@@ -227,7 +230,7 @@ export const ProjectsPage: React.FC = () => {
               <h3 data-aos="fade-up" className="font-display text-lg font-extrabold">
                 Tulisan &amp; Arsip Tambahan
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
+              <div className="sizing-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
                 {filteredManualArticles.map((proj, idx) => {
                   const tone = getSectionCardTone('projects');
                   return (
@@ -238,7 +241,7 @@ export const ProjectsPage: React.FC = () => {
                       className={`brutal-card brutal-card-interactive overflow-hidden flex flex-col h-full ${tone.cardClass} ${tone.frameClass}`}
                     >
                       {proj.imageUrls[0] && (
-                        <div className={`aspect-[16/9] border-b-2 ${tone.mediaBorderClass} overflow-hidden bg-[#F8F8E1] shrink-0`}>
+                        <div className={`sizing-media-box aspect-[16/9] border-b-2 ${tone.mediaBorderClass} overflow-hidden bg-[#F8F8E1] shrink-0`}>
                           <SafeImage
                             src={proj.imageUrls[0]}
                             alt={proj.title}
@@ -247,7 +250,7 @@ export const ProjectsPage: React.FC = () => {
                           />
                         </div>
                       )}
-                      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
+                      <div className="sizing-media-body p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3.5">
                         <div className="flex-1 flex flex-col gap-2">
                           <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono-num">
                             <span className={tone.badgeClass}>Artikel &amp; Tulisan</span>
@@ -255,7 +258,7 @@ export const ProjectsPage: React.FC = () => {
                               <span className="font-bold text-muted">{proj.period}</span>
                             )}
                           </div>
-                          <h4 className="font-display text-base sm:text-[17px] font-extrabold leading-snug line-clamp-2 min-h-[2.75rem]">
+                          <h4 className="font-display text-base sm:text-[17px] font-extrabold leading-snug line-clamp-2 min-h-[2.5rem]">
                             {proj.title}
                           </h4>
                         </div>

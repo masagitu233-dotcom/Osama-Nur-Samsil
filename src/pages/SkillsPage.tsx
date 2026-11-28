@@ -78,8 +78,8 @@ export const SkillsPage: React.FC = () => {
   }, [group]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10">
-      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5 sm:pb-6">
+    <div className="sizing-page-shell max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+      <header data-aos="fade-up" className="border-b-2 border-brutal pb-5">
         <span className="brutal-badge-green">05. Kapabilitas &amp; Potensi</span>
         <h1 className="font-display text-2xl sm:text-3xl lg:text-[34px] font-extrabold mt-2.5 text-balance leading-tight">
           Skills, Interests &amp; Talents
@@ -137,7 +137,7 @@ export const SkillsPage: React.FC = () => {
                     Belum ada item pada kategori {sec.title}. Tambahkan melalui Dashboard Admin.
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="sizing-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {items.map((item, idx) => {
                       const tone = getSectionCardTone('skills');
                       return (
@@ -145,7 +145,7 @@ export const SkillsPage: React.FC = () => {
                           key={item.id}
                           data-aos="fade-up"
                           data-aos-delay={getAosStaggerDelay(idx, 100, 3)}
-                          className={`brutal-card p-4 flex flex-col justify-between ${tone.cardClass} ${tone.frameClass}`}
+                          className={`brutal-card sizing-card-pad p-4 flex flex-col justify-between ${tone.cardClass} ${tone.frameClass}`}
                         >
                           <div>
                             {item.imageUrl && (
@@ -184,7 +184,7 @@ export const SkillsPage: React.FC = () => {
 
       {/* Interests & Talents Groups */}
       {showInterests && (
-        <div className="pt-6 border-t-2 border-brutal grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="pt-6 border-t-2 border-brutal sizing-card-grid grid grid-cols-1 md:grid-cols-2 gap-5">
           {INTEREST_GROUPS.map((sec, idx) => {
             const items = interests.filter((i) => i.category === sec.key);
             const tone = getSectionCardTone('skills');
@@ -193,7 +193,7 @@ export const SkillsPage: React.FC = () => {
                 key={sec.key}
                 data-aos="fade-up"
                 data-aos-delay={getAosStaggerDelay(idx, 100, 2)}
-                className={`brutal-card p-5 ${tone.cardClass} ${tone.frameClass}`}
+                className={`brutal-card sizing-card-pad p-5 ${tone.cardClass} ${tone.frameClass}`}
               >
                 <span className={tone.badgeClass}>
                   {sec.index}
